@@ -13,7 +13,12 @@ jobs:
     - stage: test
       script:
         - mvn test
-        - pip install pre-commit && pre-commit run --all-files
+        # Installing pre-commit globally fails with:
+        # Installing collected packages: aspy.yaml, cached-property, identify, nodeenv, pre-commit
+        #   File "/usr/lib/python2.7/shutil.py", line 83, in copyfile
+        #     with open(dst, 'wb') as fdst:
+        # IOError: [Errno 13] Permission denied: '/usr/local/lib/python2.7/dist-packages/aspy.yaml-1.0.0-nspkg.pth'
+        - pip install --user pre-commit && pre-commit run --all-files
 
 cache:
   pip: true
