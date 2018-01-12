@@ -1,0 +1,66 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<h2 class="t-fontSize-big t-color-blue--text t-font-main2">Coté Newsletter</h2>
+<div class="t-fontSize-small">
+    En tant que responsable de la newsletter, vous pouvez cliquer en haut à droite de chaque épingle sur l'icone clipboard pour ajouter ou enlever le tag '{{ label ? label : '#newsletter' }}' qui sert à générer la newsletter.
+    <br>
+    Vous pouvez vous envoyer à vous uniquement la newsletter pour avoir un visuel de type email.
+    <br>
+    L'envoi de la newsletter intègre les épingles datant d'il y a moins d'un mois et contenant le tag '{{ label ? label : "#newsletter" }}'.
+    <br>
+    Contacter un admin pour changer ces droits.
+</div>
+<br><br>
+<div>
+    <label for="newsletter-label"  class="t-color-blue--text">Label à utiliser pour la newsletter *</label>
+    <input list="labels" id="newsletter-label" class="input vboardProfilNL--required t-color-lightblue--border" data-ng-model="label" data-ng-blur="setLabel(label)" type="text" required>
+    <datalist id="labels">
+        <option data-ng-repeat="suggestion in labelSuggest track by $id(suggestion)" value="{{ suggestion }}"></option>
+    </datalist>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-6">
+        <a href="#/?label=%23{{ label ? label.substring(1) : '#newsletter' }}&from={{dateLink}}" class="t-color-blue--text">Visualiser ici les épingles de la Newsletter</a>
+    </div>
+    <div class="col-md-6">
+        <div class="t-color-black--text">Dernière newsletter envoyée le {{ lastDate }}</div>
+    </div>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-6">
+        <label for="newsletter-title"  class="t-color-blue--text">Titre *</label>
+        <input id="newsletter-title" class="input vboardProfilNL--required t-color-lightblue--border" data-ng-model="email.title" type="text" required>
+    </div>
+    <div class="col-md-6">
+        <label for="newsletter-message"  class="t-color-blue--text">Message *</label>
+        <textarea id="newsletter-message" data-ng-model="email.message" class="textArea vboardProfilNL--required t-color-lightblue--border" required></textarea>
+    </div>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-6">
+        <Button class="btn btn-warning" data-ng-click="sendNewsletterTest(email)">M'envoyer la newsletter pour vérification</Button>
+    </div>
+    <div class="col-md-6">
+        <Button class="btn btn-danger" data-ng-click="displayNewsletterPopin(email)" data-ng-disabled="!canSendNewsletter">Envoyer la newsletter</Button>
+        <div data-ng-if="!canSendNewsletter" class="t-fontSize-small"><br>La dernière newsletter a été envoyée il y a moins de 10 minutes.</div>
+    </div>
+</div>

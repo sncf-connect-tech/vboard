@@ -1,0 +1,28 @@
+version: '2'
+services:
+  ws:
+    ports:
+      - 8080:8080
+    environment:
+      - JAVA_OPTS=-Derror.whitelabel.enabled=true -Dendpoints.enabled=true -Dendpoints.sensitive=false
+    #  - JAVA_OPTS=-Dspring.profiles.active=dev
+    ports:
+      - 8080:8080
+
+  front:
+    volumes:
+      # Mouting the following directory "overrides" the one in the built container.
+      # We do this to benefit from "grunt watch" regenerating the statics
+      - ./vboard-front/grunt-target:/var/www/vboard
+    volumes:
+      - ./statics:/var/vboard/statics
+    ports:
+      - 80:80
+
+  wsdb:
+    ports:
+      - 3306:3306
+
+  elasticsearch:
+    ports:
+      - 9200:9200

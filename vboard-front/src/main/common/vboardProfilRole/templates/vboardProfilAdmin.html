@@ -1,0 +1,101 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<h2 class="t-fontSize-big t-color-blue--text t-font-main2">Coté Admin</h2>
+<div class="t-fontSize-small">
+    En tant qu'administrateur, vous pouvez afficher un message visible par tous les utilisateurs.<br>
+    Pour changer ou afficher un message:
+    <ul>
+        <li>- Vérifier que la case 'Afficher le message pour tous' est décochée.</li>
+        <li>- Ecrire le message.</li>
+        <li>- Cocher un type de message (info en bleu, warning en jaune, Error en rouge)</li>
+        <li>- Cliquer sur 'Afficher le message pour tous'</li>
+    </ul>
+    Si vous ne décochez pas la case 'Afficher le message pour tous' lors de l'écriture, un nouveau message sera créé pour chaque lettre tapée (non grave, mais pas terrible au niveau de la base de données)
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-12">
+        <label for="admin--global--message" class="t-color-blue--text">Message: </label><input id="admin--global--message" class="input t-color-lightblue--border" data-ng-change="changeMessage(message)" data-ng-model="message.content" type="text" placeholder="Message à afficher">
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-md-6 t-color-blue--text">Type du message:</div>
+        <div class="col-md-6">
+            <label>
+                <input type="radio" data-ng-model="message.type" data-ng-click="changeMessage(message)" value="Info">
+                Info
+            </label><br/>
+            <label>
+                <input type="radio" data-ng-model="message.type" data-ng-click="changeMessage(message)" value="Warning">
+                Warning
+            </label><br/>
+            <label>
+                <input type="radio" data-ng-model="message.type" data-ng-click="changeMessage(message)" value="Error">
+                Error
+            </label><br/>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="checkbox">
+            <label><input type="checkbox" data-ng-model="message.active" data-ng-click="updateMessage(message)" value="">Afficher le message pour tous</label>
+        </div>
+    </div>
+</div>
+<br><br>
+<div class="row">
+    <div class="col-md-6">
+        <div class="t-color-blue--text">Chargés Newsletter: <button class="btn btn-sm profil--addTeam" data-ng-click="addNewsletterMember()">+</button></div>
+        <br>
+        <div class="row" data-ng-repeat="mod in newsletterMembers track by $id(mod)">
+            <div class="col-md-11">
+                <ui-select data-ng-model="newsletterMembers[$index]" class="profil--card--select2" on-select="setNewsletterRole(mod)" data-ng-disabled="viewEmail(mod)!=='@'">
+                    <ui-select-match>
+                        <span data-ng-bind="viewUser(mod)"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="suggestion in (userSuggest | filter: $select.search) track by $id(suggestion)">
+                        <span data-ng-bind="viewUser(suggestion)"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-sm profil--removeTeam t-color-blue--text" data-ng-click="removeNewsletterMember(mod)">-</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="t-color-blue--text">Chargés Modération: <button class="btn btn-sm profil--addTeam" data-ng-click="addModeratorMember()">+</button></div>
+        <br>
+        <div class="row" data-ng-repeat="mod in moderatorMembers track by $id(mod)">
+            <div class="col-md-11">
+                <ui-select data-ng-model="moderatorMembers[$index]" class="profil--card--select2" on-select="setModeratorRole(mod)" data-ng-disabled="viewEmail(mod)!=='@'">
+                    <ui-select-match>
+                        <span data-ng-bind="viewUser(mod)"></span>
+                    </ui-select-match>
+                    <ui-select-choices repeat="suggestion in (userSuggest2 | filter: $select.search)">
+                        <span data-ng-bind="viewUser(suggestion)"></span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-sm profil--removeTeam t-color-blue--text" data-ng-click="removeModeratorMember(mod)">-</button>
+            </div>
+        </div>
+    </div>
+</div>

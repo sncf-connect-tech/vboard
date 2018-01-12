@@ -1,0 +1,41 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div class="vboardComment" data-ng-if="comment" data-ng-mouseover="mouseoverComment = true" data-ng-Mouseleave="mouseoverComment = false">
+    <div class="vboardComment--cred t-fontSize-x-small">
+        <div class="vboardComment--edition" data-ng-show="perm && mouseoverComment && !editComment">
+            <a href="" data-ng-click="modifyComment()" class="vboardComment--modify link-notUnderlined t-color-black--text"><span class="fi-pencil"></span></a>
+            <a href="" data-ng-click="deleteComment()" class="vboardComment--delete link-notUnderlined t-color-black--text"><span class="fi-x"></span></a>
+        </div>
+        <a data-ng-href="#/profil/{{ email }}" class="link-notUnderlined t-color-lightblack--text">
+            <img-with-fallback src="avatar" fallback="images/avatar.png" type="image/png" name="avatar"></img-with-fallback>
+            {{ name }}
+        </a>
+        <br>
+        {{ date }} <span data-ng-if="comment.id.indexOf('vblog-')===0">via Vblog</span>
+    </div>
+    <div class="vboardComment--comment" data-ng-hide="editComment" data-ng-bind-html="comment.text"></div>
+
+    <div class="vboardComment--updateComment" data-ng-if="editComment">
+        <textarea data-ng-model="comment.text" maxlength="255" required></textarea>
+        <button type="button" data-ng-click="submitUpdatedComment()"
+                class="btn t-color-midgray--background t-color-darkgray--border t-fontSize-small">
+            <span class="fi-check"></span>
+        </button>
+    </div>
+</div>

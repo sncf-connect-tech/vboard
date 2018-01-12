@@ -1,0 +1,80 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.vboardComment {
+    padding: 0 .5rem .8rem;
+    margin-top: .8rem;
+    background-color: #e8f3f9;
+    border: solid .15rem #89caf2;
+}
+
+.vboardComment::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 .5rem .6rem .5rem;
+    border-color: transparent transparent #89caf2 transparent;
+    position: relative;
+    top: -1.7em;
+    left: -.4rem;
+}
+
+.vboardComment--cred img, .vboardComment--cred object {
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
+    float: left;
+    margin-top: -3%;
+    margin-right: 1rem;
+}
+
+.vboardComment--comment {
+    margin-top: .8rem;
+}
+
+.vboardComment--updateComment > button {
+    margin: .4rem 0 0 .2rem;
+}
+
+.vboardComment--edition {
+    float: right;
+    cursor: pointer;
+    opacity: .6;
+}
+
+.vboardComment--modify {
+    padding-right: 1rem;
+}
+
+.vboardComment--delete {
+    padding-right: .5rem;
+}
+
+.vboardComment--updateComment {
+    display: flex;
+    padding-bottom: 1rem;
+    margin-top: .5rem;
+}
+
+.vboardComment--updateComment textarea {
+    resize: none;
+    overflow: hidden;
+    width: 80%;
+    margin-top: 0.4rem;
+}

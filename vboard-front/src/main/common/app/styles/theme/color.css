@@ -1,0 +1,247 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.t-color-main1--text,
+.t-color-main1--text:link,
+.t-color-main1--text:visited,
+.t-color-main1--text:hover,
+.t-color-main1--text:focus,
+.t-color-main1--text:active,
+.t-color-main1--text th,
+.t-color-main1--text td {
+    color: var(--main-color-1);
+}
+.t-color-main1--background {
+    background-color: var(--main-color-1);
+}
+.t-color-main1--border {
+    border-color: var(--main-color-1);
+}
+
+
+.t-color-white--text,
+.t-color-white--text:link,
+.t-color-white--text:visited,
+.t-color-white--text:hover,
+.t-color-white--text:focus,
+.t-color-white--text:active,
+.t-color-white--text th,
+.t-color-white--text td {
+    color: white;
+}
+.t-color-white--background {
+    background-color: white;
+}
+.t-color-white--border {
+    border-color: white;
+}
+
+
+.t-color-black--text,
+.t-color-black--text:link,
+.t-color-black--text:visited,
+.t-color-black--text:hover,
+.t-color-black--text:focus,
+.t-color-black--text:active,
+.t-color-black--text th,
+.t-color-black--text td {
+    color: black;
+}
+.t-color-black--background {
+    background-color: black;
+}
+.t-color-black--border {
+    border-color: black;
+}
+
+.t-color-lightblack--text,
+.t-color-lightblack--text:link,
+.t-color-lightblack--text:visited,
+.t-color-lightblack--text:hover,
+.t-color-lightblack--text:focus,
+.t-color-lightblack--text:active,
+.t-color-lightblack--text th,
+.t-color-lightblack--text td {
+    color: var(--color-lightblack);
+}
+.t-color-lightblack--background {
+    background-color: var(--color-lightblack);
+}
+.t-color-lightblack--border {
+    border-color: var(--color-lightblack);
+}
+
+
+.t-color-lightgray--text,
+.t-color-lightgray--text:link,
+.t-color-lightgray--text:visited,
+.t-color-lightgray--text:hover,
+.t-color-lightgray--text:focus,
+.t-color-lightgray--text:active,
+.t-color-lightgray--text th,
+.t-color-lightgray--text td {
+    color: var(--color-lightgray);
+}
+.t-color-lightgray--background {
+    background-color: var(--color-lightgray);
+}
+.t-color-lightgray--border {
+    border-color: var(--color-lightgray);
+}
+
+
+.t-color-midgray--text,
+.t-color-midgray--text:link,
+.t-color-midgray--text:visited,
+.t-color-midgray--text:hover,
+.t-color-midgray--text:focus,
+.t-color-midgray--text:active,
+.t-color-midgray--text th,
+.t-color-midgray--text td {
+    color: var(--color-midgray);
+}
+.t-color-midgray--background {
+    background-color: var(--color-midgray);
+}
+.t-color-midgray--border {
+    border-color: var(--color-midgray);
+}
+
+
+
+.t-color-darkgray--text,
+.t-color-darkgray--text:link,
+.t-color-darkgray--text:visited,
+.t-color-darkgray--text:hover,
+.t-color-darkgray--text:focus,
+.t-color-darkgray--text:active,
+.t-color-darkgray--text th,
+.t-color-darkgray--text td {
+    color: var(--color-darkgray);
+}
+.t-color-darkgray--background {
+    background-color: var(--color-darkgray);
+}
+.t-color-darkgray--border {
+    border-color: var(--color-darkgray);
+}
+
+
+
+.t-color-blue--text,
+.t-color-blue--text:link,
+.t-color-blue--text:visited,
+.t-color-blue--text:hover,
+.t-color-blue--text:focus,
+.t-color-blue--text:active,
+.t-color-blue--text th,
+.t-color-blue--text td {
+    color: var(--color-blue);
+}
+.t-color-blue--background {
+    background-color: var(--color-blue);
+}
+.t-color-blue--border {
+    border-color: var(--color-blue);
+}
+
+
+.t-color-lightblue--text,
+.t-color-lightblue--text:link,
+.t-color-lightblue--text:visited,
+.t-color-lightblue--text:hover,
+.t-color-lightblue--text:focus,
+.t-color-lightblue--text:active,
+.t-color-lightblue--text th,
+.t-color-lightblue--text td {
+    color: var(--color-lightblue);
+}
+.t-color-lightblue--background {
+    background-color: var(--color-lightblue);
+}
+.t-color-lightblue--border {
+    border-color: var(--color-lightblue);
+}
+
+.t-color-orange--text,
+.t-color-orange--text:link,
+.t-color-orange--text:visited,
+.t-color-orange--text:hover,
+.t-color-orange--text:focus,
+.t-color-orange--text:active,
+.t-color-orange--text th,
+.t-color-orange--text td {
+    color: var(--color-orange);
+}
+.t-color-orange--background {
+    background-color: var(--color-orange);
+}
+.t-color-orange--border {
+    border-color: var(--color-orange);
+}
+
+.t-color-darkred--text,
+.t-color-darkred--text:link,
+.t-color-darkred--text:visited,
+.t-color-darkred--text:hover,
+.t-color-darkred--text:focus,
+.t-color-darkred--text:active,
+.t-color-darkred--text th,
+.t-color-darkred--text td {
+    color: var(--color-darkred);
+}
+.t-color-darkred--background {
+    background-color: var(--color-darkred);
+}
+.t-color-darkred--border {
+    border-color: var(--color-darkred);
+}
+
+.t-color-green--text,
+.t-color-green--text:link,
+.t-color-green--text:visited,
+.t-color-green--text:hover,
+.t-color-green--text:focus,
+.t-color-green--text:active,
+.t-color-green--text th,
+.t-color-green--text td {
+    color: var(--color-green);
+}
+.t-color-green--background {
+    background-color: var(--color-green);
+}
+.t-color-green--border {
+    border-color: var(--color-green);
+}
+
+.t-color-yellow--text,
+.t-color-yellow--text:link,
+.t-color-yellow--text:visited,
+.t-color-yellow--text:hover,
+.t-color-yellow--text:focus,
+.t-color-yellow--text:active,
+.t-color-yellow--text th,
+.t-color-yellow--text td {
+    color: var(--color-yellow);
+}
+.t-color-yellow--background {
+    background-color: var(--color-yellow);
+}
+.t-color-yellow--border {
+    border-color: var(--color-yellow);
+}

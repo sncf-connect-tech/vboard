@@ -1,0 +1,58 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+@font-face {
+    font-family: 'proxima_nova_rgregular';
+    src: url('/common/app/fonts/proximaNova/ProximaNova-reg.eot');
+    src: url('/common/app/fonts/proximaNova/ProximaNova-reg.eot?#iefix') format('embedded-opentype'),
+         url('/common/app/fonts/proximaNova/ProximaNova-reg.woff2') format('woff2'),
+         url('/common/app/fonts/proximaNova/ProximaNova-reg.woff') format('woff'),
+         url('/common/app/fonts/proximaNova/ProximaNova-reg.ttf') format('truetype'),
+         url('/common/app/fonts/proximaNova/ProximaNova-reg.svg#proxima_nova_rgregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'museo_slab900';
+    src: url('/common/app/fonts/museo/museo-slab-900.eot');
+    src: url('/common/app/fonts/museo/museo-slab-900.eot?#iefix') format('embedded-opentype'),
+         url('/common/app/fonts/museo/museo-slab-900.woff2') format('woff2'),
+         url('/common/app/fonts/museo/museo-slab-900.woff') format('woff'),
+         url('/common/app/fonts/museo/museo-slab-900.ttf') format('truetype'),
+         url('/common/app/fonts/museo/museo-slab-900.svg#museo_slab900') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+.t-font-main {
+    font-family:  "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.t-font-main2 {
+    font-family: AvenirHeavy, AvenirBook, Arial,Helvetica, sans-serif;
+}
+
+.t-font-secondary1 {
+    font-family: "MS Sans Serif", Geneva, sans-serif;
+}
+
+.t-font-secondary2 {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}

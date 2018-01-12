@@ -1,0 +1,262 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.profil--page {
+    width: 60rem;
+    margin: 4.7rem auto 0 auto;
+}
+
+.profil--page h2{
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.profil--pins h2{
+    text-align: center;
+}
+
+.profil--card {
+    padding: 3rem 4rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    text-decoration: none;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+}
+
+.profil--card li {
+    padding: .5rem;
+}
+
+.profil--card--img {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 3rem;
+    margin: .5rem 2rem 1rem 1rem;
+}
+
+.profil--card--localisation {
+    width: 100%;
+    height: auto;
+    border-radius: 0;
+    margin: 0;
+}
+
+.profil--card--localisationPoint {
+    position: relative;
+    background-color: var(--color-darkred);
+    border-radius: 50%;
+    height: 2rem;
+    width: 2rem;
+    z-index: 2;
+}
+
+.profil--avatar {
+    margin-bottom: 3rem;
+}
+
+.profil--avatar div{
+    margin-top: 3rem;
+}
+
+.profil .l-vboardApp--mainScrollableContent .l-vboardApp--mainScrollableContent .vboardPinboard {
+    margin: 2rem;
+}
+
+.profil--uploadBtn {
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.profil--card img-crop {
+    display: inline-flex;
+    width: 15rem;
+    height: 10rem;
+}
+
+.profil--addTeam {
+    float: right;
+    margin: .2rem;
+    border-radius: 50%;
+}
+
+.profil--removeTeam {
+    margin-top: .5rem;
+    border-radius: 50%;
+}
+
+canvas{
+    margin: 0!important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.profil--card--stats > div {
+    margin: .5rem;
+}
+
+.profil--card--stats .col-md-6 {
+    display: flex;
+}
+
+.profil--card--stats .progress {
+    width: 100%;
+}
+
+.profil--card--stats .fi-bookmark {
+    color: var(--color-darkred);
+    margin-top: -.7rem;
+    font-size: 4rem;
+    margin-right: 1rem;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.4), 1px 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.profil--card--stats .fi-bookmark:hover {
+    transition: all 0.5s ease 0s;
+    text-shadow: 3px 3px 0  var(--color-shadow), 3px 3px 8px  var(--color-shadow);
+}
+
+.profil--card--stats--level {
+    color: white;
+    position: absolute;
+    left: 1.5rem;
+    top: .3rem;
+}
+
+.profil--card--badges {
+    font-size: 10rem;
+}
+
+.badge-pin {
+    width: 12rem;
+    padding-left: 2.5rem;
+    padding-top: .5rem;
+}
+
+.profil--card--badges .row {
+    margin: 1rem 0;
+}
+
+.profil--card--badges .shortPadding {
+    padding-left: 1rem;
+}
+
+.profil--card--badges .medPadding {
+    padding-left: 2rem;
+}
+
+.profil--card--badges .mediumPadding {
+    padding-left: 1.5rem;
+}
+
+.profil--card--badges .largePadding {
+    padding-left: 3rem;
+}
+
+.badge-pin-0, .badge-pin-1, .badge-pin-2 {
+    color: white;
+    text-shadow: -.1rem -.1rem .2rem var(--color-darkgray);
+    border: .5rem inset var(--color-shadow);
+}
+
+.badge-pin-3, .badge-pin-4 {
+    color: #994d00;
+    border: .5rem outset rgba(153, 77, 0, .7);
+
+}
+
+.badge-pin-3:hover, .badge-pin-4:hover {
+    box-shadow: .5rem .5rem .1rem var(--color-darkgray);
+    transition: box-shadow 0.7s 0.3s;
+}
+
+
+
+.badge-pin-5, .badge-pin-6 {
+    color: #8c8c8c;
+    border: .5rem outset #8c8c8c;
+    background-color: #541010;
+
+}
+
+.badge-pin-5:hover, .badge-pin-6:hover {
+    box-shadow: .5rem .5rem .1rem var(--color-darkgray);
+    transition: box-shadow 0.7s;
+}
+
+
+.badge-pin-7, .badge-pin-8, .badge-pin-9 {
+    color: #b1b119;
+    border: .5rem outset #ffff1a;
+    background-color: #8a8686;
+    text-shadow: .1rem .1rem .1rem black;
+}
+
+.badge-pin-7:hover, .badge-pin-8:hover , .badge-pin-9:hover {
+    box-shadow: 1rem 1rem .5rem var(--color-darkgray);
+    transition: box-shadow 0.7s;
+}
+
+.badge-pin-10 {
+    color: #99ccff;
+    border: .5rem outset #99ccff;
+    background-color: #003366;
+    text-shadow: .1rem .1rem .1rem black;
+    box-shadow: .5rem .5rem .1rem var(--color-darkgray);
+}
+
+.badge-pin-10:hover {
+    box-shadow: 1rem 1rem .5rem var(--color-darkgray);
+    transition: box-shadow 0.7s;
+}
+
+.profil--labels {
+    overflow-y: auto;
+    height: 30rem;
+    box-shadow: 0 0 .3rem .2rem var(--color-lightblue);
+    padding: .5rem;
+}
+
+.profil--labels > div {
+    cursor: pointer;
+    margin: .2rem 0;
+}
+
+.profil--card--labels .col-md-2 {
+    padding-top: 14rem;
+}
+
+.profil--card--labels .col-md-2 > div {
+    text-align: center;
+}
+
+.profil--team-link {
+    margin-top: .5rem;
+}
+
+.profil--card--select2 > div > span {
+    display: block;
+    width: 100%;
+    border: .1rem solid;
+    padding: .5rem;
+    height: 2.8rem;
+    margin: .3rem 0 1rem 0;
+    border-color: var(--color-lightblue);
+    border-radius: 0;
+}

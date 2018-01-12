@@ -1,0 +1,63 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* switching box model for all elements */
+* {
+    box-sizing: border-box;
+}
+
+/* max values */
+img,
+table,
+td,
+blockquote,
+code,
+pre,
+textarea,
+input,
+video {
+    max-width: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+}
+
+/* base font-size corresponds to "10px" and is adapted to rem unit */
+html {
+    overflow-y: scroll;
+    min-height: 100%;
+    font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;
+    font-weight: normal;
+    line-height: normal;
+    font-style: normal;
+    font-variant: normal;
+    font-size: 1rem;
+}
+
+body {
+    min-height: 100%;
+    line-height: 1.5;
+    height: 100%;
+    margin: 0 auto;
+}
+
+label[for] {
+    cursor: pointer;
+}
+
+li {
+    list-style: none;
+}

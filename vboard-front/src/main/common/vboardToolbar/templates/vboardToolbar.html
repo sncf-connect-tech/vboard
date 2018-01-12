@@ -1,0 +1,149 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<header class="vboardToolbar t-color-white--background">
+    <!-- Profil Menu -->
+    <script type="text/ng-template" id="profile">
+        <div class="triangle triangle-menu"></div>
+        <div class="ns-popover-tooltip ns-popover-tooltip-profile">
+            <ul>
+                <li><a href="#/" title="Retour au Dashboard" data-ng-click="forceUpdate()" class="t-color-darkgray--text">Dashboard</a></li>
+                <li data-ng-if="userAuthenticated"><a href="#profil" title="Page de profil" class="t-color-darkgray--text">Profil</a></li>
+                <li data-ng-if="blogUrl"><a title="Accéder au blog wordpress pour y créer un article dont l'épingle sera visible ici" href="{{blogUrl}}" target="_blank"  class="t-color-darkgray--text">Accéder au blog</a></li>
+                <li><a title="Voir le classement des utilisateurs et équipes les plus actifs dans certaines catégories" href="#leaderboard" class="t-color-darkgray--text">LeaderBoard</a></li>
+                <li><a title="Trouver le profil d'une équipe ou d'un utilisateur" href="#search" class="t-color-darkgray--text">Rechercher un profil</a></li>
+                <li data-ng-if="userAuthenticated"><a title="Se déconnecter de l'application" href="#/" data-ng-click="logout()" class="t-color-darkgray--text">Déconnexion</a></li>
+            </ul>
+        </div>
+    </script>
+    <!-- Notification Menu -->
+    <script type="text/ng-template" id="notification">
+        <div class="triangle ns-popover-tooltip-notification--position"></div>
+        <div class="ns-popover-tooltip ns-popover-tooltip-notification ns-popover-tooltip-notification--position">
+            <vboard-notification ng-repeat="notification in notifications track by $id(notification)"></vboard-notification>
+            <div class="ns-popover-tooltip-notification--noNotification" data-ng-if="notifications.length <= 0 && !canLoadPreviousNotif">Aucune notification récente</div>
+            <div class="ns-popover-tooltip-notification--more" data-ng-if="canLoadPreviousNotif" data-ng-click="getSeenNotif(5)">Charger d'anciennes notifications</div>
+        </div>
+    </script>
+
+    <!-- First Line -->
+    <div class="vboardToolbar--topRow">
+        <!-- Search column -->
+        <div class="vboardToolbar--searchColumn">
+            <div class="vboardToolbar--searchBlock t-color-midgray--border">
+                <!-- Logo -->
+                <div class="vboardToolbar--searchBlockLogo">
+                    <a href="#/" data-ng-click="forceUpdate()">
+                        <img src="images/logo_vsc.jpg" class="vboardToolbar--searchLogo">
+                    </a>
+                </div>
+                <!-- Search Field -->
+                <div class="vboardToolbar--searchBlockText t-color-midgray--border t-color-lightgray--background" data-ng-show="showSearchInput">
+                    <input type="text" placeholder="Recherche textuelle" data-ng-model="search.text" title="Recherche des épingles selon une entrée partielle (titre, contenu, auteur)"
+                           class="vboardToolbar--searchText t-color-lightgray--background t-color-darkgray--text" >
+                </div>
+                <a href="#/" data-ng-click="forceUpdate()" title="Retour au Dashboard" class="vboardToolbar--searchBlockText vboardToolbar--searchText t-color-midgray--border t-color-lightgray--background link-notUnderlined" data-ng-hide="showSearchInput">
+                </a>
+            </div>
+        </div>
+        <!-- User's column -->
+        <div class="vboardToolbar--userColumn">
+            <a href="#profil" class="link-notUnderlined" title="Page de profil" data-ng-hide="userOnProfil" data-ng-if="userAuthenticated">
+                <div class="vboardToolbar--userBlock t-color-midgray--border t-color-lightgray--background t-font-main text-bold t-color-darkgray--text">
+                    {{ userAuthenticated.first_name }} {{ userAuthenticated.last_name }}
+                </div>
+            </a>
+            <a href="#/" class="link-notUnderlined" data-ng-click="forceUpdate()" data-ng-show="userOnProfil" data-ng-if="userAuthenticated">
+                <div class="vboardToolbar--userBlock t-color-midgray--border t-color-lightgray--background t-font-main text-bold t-color-darkgray--text">
+                    Dashboard
+                </div>
+            </a>
+            <a href="#/" data-ng-if="islogin" data-ng-click="forceUpdate()" class="vboardToolbar--userBlock t-color-midgray--border t-color-lightgray--background vboardToolbar--loading" data-ng-hide="userAuthenticated">
+                <div class="chargement-user">
+                    <svg class="chargement__picto-user" role="presentation" viewBox="0 0 124 24">
+                        <use xlink:href="images/icon-loader.svg#icon-loader" />
+                    </svg>
+                </div>
+            </a>
+            <a href="#/" class="link-notUnderlined" data-ng-click="login()" data-ng-hide="userAuthenticated || islogin">
+                <div class="vboardToolbar--userBlock t-color-midgray--border t-color-lightgray--background t-font-main text-bold t-color-darkgray--text">
+                    Se connecter
+                </div>
+            </a>
+        </div>
+        <!-- User menu -->
+        <div class="vboardToolbar--userColumn">
+            <a href="" data-ng-click="openAddPinDialog()" title="Création d'épingle" data-ng-if="userAuthenticated" class="vboardToolbar--userBlock vboardToolbar--userInnerBlock t-color-midgray--border t-color-lightgray--background">
+                <span class="fi-pencil"></span>
+            </a>
+        </div>
+        <div data-ns-popover
+             data-ns-popover-template="notification"
+             data-ns-popover-trigger="click"
+             data-ns-popover-theme="ns-popover-tooltip-theme"
+             data-ns-popover-placement="bottom"
+             class="vboardToolbar--userColumn">
+            <a href="" data-ng-click="notificationsCheck()" title="Notifications" data-ng-if="userAuthenticated" class="vboardToolbar--userBlock vboardToolbar--userInnerBlock t-color-midgray--border t-color-lightgray--background">
+                <span class="fi-flag"></span>
+                <span data-ng-if="notificationsUnseen.length > 0" class="vboardToolbar--userNotification--tag link-notUnderlined">{{ notificationsUnseen.length }}</span>
+            </a>
+        </div>
+        <div data-ns-popover
+             data-ns-popover-template="profile"
+             data-ns-popover-trigger="click"
+             data-ns-popover-theme="ns-popover-tooltip-theme"
+             data-ns-popover-placement="bottom"
+             class="vboardToolbar--userColumn">
+            <a href="" title="Menu d'accès" class="vboardToolbar--userBlock vboardToolbar--userProfile t-color-midgray--border t-color-lightgray--background">
+                <span class="fi-list"></span>
+            </a>
+        </div>
+    </div>
+    <!-- Labels -->
+    <div class="vboardToolbar-labels" data-ng-show="showSearchInput">
+        <span data-ng-repeat="label in getLabels() track by $index"
+              class="vboardToolbar-labels--label t-color-white--text t-font-secondary1 t-fontSize-small"
+              data-ng-class="{'vboardToolbar-labels--labelActive': isActive(label)}"
+              data-ng-click="addOrDeleteLabel(label, true)">
+            {{label}}
+        </span>
+        <button type="button" title="{{ getAllLabels ? 'Afficher moins de labels' : 'Afficher plus de labels' }}" class="btn btn-default btn-xs vboardToolbar-more-btn" data-ng-click="showAllLabels()">
+            <span data-ng-show="getAllLabels">&nbsp;-&nbsp;</span><span data-ng-hide="getAllLabels">&nbsp;+&nbsp;</span>
+        </button>
+        <span class="vboardToolbar-labels--label t-color-white--text t-font-secondary1 t-fontSize-small"
+              title="Organiser les épingles en fonction du nombre de likes"
+              data-ng-class="{'vboardToolbar-labels--labelActive': searchByPopularity}"
+              data-ng-click="toggleSearchByPopularity()">
+            Par popularité
+        </span>
+        <span class="vboardToolbar-labels--label t-color-white--text t-font-secondary1 t-fontSize-small"
+              title="Afficher les épingles portant au moins un de mes labels favoris"
+              data-ng-if="userAuthenticated"
+              data-ng-class="{'vboardToolbar-labels--labelActive': searchByFavoriteLabels}"
+              data-ng-click="toggleSearchByFavoriteLabels()">
+            Mes labels favoris
+        </span>
+        <span class="vboardToolbar-labels--label t-color-white--text t-font-secondary1 t-fontSize-small"
+              title="Afficher les épingles enregistrées"
+              data-ng-if="userAuthenticated"
+              data-ng-class="{'vboardToolbar-labels--labelActive': displaySavedPins}"
+              data-ng-click="toggleDisplaySavedPins()">
+            Mes épingles favorites
+        </span>
+    </div>
+</header>

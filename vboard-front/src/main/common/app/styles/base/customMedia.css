@@ -1,0 +1,24 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Small Screens type smartphone : */
+@custom-media --small only screen and (max-width: 697px);
+/* Medium sized screens type desktop 800x600, 1024x768 or video projectors : */
+@custom-media --medium only screen and (min-width: 698px) and (max-width: 1046px);
+/* Large screens type desktop >= 1280x800 : */
+@custom-media --large only screen and (min-width: 1047px);

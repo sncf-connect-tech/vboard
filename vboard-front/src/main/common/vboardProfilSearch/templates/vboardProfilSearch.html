@@ -1,0 +1,62 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div class="profil">
+    <div class="profil--page">
+        <div class="profil--card box-shadow">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Recherche de profil</h2>
+            <br><br><br>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-7">
+                    <label class="t-color-blue--text">Rechercher un utilisateur:</label>
+                    <br>
+                    <ui-select data-ng-model="user" class="profilSearch--select2" on-select="seeUserProfil(user)">
+                        <ui-select-match>
+                            <span data-ng-bind="viewUser(user)"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="suggestion in (userSuggest | filter: $select.search) track by $id(suggestion)">
+                            <span data-ng-bind="viewUser(suggestion)"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div data-ng-if="showUserLinkButton" class="col-md-3">
+                    <a data-ng-href="{{ '#/profil/' + getEmail(user) }}" class="btn btn-info profilSearch--link">Voir le profil</a>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-7">
+                    <label class="t-color-blue--text">Rechercher une équipe:</label>
+                    <br>
+                    <ui-select data-ng-model="team" class="profilSearch--select2" on-select="seeTeamProfil(team)">
+                        <ui-select-match>
+                            <span data-ng-bind="team"></span>
+                        </ui-select-match>
+                        <ui-select-choices repeat="suggestion in (teamSuggest | filter: $select.search) track by $id(suggestion)">
+                            <span data-ng-bind="suggestion"></span>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+                <div data-ng-if="showTeamLinkButton" class="col-md-3">
+                    <a data-ng-href="{{ '#/profil/team/' + team }}" class="btn btn-info profilSearch--link">Voir le profil</a>
+                </div>
+            </div>
+            <br><br><br>
+        </div>
+    </div>
+</div>

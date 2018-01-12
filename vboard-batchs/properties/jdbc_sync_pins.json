@@ -1,0 +1,17 @@
+{
+  "type" : "jdbc",
+  "jdbc" : {
+    "url" : "jdbc:mysql://$VBOARD_DB_HOST/vboard_pins",
+    "user" : "root",
+    "password" : "root",
+    "sql" :  "select distinct pin_id as _id, pin_id, pin_title, href_url, indexable_text_content, labels, post_date_utc, likes, comments_number, img_type, author FROM pins",
+    "treat_binary_as_string" : true,
+    "elasticsearch" : {
+      "cluster" : "elasticsearch",
+      "host" : "$VBOARD_ELASTICSEARCH_HOST:9200/"
+    },
+    "max_bulk_actions" : 20000,
+    "max_concurrent_bulk_requests" : 10,
+    "index" : "jdbc_pins_index"
+  }
+}

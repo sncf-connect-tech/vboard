@@ -1,0 +1,72 @@
+{
+    "default": [
+        "install"
+    ],
+    "install": [
+        "clean:target",
+        "build",
+        "clean:useminTmp",
+        "clean:compileWithoutFilerev"
+    ],
+    "build": [
+        "addDependencies",
+        "copyAllStatics",
+        "compileAll"
+    ],
+    "addDependencies": [
+        "bower:install",
+        "concurrent:wiredep"
+    ],
+    "copyAllStatics": [
+        "copy:mainStatics",
+        "copy:images",
+        "copy:icons",
+        "copy:config",
+        "replace:admin_version"
+    ],
+    "compileAll": [
+        "ngtemplates",
+        "shell:pleeease",
+        "csslint",
+        "eslint",
+        "concat:scripts",
+        "copy:index",
+        "useminPrepare",
+        "ngAnnotate",
+        "concat:generated",
+        "cssmin:generated",
+        "clean:fileRevs",
+        "filerev",
+        "usemin"
+    ],
+    "compileJs": [
+        "eslint",
+        "concat:scripts",
+        "copy:index",
+        "useminPrepare",
+        "ngAnnotate",
+        "concat:generated",
+        "clean:fileRevs",
+        "filerev",
+        "usemin",
+        "copy:config"
+    ],
+    "compileCss": [
+        "shell:pleeease",
+        "csslint",
+        "copy:index",
+        "useminPrepare",
+        "concat:generated",
+        "cssmin:generated",
+        "clean:fileRevs",
+        "filerev",
+        "usemin"
+    ],
+    "unitTests": [
+        "karma:dev"
+    ],
+    "validate": [
+        "eslint",
+        "csslint"
+    ]
+}

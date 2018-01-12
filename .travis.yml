@@ -1,0 +1,20 @@
+front:
+  - build
+  - test
+
+jobs:
+  include:
+    - stage: build
+      script:
+        - mvn clean install -Dmaven.test.skip=true
+        - vboard-web-fo/install-build.sh
+    - stage: test
+      script:
+        - mvn test
+        - pip install pre-commit && pre-commit run --all-files
+
+cache:
+  pip: true
+  directories:
+  - node_modules # npm packages
+  - $HOME/.m2    # Maven packages

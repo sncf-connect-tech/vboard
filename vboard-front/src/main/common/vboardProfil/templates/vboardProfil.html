@@ -1,0 +1,239 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div data-ng-hide="user" class="cssload-container">
+    <div class="cssload-whirlpool"></div>
+    <div class="scroll-fixation"></div>
+</div>
+<div class="chargement" data-ng-hide="user">
+    <svg class="chargement__picto" role="presentation" viewBox="0 0 124 24">
+        <use xlink:href="images/icon-loader.svg#icon-loader" />
+    </svg>
+</div>
+<div class="profil" data-ng-show="user">
+    <div class="profil--page">
+        <div class="profil--card box-shadow">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Informations Générales</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="t-color-blue--text">Prénom: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.first_name }}" disabled>
+                    <label class="t-color-blue--text">E-mail: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.email }}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label class="t-color-blue--text">Nom: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.last_name }}" disabled>
+                    <div data-ng-if="!public"><label  class="t-color-blue--text">Role: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.role ? user.role : 'Utilisateur' }}" disabled></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="profil--card box-shadow" data-ng-if="isAdmin && !public">
+            <vboard-profil-admin></vboard-profil-admin>
+        </div>
+
+        <div data-ng-if="user.role.indexOf('Newsletter') >= 0 && !public" class="profil--card box-shadow">
+            <vboard-profil-newsletter></vboard-profil-newsletter>
+        </div>
+
+        <div id="profil--personnal--info" class="profil--card box-shadow">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Informations Personnelles</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="t-color-blue--text">Avatar: </div><img class="profil--card--img" data-ng-src="{{ myCroppedAvatar }}" alt="Avatar" /><img-crop data-ng-show="showCrop" class="cropArea" image="myAvatar" result-image="myCroppedAvatar"></img-crop>
+                    <div class="profil--uploadBtn">
+                        <div class="button--upload input--file t-color-darkgray--border t-fontSize-small t-color-midgray--background t-color-darkgray--border" data-ng-hide="public"
+                             ondragover="this.style.borderColor = '#82d3e5'; this.style.backgroundColor = '#cae4f5';"
+                             ondragleave="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'"
+                             ondrop="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'">
+                            <input type="file" id="avatarInput" dropzone="copy" class="input--file--hide pointer" accept="image/*"/>
+                            <span class="fi-upload"></span>
+                            <span>Upload ou drop</span>
+                        </div>
+                        <button data-ng-show="showCrop && !public" type="button" data-ng-click="submitAvatarUpdate()"
+                                class="btn btn-success">
+                            <span class="fi-check"></span>
+                            <span>Sauvegarder</span>
+                        </button>
+                        <button data-ng-hide="showCrop || public || myCroppedAvatar === 'images/avatar.png'" type="button" data-ng-click="submitDeleteAvatar()"
+                                class="btn btn-danger">
+                            <span class="fi-x"></span>
+                            <span>Supprimer</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="t-color-blue--text">Equipe(s): <button class="btn btn-sm profil--addTeam" data-ng-if="!public" data-ng-click="addTeam()">+</button></div>
+                    <br>
+                    <div data-ng-repeat="t in user.team track by $index" class="row">
+                        <div data-ng-class="t !== '' ? 'col-md-9' : 'col-md-12'">
+                            <input list="teams" class="input t-color-lightblue--border" data-ng-disabled="public" data-ng-model="user.team[$index]" type="text" data-ng-focus="userUpdateFocus()" data-ng-blur="submitUserUpdate(user)">
+                            <datalist id="teams">
+                                <option data-ng-repeat="suggestion in teamSuggest track by $id(suggestion)" value="{{ suggestion }}"></option>
+                            </datalist>
+                        </div>
+                        <div data-ng-if="t !== ''" class="col-md-3">
+                            <a data-ng-href="{{ '#/profil/team/' + t }}" class="btn btn-info profil--team-link">Voir la fiche</a>
+                        </div>
+                    </div>
+                    <label for="profil--textarea" class="t-color-blue--text">Info: </label>
+                    <textarea data-ng-disabled="public" id="profil--textarea" data-ng-keyup="profileResize()" data-ng-model="user.info"  data-ng-focus="userUpdateFocus()" data-ng-blur="submitUserUpdate(user)" class="textArea textArea-resize t-color-lightblue--border" maxlength="255"></textarea>
+                </div>
+            </div>
+            <div class="margin-top-medium">
+                <a href="#/?author={{ user.email }}" data-ng-show="public" class="t-color-blue--text">Visualiser les épingles de {{ user.first_name }}</a>
+                <a href="#/?author={{ user.email }}" data-ng-show="!public" class="t-color-blue--text">Visualiser vos épingles</a>
+            </div>
+        </div>
+        <div class="profil--card box-shadow profil--card--labels" data-ng-if="!public">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Labels Favoris</h2>
+            <div class="row">
+                <div class="col-md-5">
+                    <h2 class="t-fontSize-large t-color-blue--text t-font-main2">Vos labels favoris</h2>
+                    <div class=" profil--labels">
+                        <div data-ng-repeat="label in favoriteLabels track by $id(label)" data-toggle="tooltip" title="Cliquer pour l'enlever" class="input t-color-lightblue--border" data-ng-click="removeLabel(label)">{{label}}</div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="fi-arrow-right"></div>
+                    <div class="fi-arrow-left"></div>
+                </div>
+                <div class="col-md-5">
+                    <h2 class="t-fontSize-large t-color-blue--text t-font-main2">Liste des labels</h2>
+                    <div class=" profil--labels">
+                        <div data-ng-repeat="label in allLabels track by $id(label)" data-toggle="tooltip" title="Cliquer pour l'ajouter" class="input t-color-lightblue--border" data-ng-click="addLabel(label)">{{label}}</div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="t-color-blue--text">Recevoir les emails provenant de la newsletter&nbsp;&nbsp;&nbsp;   <input class="t-color-lightblue--border" type="checkbox" data-ng-click="submitUserUpdate(user)" data-ng-model="user.receive_nl_emails"></div>
+            <div class="t-color-blue--text">Recevoir des emails chaque mois avec les épingles les plus populaires&nbsp;&nbsp;&nbsp;   <input class="t-color-lightblue--border" type="checkbox" data-ng-click="submitUserUpdate(user)" data-ng-model="user.receive_popular_pins_emails"></div>
+            <div class="t-color-blue--text">Recevoir des emails chaque mois contenant le leaderboard&nbsp;&nbsp;&nbsp;   <input class="t-color-lightblue--border" type="checkbox" data-ng-click="submitUserUpdate(user)" data-ng-model="user.receive_leaderboard_emails"></div>
+            <div class="t-color-blue--text">Recevoir des emails chaque mois contenant les épingles ayant un label favoris&nbsp;&nbsp;&nbsp;   <input class="t-color-lightblue--border" type="checkbox" data-ng-click="submitUserUpdate(user)" data-ng-model="user.receive_recap_emails"></div>
+        </div>
+        </br>
+        <div class="profil--card box-shadow profil--card--stats">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Statistiques</h2>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div>Nombre d'épingles postées:</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>{{ stats.pins_posted }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div data-toggle="tooltip" title="Rang/Niveau" class="fi-bookmark"></div> <div class="profil--card--stats--level">{{ badges.pins_posted_level }}</div>
+                        <div data-toggle="tooltip" title="Pour atteindre le rang suivant !" class="progress t-color-midgray--background">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ statsPercentage.pins_posted }}%;">{{ statsPercentage.pins_posted }}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div>Nombre de commentaires postés:</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>{{ stats.comments_posted }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div data-toggle="tooltip" title="Rang/Niveau" class="fi-bookmark"></div> <div class="profil--card--stats--level">{{ badges.comments_posted_level }}</div>
+                        <div data-toggle="tooltip" title="Pour atteindre le rang suivant !" class="progress t-color-midgray--background">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ statsPercentage.comments_posted }}%;">{{ statsPercentage.comments_posted }}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div>Nombre de likes émis:</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>{{ stats.likes_posted }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div data-toggle="tooltip" title="Rang/Niveau" class="fi-bookmark"></div><div class="profil--card--stats--level">{{ badges.likes_posted_level }}</div>
+                        <div data-toggle="tooltip" title="Pour atteindre le rang suivant !" class="progress t-color-midgray--background">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ statsPercentage.likes_posted }}%;">{{ statsPercentage.likes_posted }}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div>Nombre d'épingles enregistrées:</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div>{{ stats.saved_pins }}</div>
+                    </div>
+                    <div class="col-md-6">
+                        <div data-toggle="tooltip" title="Rang/Niveau" class="fi-bookmark"></div> <div class="profil--card--stats--level">{{ badges.saved_pins_level }}</div>
+                        <div data-toggle="tooltip" title="Pour atteindre le rang suivant !" class="progress t-color-midgray--background">
+                            <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ statsPercentage.saved_pins }}%;">{{ statsPercentage.saved_pins }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="profil--card box-shadow profil--card--badges">
+                <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Badges</h2>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Chroniqueur: Epingles postées ! (Niveau: {{ badges.pins_posted_level }}, {{ statsPercentage.pins_posted }}% du niveau suivant)" class="fi-book-bookmark badge-pin badge-pin-{{ badges.pins_posted_level }}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Commentateur: Commentaires postés ! (Niveau: {{ badges.comments_posted_level }}, {{ statsPercentage.comments_posted }}% du niveau suivant)" class="fi-microphone badge-pin badge-pin-{{ badges.comments_posted_level }} largePadding"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Fan: Likes émis ! (Niveau: {{ badges.likes_posted_level }}, {{ statsPercentage.likes_posted }}% du niveau suivant)" class="fi-like badge-pin badge-pin-{{ badges.likes_posted_level }}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Collectionneur: Epingles sauvegardées ! (Niveau: {{ badges.saved_pins_level }}, {{ statsPercentage.saved_pins }}% du niveau suivant)" class="fi-save badge-pin badge-pin-{{ badges.saved_pins_level }} medPadding"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Epingle polémique: Commentaires reçus sur une épingle ! (Niveau: {{ badges.comments_received_for_one_pin_level }}, {{ statsPercentage.comments_received_for_one_pin }}% du niveau suivant)" class="fi-comment-quotes badge-pin badge-pin-{{ badges.comments_received_for_one_pin_level }} mediumPadding"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Animateur: Commentaires reçus ! (Niveau: {{ badges.comment_received_level }}, {{ statsPercentage.comment_received }}% du niveau suivant)" class="fi-comments badge-pin badge-pin-{{ badges.comment_received_level }} shortPadding"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Orateur: Likes reçus ! (Niveau: {{ badges.likes_received_level }}, {{ statsPercentage.likes_received }}% du niveau suivant)" class="fi-torsos-all badge-pin badge-pin-{{ badges.likes_received_level }} shortPadding"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Epingle appréciée: Likes reçus sur une épingle ! (Niveau: {{ badges.likes_received_for_one_pin_level }}, {{ statsPercentage.likes_received_for_one_pin }}% du niveau suivant)" class="fi-target badge-pin badge-pin-{{ badges.likes_received_for_one_pin_level }} mediumPadding"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-2">
+                        <div data-toggle="tooltip" title="Lecteur: Connexions régulières ! (Niveau: {{ badges.connexion_number_level }}, {{ statsPercentage.connexion_number }}% du niveau suivant)" class="fi-calendar badge-pin badge-pin-{{ badges.connexion_number_level }}"></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div data-toggle="tooltip" title="Champion: Tous les badges obtenus !!! (Niveau: {{ badges.global_level }})" class="fi-trophy badge-pin badge-pin-{{ badges.global_level }}"></div>
+                    </div>
+                    <div class="col-md-3" data-ng-if="badges.secret_level > 0 && !public">
+                        <div data-toggle="tooltip" title="Curieux: Obtention secrète !" class="fi-magnifying-glass badge-pin badge-pin-10 shortPadding"></div>
+                    </div>
+                    <div class="col-md-3" data-ng-if="badges.secret_level > 0 && public">
+                        <div data-toggle="tooltip" title="?" class="fi-magnifying-glass badge-pin badge-pin-10 shortPadding"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,86 @@
+version: '2'
+services:
+  ws:
+    build: ./vboard-ws
+    restart: always
+    image: vboard/vboard-ws:${TAG}
+    labels:
+      - SERVICE_8080_NAME=${PROJECT_NAME}-ws
+      - SERVICE_8080_VERSION=${TAG}
+    environment:
+      - VBOARD_DB_HOST=wsdb
+      - VBOARD_ELASTICSEARCH_HOST=elasticsearch
+      - VBOARD_HOSTNAME=localhost
+      - VBOARD_IMAGES_DIRECTORY=/usr/local/tomcat/data/
+      - affinity:container==~*${PROJECT_NAME}_front*
+    ports:
+      - 8080
+    networks:
+      - back
+    volumes:
+      - images:/usr/local/tomcat/data
+    depends_on:
+      - front
+      - wsdb
+
+  front:
+    build: ./vboard-front
+    restart: always
+    image: vboard/vboard-front:${TAG}
+    labels:
+      - SERVICE_80_NAME=${PROJECT_NAME}-front
+      - SERVICE_80_VERSION=${TAG}
+    environment:
+      - VBOARD_HOSTNAME=localhost
+      - VBOARD_WS_HOST=ws:8080
+    ports:
+      - 80
+    networks:
+      - back
+    volumes:
+      - images:/var/vboard/statics
+
+  batchs:
+    build: ./vboard-batchs
+    restart: always
+    image: vboard/vboard-batchs:${TAG}
+    environment:
+     - JAVA_OPTS=-Xms512m -Xmx512m
+     - VBOARD_DB_HOST=wsdb:3306
+     - VBOARD_ELASTICSEARCH_HOST=elasticsearch
+    networks:
+     - back
+
+  wsdb:
+    image: mysql:5.7
+    labels:
+      - SERVICE_NAME=${PROJECT_NAME}-wsdb
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vboard_pins
+    ports:
+       - 3306
+    networks:
+      - back
+    volumes:
+      - wsdb-data:/var/lib/mysql
+
+  elasticsearch:
+    restart: always
+    image: elasticsearch:1.5.2
+    labels:
+      - SERVICE_9200_NAME=${PROJECT_NAME}-elasticsearch
+      - SERVICE_9200_VERSION=${TAG}
+    ports:
+      - 9200
+    networks:
+      - back
+
+networks:
+  back:
+    driver: bridge
+
+volumes:
+  images:
+  wsdb-data:

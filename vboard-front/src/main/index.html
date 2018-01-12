@@ -1,0 +1,138 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<!DOCTYPE html>
+<!--
+This file is part of the vboard distribution.
+(https://github.com/voyages-sncf-technologies/vboard)
+Copyright (c) 2017 VSCT.
+
+vboard is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, version 3.
+
+vboard is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>V.Board</title>
+
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <link rel="alternate" type="application/rss+xml" href="/api/v1/rss" title="RSS Feed"/>
+
+    <!-- build:css compile/styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/ngImgCropFullExtended/compile/minified/ng-img-crop.css" />
+    <link rel="stylesheet" href="bower_components/angular-ui-select/dist/select.css" />
+    <!-- endbower -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="bower_components/foundation-icon-fonts/foundation-icons.css"/>
+    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css"/>
+    <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css"/>
+    <!-- endbuild -->
+    <link rel="stylesheet" href="fi-icons/foundation-icons.css"/>
+
+    <!-- build:css compile/styles/app.css -->
+    <link rel="stylesheet" href="../../grunt-target/styles/app.css"/>
+    <!-- endbuild -->
+
+    <script type="text/javascript">window.Keycloak = 'DISABLED'</script>
+</head>
+
+<body data-ng-controller="VboardKonami" class="t-color-lightgray--background"
+      data-ng-keydown="keydown($event)">
+<noscript>
+    <div class="t-color-error--background t-color-white--text t-fontSize-medium text-center">
+        Ce site web requiert que Javascript soit activé pour fonctionner.
+    </div>
+</noscript>
+
+<!--[if lt IE 10]>
+<script type="text/javascript">
+    window.location = "deprecated_browser.html";
+</script>
+<![endif]-->
+<vboard-toolbar class="vboardApp--fixedHeader"></vboard-toolbar>
+
+<!-- Ng-clock: to prevent the raw div to be displayed on the browser before loading angular, and thus before applying the ng-if or ng-hide -->
+<div class="messages ng-cloak">
+    <div class="alert {{ message.class }}" data-ng-show="message.type">
+        <a class="close" data-ng-click="message.type = null" href=""><span class="fi-x"></span></a>
+        <div class="message--type" data-ng-bind="message.type"></div>
+        <div data-ng-bind="message.content"></div>
+    </div>
+</div>
+
+<div data-ng-view></div>
+
+<!-- build:js compile/scripts/vendor.js -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-aria/angular-aria.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/arrive/src/arrive.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/classie/classie.js"></script>
+<script src="bower_components/get-style-property/get-style-property.js"></script>
+<script src="bower_components/get-size/get-size.js"></script>
+<script src="bower_components/eventie/eventie.js"></script>
+<script src="bower_components/doc-ready/doc-ready.js"></script>
+<script src="bower_components/eventEmitter/EventEmitter.js"></script>
+<script src="bower_components/matches-selector/matches-selector.js"></script>
+<script src="bower_components/fizzy-ui-utils/utils.js"></script>
+<script src="bower_components/outlayer/item.js"></script>
+<script src="bower_components/outlayer/outlayer.js"></script>
+<script src="bower_components/packery/js/rect.js"></script>
+<script src="bower_components/packery/js/packer.js"></script>
+<script src="bower_components/packery/js/item.js"></script>
+<script src="bower_components/packery/js/packery.js"></script>
+<script src="bower_components/imagesloaded/imagesloaded.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script src="bower_components/ngDialog/js/ngDialog.js"></script>
+<script src="bower_components/nsPopover/src/nsPopover.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/ngImgCropFullExtended/compile/minified/ng-img-crop.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular-ui-select/dist/select.js"></script>
+<!-- endbower -->
+<script src="bower_components/moment/locale/fr.js"></script>
+<!-- endbuild -->
+
+<!-- build:js compile/scripts/app.js -->
+<script src="../../grunt-target/scripts/app.js"></script>
+<script src="../../grunt-target/scripts/ngtemplates.js"></script>
+<!-- endbuild -->
+<script src="compile/scripts/config.js"></script>
+
+<!-- OPTIONAL EXTRA_JS_URL PLACEHOLDER -->
+</body>
+</html>

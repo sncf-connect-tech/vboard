@@ -1,0 +1,52 @@
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    sha: v0.9.2
+    hooks:
+    -   id: check-merge-conflict
+    -   id: trailing-whitespace
+        args:
+        - --no-markdown-linebreak-ext
+    -   id: check-json
+    -   id: check-yaml
+-   repo: https://github.com/Lucas-C/pre-commit-hooks
+    sha: v1.1.4
+    hooks:
+    -   id: remove-crlf
+    -   id: remove-tabs
+    -   id: insert-license
+        files: \.(css|java|js)$
+        exclude: vboard-front/src/main/common/app/styles/module/loading.css
+        args:
+        - --license-filepath
+        - LICENSE-short.txt
+        - --comment-style
+        - /*| *| */
+    -   id: insert-license
+        files: \.html$
+        args:
+        - --license-filepath
+        - LICENSE-short.txt
+        - --comment-style
+        - <!--|  ~|  -->
+-   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    sha: v1.0.1
+    hooks:
+    -   id: markdown-toc
+# vboard-front
+-   repo: local
+    hooks:
+    -   id: angular-forbid-$apply
+        name: In AngularJS, use $digest over $apply
+        language: pcre
+        entry: $apply
+        files: ^vboard-front.+\.js$
+    -   id: angular-forbid-ngrepeat-without-trackby
+        name: In AngularJS, ALWAYS use 'track by' with ng-repeat
+        language: pcre
+        entry: ng-repeat(?!.*track by)
+        files: ^vboard-front.+\.html$
+    -   id: angular-forbid-ngmodel-with-no-dot
+        name: In AngularJS, "Whenever you have ng-model there's gotta be a dot in there somewhere"
+        language: pcre
+        entry: ng-model="?[^.]+"?[ $](?!.*name=)
+        files: ^vboard-front.+\.html$
+        exclude: vboard-front/src/main/common/vboardProfil.*

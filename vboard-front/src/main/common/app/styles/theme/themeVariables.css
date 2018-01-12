@@ -1,0 +1,39 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+:root {
+    --main-color-1: #c00000;
+
+    --color-transparentwhite: rgba(255,255,255, 0.7);
+    --color-lightblack: #333;
+    --color-lightgray: #e7e7e7;
+    --color-midgray: #d4d4d4;
+    --color-darkgray: #909090;
+    --color-blue: #0088ce;
+    --color-semi-lightgray: #e0e0e0;
+    --color-lightblue: #bfe2f5;
+    --color-darkred: #ae0001;
+    --color-shadow: rgba(0, 0, 0, 0.6);
+    --color-box-shadow : rgba(0,0,0,0.22);
+    --color-shadow-blue: rgba(179, 230, 255,.3);
+    --color-shadow-darkblue: rgba(97, 176, 215, 0.3);
+    --color-orange: #e65c00;
+    --color-green: #008000;
+    --color-yellow: #e6b800;
+
+}

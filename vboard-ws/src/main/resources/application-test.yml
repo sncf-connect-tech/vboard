@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    driverClassName: org.hsqldb.jdbcDriver
+    url: jdbc:hsqldb:mem:.;sql.syntax_mys=true
+    username: SA
+    password:
+elasticsearch:
+  serverUri: dummy:0000
+  pinsIndex: dummy_index
+  querySize: 1
+com:
+  vsct:
+    vboard:
+      hostname: localhost

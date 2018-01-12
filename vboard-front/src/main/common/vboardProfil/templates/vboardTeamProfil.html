@@ -1,0 +1,165 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div data-ng-hide="team" class="cssload-container">
+    <div class="cssload-whirlpool"></div>
+    <div class="scroll-fixation"></div>
+</div>
+<div class="chargement" data-ng-hide="team">
+    <svg class="chargement__picto" role="presentation" viewBox="0 0 124 24">
+        <use xlink:href="images/icon-loader.svg#icon-loader" />
+    </svg>
+</div>
+<div class="profil" data-ng-show="team">
+    <div class="profil--page">
+        <div class="profil--card box-shadow">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Informations Générales</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="t-color-blue--text">Nom: </label>
+                    <input class="input t-color-lightblue--border" type="text" value="{{ team.name }}" disabled>
+                    <label for="team--profil--email" class="t-color-blue--text">E-mail: </label>
+                    <input id="team--profil--email" class="input t-color-lightblue--border" type="email" data-ng-model="team.email" data-ng-disabled="!perm" data-ng-focus="teamUpdateFocus()" data-ng-blur="submitTeamUpdate(team)">
+                </div>
+                <div class="col-md-6">
+                    <label class="t-color-blue--text" for="team--profil--projet">Projet: </label>
+                    <input id="team--profil--projet" class="input t-color-lightblue--border" type="text" data-ng-model="team.project" data-ng-disabled="!perm" data-ng-focus="teamUpdateFocus()" data-ng-blur="submitTeamUpdate(team)">
+                </div>
+            </div>
+        </div>
+
+        <div id="profil--personnal--info" class="profil--card box-shadow">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Informations de l'équipe</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="t-color-blue--text">Avatar: </div><img class="profil--card--img" data-ng-src="{{ myCroppedAvatar }}" alt="Avatar" /><img-crop data-ng-show="showCrop" class="cropArea" image="myAvatar" result-image="myCroppedAvatar"></img-crop>
+                    <div class="profil--uploadBtn">
+                        <div class="button--upload input--file t-color-darkgray--border t-fontSize-small t-color-midgray--background t-color-darkgray--border" data-ng-hide="!perm"
+                             ondragover="this.style.borderColor = '#82d3e5'; this.style.backgroundColor = '#cae4f5';"
+                             ondragleave="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'"
+                             ondrop="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'">
+                            <input type="file" id="avatarInput" dropzone="copy" class="input--file--hide pointer" accept="image/*"/>
+                            <span class="fi-upload"></span>
+                            <span>Upload ou drop</span>
+                        </div>
+                        <button data-ng-show="showCrop && perm" type="button" data-ng-click="submitAvatarUpdate()"
+                                class="btn btn-success">
+                            <span class="fi-check"></span>
+                            <span>Sauvegarder</span>
+                        </button>
+                        <button data-ng-hide="!perm || (showCrop || myCroppedAvatar === 'images/avatar.png')" type="button" data-ng-click="submitDeleteAvatar()"
+                                class="btn btn-danger">
+                            <span class="fi-x"></span>
+                            <span>Supprimer</span>
+                        </button>
+                    </div>
+                    <label for="team--profil--textarea" class="t-color-blue--text">Info: </label>
+                    <textarea id="team--profil--textarea" data-ng-keyup="profileResize()" data-ng-model="team.info" data-ng-focus="teamUpdateFocus()" data-ng-blur="submitTeamUpdate(team)" class="textArea textArea-resize t-color-lightblue--border" maxlength="255" data-ng-disabled="!perm"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <div class="t-color-blue--text">Membres: <button class="btn btn-sm profil--addTeam" data-ng-if="perm" data-ng-click="addTeam()">+</button></div>
+                    <br>
+                    <div class="row" data-ng-repeat="member in team.members track by $index" data-ng-if="perm">
+                        <div class="col-md-11">
+                            <ui-select data-ng-model="team.members[$index]" class="profil--card--select2" on-select="setMembers(team.members)">
+                                <ui-select-match>
+                                    <span data-ng-bind="viewValue(member)"></span>
+                                </ui-select-match>
+                                <ui-select-choices repeat="suggestion in (userSuggest | filter: $select.search)">
+                                    <span data-ng-bind="viewValue(suggestion)"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn btn-sm profil--removeTeam t-color-blue--text" data-ng-click="removeMember(member)">-</button>
+                        </div>
+                    </div>
+                    <div class="row" data-ng-repeat="member in team.members track by $index" data-ng-if="!perm">
+                        <div class="col-md-10">
+                            <input class="input t-color-lightblue--border" type="text" value="{{ viewValue(team.members[$index]) }}" disabled>
+                        </div>
+                        <div class="col-md-2">
+                            <a href="#/profil/{{ member.split(';')[2] }}" class="btn btn-info profil--team-link">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="profil--card box-shadow" data-ng-if="perm || team.localisation">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Localisation</h2>
+            <label for="team--profil--map" class="t-color-blue--text">Bâtiment et étage de l'équipe: </label>
+            <select id="team--profil--map" name="localisation" data-ng-model="team.localisation" data-ng-change="submitTeamUpdate(team)" data-ng-disabled="!perm" class="input t-color-lightblue--border">
+                <option value="">Selectionner une localisation</option>
+                <option data-ng-selected="team.localisation == localisation" data-ng-repeat="localisation in localisations track by $index" value="{{localisation}}">{{ localisationName(localisation) }}</option>
+            </select>
+            <button class="btn-warning btn" data-ng-if="team.localisation && perm && team.longitude === 0 && team.latitude === 0" data-ng-click="changeLocalisation()">Définir l'emplacement exact</button>
+            <button class="btn-warning btn" data-ng-if="team.localisation && perm && (team.longitude !== 0 || team.latitude !== 0)" data-ng-click="changeLocalisation()">Changer l'emplacement exact</button>
+            <div>
+                <div data-ng-if="team.localisation && (team.longitude !== 0 || team.latitude !== 0)" class="profil--card--localisationPoint" style="left: {{ team.longitude }}px; top: {{ team.latitude }}px;"></div>
+                <img id="imglocalisation" data-ng-mousedown="finishSetLocalisation()" data-ng-mousemove="getCoords($event)" class="profil--card--localisation {{ setLocalisation ? 'crosshair' : 'pointer' }}" src="/localisations/{{ team.localisation }}.png" data-ng-if="team.localisation">
+                <div data-ng-if="team.localisation && (team.longitude !== 0 || team.latitude !== 0)" class="row">
+                    <div class="col-md-1"><div class="profil--card--localisationPoint" style="float: right;"></div></div>
+                    <div class="col-md-5">Emplacement de l'équipe.</div>
+                </div>
+            </div>
+        </div>
+        <div class="profil--card box-shadow profil--card--badges">
+            <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Badges</h2>
+            <div class="row">
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Chroniqueur: Epingles postées ! (Niveau: {{ badges.pins_posted_level }}, {{ statsPercentage.pins_posted }}% du niveau suivant)" class="fi-book-bookmark badge-pin badge-pin-{{ badges.pins_posted_level }}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Commentateur: Commentaires postés ! (Niveau: {{ badges.comments_posted_level }}, {{ statsPercentage.comments_posted }}% du niveau suivant)" class="fi-microphone badge-pin badge-pin-{{ badges.comments_posted_level }} largePadding"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Fan: Likes émis ! (Niveau: {{ badges.likes_posted_level }}, {{ statsPercentage.likes_posted }}% du niveau suivant)" class="fi-like badge-pin badge-pin-{{ badges.likes_posted_level }}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Collectionneur: Epingles sauvegardées ! (Niveau: {{ badges.saved_pins_level }}, {{ statsPercentage.saved_pins }}% du niveau suivant)" class="fi-save badge-pin badge-pin-{{ badges.saved_pins_level }} medPadding"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Epingle polémique: Commentaires reçus sur une épingle ! (Niveau: {{ badges.comments_received_for_one_pin_level }}, {{ statsPercentage.comments_received_for_one_pin }}% du niveau suivant)" class="fi-comment-quotes badge-pin badge-pin-{{ badges.comments_received_for_one_pin_level }} mediumPadding"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Animateur: Commentaires reçus ! (Niveau: {{ badges.comment_received_level }}, {{ statsPercentage.comment_received }}% du niveau suivant)" class="fi-comments badge-pin badge-pin-{{ badges.comment_received_level }} shortPadding"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Orateur: Likes reçus ! (Niveau: {{ badges.likes_received_level }}, {{ statsPercentage.likes_received }}% du niveau suivant)" class="fi-torsos-all badge-pin badge-pin-{{ badges.likes_received_level }} shortPadding"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Epingle appréciée: Likes reçus sur une épingle ! (Niveau: {{ badges.likes_received_for_one_pin_level }}, {{ statsPercentage.likes_received_for_one_pin }}% du niveau suivant)" class="fi-target badge-pin badge-pin-{{ badges.likes_received_for_one_pin_level }} mediumPadding"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-md-offset-2">
+                    <div data-toggle="tooltip" title="Lecteur: Connexions régulières ! (Niveau: {{ badges.connexion_number_level }}, {{ statsPercentage.connexion_number }}% du niveau suivant)" class="fi-calendar badge-pin badge-pin-{{ badges.connexion_number_level }}"></div>
+                </div>
+                <div class="col-md-3">
+                    <div data-toggle="tooltip" title="Champion: Tous les Badges obtenus !!! (Niveau: {{ badges.global_level }})" class="fi-trophy badge-pin badge-pin-{{ badges.global_level }}"></div>
+                </div>
+                <div class="col-md-3" data-ng-if="badges.secret_level > 0">
+                    <div data-toggle="tooltip" title="?" class="fi-magnifying-glass badge-pin badge-pin-10 shortPadding"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

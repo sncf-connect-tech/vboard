@@ -1,0 +1,43 @@
+{
+    // Possible Errors
+    "box-model": false,
+    "display-property-grouping": 2,
+    "duplicate-properties": false,
+    "empty-rules": 2,
+    "known-properties": false,
+
+    // Compatibility
+    "box-sizing": false,
+    "compatible-vendor-prefixes": false,
+    "gradients": false,
+    "text-indent": false,
+    "vendor-prefix": false,
+    "fallback-colors": false,
+    "star-property-hack": 2,
+    "underscore-property-hack": 2,
+    "bulletproof-font-face": false,
+
+    // Performance
+    "font-faces": false,
+    "import": false,
+    "regex-selectors": false,
+    "universal-selector": false,
+    "unqualified-attributes": false,
+    "zero-units": 2,
+    "overqualified-elements": false,
+    "shorthand": false,
+    "duplicate-background-images": false,
+
+    // Maintainability & Duplication
+    "floats": 2,
+    "font-sizes": false,
+    "ids": 2,
+    "important": false,
+
+    // Accessibility
+    "outline-none": 2,
+
+    // OOCSS
+    "qualified-headings": false,
+    "unique-headings": false
+}

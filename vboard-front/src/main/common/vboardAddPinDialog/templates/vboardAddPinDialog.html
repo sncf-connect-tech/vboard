@@ -1,0 +1,133 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div class="vboardAddPinDialog--popin">
+    <!-- Pin preview -->
+    <div class="vboardPin vboardAddPinDialog--pin">
+
+        <iframe class="vboardPin--imgType" data-ng-if="videoLink && image.show" width="244" height="137" src="{{ videoLink }}" frameborder="0" allowfullscreen></iframe>
+        <a data-ng-href="" class="link-notUnderlined">
+            <div data-ng-if="image.show && !videoLink" class="vboardPin--img--full">
+                <img data-ng-src="{{ image.croppedImage }}" class="vboardPin--imgType"/>
+            </div>
+            <div data-ng-if="editablePin.title" class="vboardPin--title t-color-black--text t-font-main2 t-fontSize-medium-large">
+                {{ editablePin.title }}
+            </div>
+            <div class="vboardPin--text t-color-lightblack--text t-font-main t-fontSize-small" data-ng-bind-html="editablePin.descriptionShow">
+            </div>
+            <div class="vboardPin--tags t-color-black--text t-font-secondary2 t-fontSize-x-small text-center">
+                {{ displayLabels }}
+            </div>
+        </a>
+        <div class="vboardPin--interaction">
+            <span class="t-fontSize-xx-small vboardPin--likes">0 like</span>
+            <span class="fi-comment t-color-lightblack--text t-fontSize-large vboardPin--comment"></span>
+            <span class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like"></span>
+        </div>
+        <a ng-href="" class="link-notUnderlined">
+            <div class="vboardPin--cred t-color-lightgray--border t-font-secondary1 t-fontSize-xx-small t-color-black--text">
+                <img-with-fallback src="editablePin.avatar" fallback="images/avatar.png" type="image/png" name="avatar"></img-with-fallback>
+                <span data-ng-if="author" class="vboardPin--author"> par {{ editablePin.author }} </span>
+                <br>
+                <div class="vboardPin--date">{{ editablePin.date }}</div>
+            </div>
+        </a>
+    </div>
+
+    <!-- Pin Form -->
+    <div class="vboardAddPinDialog t-font-main">
+        <span data-ng-if="error" class="t-color-main1--text text-bold">Une erreur est survenue ({{ error.data.status }})</span>
+        <form name="addLink">
+            <fieldset class="vboardAddPinDialog--linkgroup t-color-black--border">
+                <legend class="vboardAddPinDialog--linkgrouptitle t-color-black--text">{{ popupTitle }}</legend>
+                <div class="vboardAddPinDialog--formgroup">
+                    <label for="pin_title" class="t-fontSize-small">Titre</label>
+                    <input type="text" id="pin_title" maxlength="255" placeholder="Titre" data-ng-model="editablePin.title"
+                           class="vboardAddPinDialog--input t-color-darkgray--border">
+                </div>
+                <div class="vboardAddPinDialog--formgroup">
+                    <label for="pin_url" class="t-fontSize-small">Lien</label>
+                    <input type="text" id="pin_url" maxlength="255" placeholder="Lien" data-ng-model="editablePin.url"
+                           class="vboardAddPinDialog--input t-color-darkgray--border" data-ng-blur="getInfoFromURL(editablePin.url)">
+                </div>
+                <div class="vboardAddPinDialog--formgroup">
+                    <div class="row">
+                        <div class="{{ !image.show ? 'col-md-5' : 'col-md-12' }}">
+                            <label class="t-fontSize-small" for="imgInput">Image</label>
+                            <div class="vboardAddPinDialog--imagebutton">
+                                <div class="button--upload input--file vboardAddPinDialog--inputfile t-color-black--text t-fontSize-x-small t-color-midgray--background t-color-darkgray--border"
+                                     ondragover="this.style.borderColor = '#82d3e5'; this.style.backgroundColor = '#cae4f5';"
+                                     ondragleave="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'"
+                                     ondrop="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'">
+                                    <input dropzone="copy" type="file" id="imgInput" class="input--file--hide pointer" onchange="angular.element(this).scope().uploadFile(this.files[0])" accept="image/*"/>
+                                    <span class="fi-upload pointer"></span>
+                                    <span>Upload ou drop</span>
+                                </div>
+                                <button data-ng-show="image.show" type="button" data-ng-click="removeImage()"
+                                        class="vboardAddPinDialog--imgsuppr btn btn-danger">
+                                    <span class="fi-x"></span>
+                                    <span>Supprimer</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="{{ !image.show ? 'col-md-7' : 'hide' }}">
+                            <label for="img_url" class="t-fontSize-small">URL de l'image ou iframe video <span class="fi-info" data-toggle="tooltip" data-placement="top" title="Pour mettre une vidéo, notamment youtube, allez sur la page de la vidéo, cliquez sur 'partager', puis cliquez sur l'onglet 'intégrer'. Copiez le code donné et collez le ici."></span></label>
+                            <input type="text" id="img_url" placeholder="URL ou iframe" data-ng-model="image.croppedImage" class="vboardAddPinDialog--input t-color-darkgray--border" data-ng-blur="addImageURL()">
+                        </div>
+                    </div>
+                </div>
+                <div class="vboardAddPinDialog--crop"><img-crop data-ng-show="showCrop" area-type="rectangle" area-min-size="{w:60, h:40}" aspect-ratio="1.5" result-image-size="{w:300, h:200}" class="cropArea" image="image.originalImage" result-image="image.croppedImage"></img-crop></div>
+
+                <div class="vboardAddPinDialog--formgroup">
+                    <label for="pin_description" class="t-fontSize-small">Description *</label>
+                    <textarea id="pin_description" type="text" placeholder="Description" data-ng-model="editablePin.description" maxlength="255" required
+                              class="vboardAddPinDialog--description t-color-darkgray--border">
+                    </textarea>
+                </div>
+                <div class="vboardAddPinDialog--formgroup">
+                    <label for="pin_label" class="t-fontSize-small">Labels <span class="fi-info" data-toggle="tooltip" data-placement="top" title="Plusieurs labels peuvent être rajoutés. Ajouter les labels un par un et appuyer sur la touche Entrée pour chaque ajout."></span></label>
+                    <input list="labels" type="text" id="pin_label" placeholder="Label associé (Touche Entrée pour ajouter le label)"
+                           data-ng-model="editablePin.newLabel"
+                           data-ng-keyup="$event.keyCode===13 && addLabel()"
+                           class="vboardAddPinDialog--input t-color-darkgray--border">
+                    <datalist id="labels">
+                        <option data-ng-repeat="suggestion in labelSuggests track by $id(suggestion)" value="{{ suggestion }}"></option>
+                    </datalist>
+                </div>
+                <div class="vboardAddPinDialog--labels">
+                    <span data-ng-repeat="label in editablePin.labels track by $index"
+                          class="vboardAddPinDialog--label t-color-white--text t-font-secondary1 t-fontSize-small">
+                        <span>{{label}}</span>
+                        <a href="" class="vboardAddPinDialog--labelDelete fi-x t-color-white--text" data-ng-click="deleteLabel($index)"></a>
+                    </span>
+                </div>
+
+            </fieldset>
+            <button type="button" data-ng-click="submit()" data-ng-disabled="addLink.$invalid"
+                    class="button--main t-color-midgray--background t-color-darkgray--border t-fontSize-small">
+                <span class="fi-check"></span>
+                <span>Valider</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // initialize bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+</script>

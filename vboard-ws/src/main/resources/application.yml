@@ -1,0 +1,68 @@
+application:
+  name: ${project.artifactId}
+  version: ${project.version}
+  buildDate: ${buildDate}
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+    com:
+      vsct: DEBUG
+
+error:
+  whitelabel:
+    enabled: false
+endpoints: # by default disable and protect all actuator endpoints
+  enabled: false
+  sensitive: true
+
+spring:
+  jackson:
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: update
+      # Possible values:
+      # - none: do nothing
+      # - validate: validate the schema, makes no changes to the database
+      # - update: update the DB schema (add columns, never removes them) based on the code Entities
+      # - create: creates the DB schema, destroying previous data
+      # - create-drop: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped
+  datasource:
+    url: jdbc:mysql://${VBOARD_DB_HOST}/vboard_pins
+    username: root
+    password: root
+    testOnBorrow: true
+    validationQuery: SELECT 1
+elasticsearch:
+  serverUri: http://${VBOARD_ELASTICSEARCH_HOST}:9200
+  pinsIndex: jdbc_pins_index
+  querySize: 50
+
+com:
+  vsct:
+    vboard:
+      hostname: ${VBOARD_HOSTNAME}
+uploads:
+  providerPath: ${VBOARD_IMAGES_DIRECTORY}
+  wordpressImagePath: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
+proxy:
+  hostname: ${PROXY_HOST}
+  port: 3128
+emails:
+  hostname: ${MAIL_HOST}
+  port: 25
+  sender: ${MAIL_SENDER}
+administrators:
+  emails: ${ADMINS}
+
+keycloak:
+  realm: ${KCK_REALM}
+  realm-key: ${KCK_REALM_KEY}
+  ssl-required: none
+  resource: vboard-ws
+  bearer-only: true
+  auth-server-url: http://${KCK_PUBLIC_HOST}/auth

@@ -1,0 +1,126 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div data-ng-hide="leaders" class="cssload-container">
+    <div class="cssload-whirlpool"></div>
+    <div class="scroll-fixation"></div>
+</div>
+<div class="chargement" data-ng-hide="leaders">
+    <svg class="chargement__picto" role="presentation" viewBox="0 0 124 24">
+        <use xlink:href="images/icon-loader.svg#icon-loader" />
+    </svg>
+</div>
+
+<div class="vboardLeaderBoard box-shadow" data-ng-show="leaders">
+    <h2 class="t-fontSize-big t-color-blue--text t-font-main2">LeaderBoard</h2>
+    <div class="row">
+        <div class="col-lg-7 col-md-offset-5">
+            <button data-ng-click="teamLeaderBoard()" class="btn btn-info vboardLeaderBoard--switchBoard" data-ng-if="!teamStat">Voir le LeaderBoard des équipes</button>
+            <button data-ng-click="userLeaderBoard()" class="btn btn-info vboardLeaderBoard--switchBoard" data-ng-if="teamStat">Voir le LeaderBoard des utilisateurs</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Epingles postées</div>
+                        <div data-toggle="tooltip" title="Epingles postées !" class="t-fontSize-x-big fi-book-bookmark"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.pins_posted track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><div><img data-ng-src="{{ leader.avatar }}" /><div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.pins_posted : '-'}} points<br>{{ displayName(leader) }}</div></div></a>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Commentaires postés</div>
+                        <div data-toggle="tooltip" title="Commentaires postés !" class="fi-microphone badge-pinlargePadding t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.comments_posted track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.comments_posted : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Epingles likées</div>
+                        <div data-toggle="tooltip" title="Likes émis !" class="fi-like t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.likes_posted track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.likes_posted : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Connexions régulières</div>
+                        <div data-toggle="tooltip" title="Connexions régulières !" class="fi-calendar t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.connexions track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.connexion_number : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Commentaires reçus</div>
+                        <div data-toggle="tooltip" title="Commentaires reçus !" class="fi-comments shortPadding t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.comment_received track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.comment_received : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Commentaires reçus sur une épingle</div>
+                        <div data-toggle="tooltip" title="Commentaires reçus sur une épingles !" class="fi-comment-quotes mediumPadding t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.comments_received_for_one_pin track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.comments_received_for_one_pin : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Likes reçus</div>
+                        <div data-toggle="tooltip" title="Likes reçus !" class="fi-torsos-all shortPadding t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.likes_received track by $index" class="vboardLeaderBoard--Avatar {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.likes_received : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 vboardLeaderBoard--place">
+                    <div class="vboardLeaderBoard--Badge">
+                        <div class="t-fontSize-medium t-font-bold t-shadow-none t-color-lightblack--text">Likes reçus sur une épingle</div>
+                        <div data-toggle="tooltip" title="Likes reçus sur une épingle !" class="fi-target mediumPadding t-fontSize-x-big"></div>
+                    </div>
+                    <div data-ng-repeat="leader in leaders.likes_received_for_one_pin track by $index" class="vboardLeaderBoard--Avatar  {{ $index % 2 === 0 ? 't-color-lightgray--background' : ''}}">
+                        <a data-ng-href="#/profil/{{ leader.name ? 'team/' +leader.name : leader.email }}" class="link-notUnderlined"><img data-ng-src="{{ leader.avatar }}" /></a>
+                        <div class="vboardLeaderBoard--Names">{{ leader.points ? leader.points.likes_received_for_one_pin : '-'}} points<br>{{ displayName(leader) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

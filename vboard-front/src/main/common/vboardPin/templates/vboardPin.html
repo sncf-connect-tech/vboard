@@ -1,0 +1,81 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<div id="{{pin.pinId}}" class="vboardPin box-shadow {{ pinClass }}" data-ng-mouseover="mouseover = true" data-ng-Mouseleave="mouseover = false">
+    <div class="vboardPin-edition" data-ng-show="perm && mouseover">
+        <vboard-delete-pin></vboard-delete-pin>
+        <a href="" data-ng-click="openEditPopin()" class="vboardPin--modify link-notUnderlined t-color-black--text"><span class="fi-pencil"></span></a>
+    </div>
+    <div class="vboardPin-edition" data-ng-show="mouseover && !perm && hasNewsletterRole">
+        <a href="" data-ng-click="toggleNewsletterTag()" class="vboardPin--nl link-notUnderlined t-color-black--text"><span class="fi-clipboard-pencil"></span></a>
+    </div>
+    <div class="vboardPin-save" data-ng-show="connected && mouseover && saved.indexOf(pin.pinId) < 0">
+        <a href="" data-ng-click="savePin()" class="link-notUnderlined t-color-black--text"><span class="transparency-light fi-star"></span></a>
+    </div>
+    <div class="vboardPin-save" data-ng-show="connected && mouseover && saved.indexOf(pin.pinId) >= 0">
+        <a href="" data-ng-click="unSavePin()" class="link-notUnderlined t-color-black--text"><span class="transparency-light t-color-orange--text fi-star"></span></a>
+    </div>
+
+    <iframe class="vboardPin--imgType" data-ng-if="pin.imgType && pin.imgType.indexOf('<iframe') === 0 && videoLink" width="244" height="137" src="{{ videoLink }}" frameborder="0" allowfullscreen></iframe>
+
+    <a data-ng-href="{{pin.hrefUrl}}" target="_blank" class="link-notUnderlined">
+
+        <div data-ng-if="pin.imgType && pin.imgType.indexOf('<iframe') !== 0" class="vboardPin--img--full">
+            <img data-ng-src="{{ pin.imgType }}" class="vboardPin--imgType">
+        </div>
+
+        <div data-ng-if="pin.pinTitle" class="vboardPin--title t-color-black--text t-font-main2 t-fontSize-medium-large">
+            {{ pin.pinTitle }}
+        </div>
+        <div class="vboardPin--text t-color-lightblack--text t-font-main t-fontSize-small" data-ng-bind-html="pin.indexableTextContent">
+
+        </div>
+    </a>
+
+    <div class="vboardPin--tags t-color-black--text t-font-secondary2 t-fontSize-x-small text-center">
+        <span data-ng-repeat="tag in tags(pin) track by $id(tag)"><a class="link-notUnderlined t-color-lightblack--text" data-ng-href="#/?label={{ encode(tag) }}">{{ tag }} &nbsp;</a></span>
+    </div>
+
+    <div class="vboardPin--interaction">
+        <span class="t-fontSize-xx-small vboardPin--likes" data-ng-mouseover="seeLikes(pin.pinId)" data-toggle="tooltip" data-delay="200" data-placement="bottom" data-original-title="{{ likesAuthors }}">{{ pin.likes }} like<span data-ng-if="pin.likes > 1">s</span></span><span class="t-fontSize-xx-small vboardPin--likes" data-ng-if="likes.indexOf(pin.pinId) >= 0"> dont vous</span>
+        <span class="fi-comment t-color-lightblack--text t-fontSize-large vboardPin--comment" data-ng-click="addComment()"><div data-ng-show="pin.commentsNumber > 0" class="vboardPin--commentsNumber {{ pin.commentsNumber > 9 ? 'vboardPin--multipleCommentsNumber' : ''}} t-color-white--text t-fontSize-x-small">{{ pin.commentsNumber }}</div></span>
+        <span data-ng-if="likes.indexOf(pin.pinId) < 0" class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like" data-ng-click="addLike(pin.pinId)"></span>
+        <span data-ng-if="likes.indexOf(pin.pinId) >= 0" class="fi-like t-color-blue--text t-fontSize-large vboardPin--unlike" data-ng-click="unlike(pin.pinId)"></span>
+        <span data-ng-if="!likes" class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like"></span>
+    </div>
+    <a data-ng-href="{{ authorLink }}" class="link-notUnderlined">
+        <div class="vboardPin--cred t-color-lightgray--border t-font-secondary1 t-fontSize-xx-small t-color-black--text">
+            <img-with-fallback src="pinAvatar" fallback="images/avatar.png" type="image/png" name="avatar"></img-with-fallback>
+            <span data-ng-if="readableAuthor" class="vboardPin--author">{{ readableAuthor }}</span>
+            <br>
+            <div class="vboardPin--date">{{ creationDate(pin) }}</div>
+        </div>
+    </a>
+    <div class="vboardPin--comments" data-ng-show="showAllComments" >
+        <div class="vboardPin--comments--scroll">
+            <vboard-comment data-ng-if="createAllComments" ng-repeat="comment in comments | orderBy : 'post_date_utc' track by comment.id"></vboard-comment>
+        </div>
+        <div class="vboardPin--addComment" data-ng-if="connected && newComment">
+            <textarea placeholder="Ajouter un commentaire..." rows="5" maxlength="255" required></textarea>
+            <button type="button" data-ng-click="submitComment($event.target.value)"
+                    class="btn t-color-midgray--background t-color-darkgray--border t-fontSize-small">
+                <span class="fi-check"></span>
+            </button>
+        </div>
+    </div>
+</div>

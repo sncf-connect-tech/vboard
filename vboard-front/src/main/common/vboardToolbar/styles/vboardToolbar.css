@@ -1,0 +1,175 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+  * The toolbar
+  */
+.vboardToolbar {
+    padding: 0.5rem 1rem;
+    box-shadow: 0 1px 2px 0 var(--color-box-shadow);
+    z-index: 100;
+}
+
+/**
+  * 1st lign = search field + buttons
+  */
+.vboardToolbar--topRow {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-left: 0; /* override foundation */
+}
+
+/**
+  * Search Field
+  */
+.vboardToolbar--searchColumn {
+    flex: 4;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    margin: 0; /* override foundation */
+    padding: 0;
+}
+.vboardToolbar--searchBlock {
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    width:100%;
+    height: 2rem;
+    border-radius: 0.5rem;
+    padding: 0;
+    margin-left: 0.2rem;
+}
+.vboardToolbar--searchBlockLogo {
+    height: 1.8rem;
+    flex: 1;
+    align: center;
+    max-width: 2.2rem;
+}
+.vboardToolbar--searchLogo {
+    max-height: 1.8rem;
+    min-height: 1.8rem;
+    width: auto;
+    float: right;
+    margin-right: 0.2rem;
+}
+.vboardToolbar--searchBlockText {
+    height: 2rem;
+    border: 1px solid;
+    flex: 4;
+    padding-left: 0.3rem;
+    border-radius: 0 .5rem .5rem 0;
+}
+.vboardToolbar--searchText, .vboardToolbar--searchText:focus {
+    height: 100%;
+    width:100%;
+    border: none;
+    outline: 0;
+    font-weight: bold;
+    border-radius: 0 .5rem .5rem 0;
+}
+
+.vboardToolbar--userInnerBlock:hover, .vboardToolbar--userProfile:hover {
+    color: var(--main-color-1);
+}
+
+/**
+  * User
+  */
+.vboardToolbar--userColumn {
+    align-items: center;
+    margin: 0; /* override foundation */
+    padding: 0;
+}
+
+.vboardToolbar--userBlock {
+    margin-left: 1rem;
+    border: 1px solid;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 2rem;
+    border-radius: .3rem 0 0 .3rem;
+    padding: 0 0.5rem;
+}
+
+.vboardToolbar--userProfile {
+    margin-left: 0;
+    border-radius: 0 .3rem .3rem 0;
+    width: 2rem;
+    font-size: 1.4rem;
+    color: var(--color-darkgray);
+}
+
+.vboardToolbar--userInnerBlock {
+    margin-left: 0;
+    border-radius: 0;
+    width: 2rem;
+    font-size: 1.4rem;
+    color: var(--color-darkgray);
+}
+
+.vboardToolbar--userNotification--tag {
+    border-radius: 50%;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: var(--color-darkred);
+    margin: -1.5rem -1.5rem 0 -.2rem;
+    z-index: 2;
+    color: white;
+    padding: 0.1rem;
+}
+
+.vboardToolbar--loading {
+    width: 10rem;
+    padding: 0;
+}
+
+/**
+  *  Labels
+  */
+.vboardToolbar-labels {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    cursor: pointer;
+    margin: 0; /* override foundation */
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+.vboardToolbar-labels--label {
+    margin: 0.1rem 0.2rem 0.1rem 0;
+    background-color: var(--color-darkgray);
+    line-height: 1;
+    white-space: nowrap;
+    display: inline-block;
+    padding: .25rem .5rem;
+    border-radius: 2rem;
+
+}
+.vboardToolbar-labels--label:hover {
+   background-color: var(--main-color-1);
+}
+.vboardToolbar-labels--labelActive {
+    background-color: var(--main-color-1);
+}
+
+.vboardToolbar-more-btn {
+    margin: 0 1.5rem 0 .5rem;
+}

@@ -1,0 +1,125 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/* Code from http://codepen.io/mikeambrosi/pen/JdEMVX (and resized)
+Licence:
+"Copyright (c) 2016 by Miguel Ambrosi (http://codepen.io/mikeambrosi/pen/JdEMVX)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
+
+*/
+
+.scroll-fixation {
+    position: absolute;
+    width: 1rem;
+    height: 25rem;
+}
+
+.cssload-container{
+    position:relative;
+    margin-top: 20%;
+}
+
+.cssload-whirlpool,
+.cssload-whirlpool::before,
+.cssload-whirlpool::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border: 0.375rem solid rgb(204,204,204);
+    border-left-color: rgb(0,0,0);
+    border-radius: 367rem;
+    -o-border-radius: 367rem;
+    -ms-border-radius: 367rem;
+    -webkit-border-radius: 367rem;
+    -moz-border-radius: 367rem;
+}
+
+.cssload-whirlpool {
+    margin: -9.2rem 0 0 -9.2rem;
+    height: 19.5rem;
+    width: 19.5rem;
+    animation: cssload-rotate 1900ms linear infinite;
+
+}
+
+.cssload-whirlpool::before {
+    content: "";
+    margin: -8.5rem 0 0 -8.5rem;
+    height: 17rem;
+    width: 17rem;
+    animation: cssload-rotate 1900ms linear infinite;
+}
+
+.cssload-whirlpool::after {
+    content: "";
+    margin: -10.65rem 0 0 -10.7rem;
+    height: 21.4rem;
+    width: 21.4rem;
+    animation: cssload-rotate 3800ms linear infinite;
+}
+
+
+
+@keyframes cssload-rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* VSCT train loading */
+
+.chargement {
+    position: absolute;
+    left: 50%;
+    width: 16.2rem;
+    height: 16.2rem;
+    overflow: hidden;
+    margin: -7.7rem 0 0 -7.6rem;
+    border-radius: 50%;
+}
+
+.chargement__picto {
+    width: 15rem;
+    margin-top: 7rem;
+    animation: chargement__animation 1.5s linear infinite;
+    fill: var(--color-lightblack);
+}
+
+.chargement-user {
+    overflow: hidden;
+}
+
+.chargement__picto-user {
+    width: 11rem;
+    animation: chargement__animation 1.5s linear infinite;
+    fill: var(--color-lightblack);
+}
+
+@keyframes chargement__animation {
+    from {
+        transform: translateX(-14rem);
+    }
+    to {
+        transform: translateX(15rem);
+    }
+}

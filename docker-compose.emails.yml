@@ -1,0 +1,10 @@
+version: '2'
+services:
+  batchs:
+    labels:
+      - cron.${PROJECT_NAME}-preferedlabelspins.cmd=/var/opt/batch_sync/scripts/sendMailPreferedLabelsPins.sh
+      - cron.${PROJECT_NAME}-preferedlabelspins.time=0 8 15 * *
+      - cron.${PROJECT_NAME}-leaderboard.cmd=/var/opt/batch_sync/scripts/sendMailLeaderboard.sh
+      - cron.${PROJECT_NAME}-leaderboard.time=0 8 5 * *
+      - cron.${PROJECT_NAME}-bestmonthpins.cmd=/var/opt/batch_sync/scripts/sendMailBestMonthPins.sh
+      - cron.${PROJECT_NAME}-bestmonthpins.time=0 8 25 * *

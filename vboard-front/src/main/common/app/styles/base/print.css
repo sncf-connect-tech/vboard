@@ -1,0 +1,108 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/*
+ * Print reset from KNACSS : http://knacss.com/knacss.html.
+ */
+
+@media print {
+    * {
+        background: transparent !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    body {
+        width: auto !important;
+        margin: auto !important;
+        font-family: serif;
+        font-size: 12pt;
+        background-color: #fff !important;
+        color: #333 !important;
+    }
+
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote,
+    ul,
+    ol {
+        color: #000 !important;
+        margin: auto !important;
+    }
+
+    .print {
+        display: block;
+        /* displaying .print elements */
+    }
+    .noPrint {
+        display: none;
+        /* hiding .noPrint elements */
+    }
+
+    img {
+        filter: grayscale(100%);
+    }
+
+    p,
+    blockquote {
+        orphans: 3;
+        /* no orphans */
+        widows: 3;
+        /* no widows */
+    }
+
+    blockquote,
+    ul,
+    ol {
+        page-break-inside: avoid;
+        /* no breaks inside these elements */
+    }
+
+    h1 {
+        page-break-before: always;
+        /* page break before main headers */
+    }
+
+    h1,
+    h2,
+    h3,
+    caption {
+        page-break-after: avoid;
+        /* no breaks after these elements */
+    }
+
+    a {
+        color: #000 !important;
+        text-decoration: underline !important;
+    }
+
+    a[href]:after {
+        content: " (" attr(href) ")";
+        /* displaying URLs */
+    }
+
+    a[href^="javascript:"]:after,
+    a[href^="#"]:after {
+        content: "";
+    }
+}

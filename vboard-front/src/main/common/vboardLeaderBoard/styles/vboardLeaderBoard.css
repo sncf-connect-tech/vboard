@@ -1,0 +1,82 @@
+/*
+ * This file is part of the vboard distribution.
+ * (https://github.com/voyages-sncf-technologies/vboard)
+ * Copyright (c) 2017 VSCT.
+ *
+ * vboard is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, version 3.
+ *
+ * vboard is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+.vboardLeaderBoard {
+    width: 90%;
+    margin: 4.7rem auto 0 auto;
+    padding: 3rem 4rem;
+    border-radius: 0.5rem;
+    background-color: white;
+    text-decoration: none;
+    height: 97rem;
+}
+
+.vboardLeaderBoard .row{
+    margin: 0;
+}
+
+.vboardLeaderBoard h2 {
+    margin-bottom: 3rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+.vboardLeaderBoard--place {
+    height: 5.5rem;
+    padding: 0;
+}
+
+.vboardLeaderBoard .col-md-6 {
+    padding: 0;
+}
+
+.vboardLeaderBoard .col-md-3 {
+    padding: 0;
+    height: 85rem;
+}
+
+.vboardLeaderBoard--Avatar {
+    padding: 1rem;
+    height: 7.5rem;
+    text-align: center;
+}
+
+.vboardLeaderBoard--Badge {
+    text-align: center;
+    text-shadow: .1rem .2rem .3rem var(--color-black), 0 0 0 var(--color-black), .1rem .2rem .3rem var(--color-black);
+    color: var(--color-darkgray);
+    height: 6rem;
+}
+
+.vboardLeaderBoard .col-md-3 img {
+    width: 4rem;
+    border: .3rem outset #8c8c8c;
+    border-radius: 50%;
+    margin-left: 0;
+}
+
+.vboardLeaderBoard--Names {
+    font-size: .8rem;
+    font-weight: bold;
+    color: var(--color-lightblack);
+    text-align: center;
+}
+
+.vboardLeaderBoard--switchBoard {
+    margin-bottom: 3rem;
+}

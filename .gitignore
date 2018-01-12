@@ -1,0 +1,12 @@
+# Maven & Java
+target/
+
+# Node JS
+bower_components/
+grunt-target/
+node_modules/
+npm-debug.log
+
+# IntelliJ
+/.idea/
+vboard.iml
