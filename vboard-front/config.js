@@ -20,13 +20,5 @@
 
 angular.module('vboard').constant('CONFIG', {
     blogUrl: '$VBOARD_WP_PUBLIC_HOST',
-    localisations: [
-        {id: 'Nantes1', name: 'Nantes 1er Etage'},
-        {id: 'Nantes2', name: 'Nantes 2eme Etage'},
-        {id: 'Nantes5', name: 'Nantes 5eme Etage'},
-        {id: 'Nantes6', name: 'Nantes 6eme Etage'},
-        {id: 'Collines2', name: 'Collines 2eme Etage'},
-        {id: 'Collines3', name: 'Collines 3eme Etage'},
-        {id: 'Collines8', name: 'Collines 8eme Etage'}
-    ],
+    localisations: '$VBOARD_LOCALISATIONS'.split(';').map(function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; }),
 });

@@ -1,3 +1,5 @@
+language: java
+
 front:
   - build
   - test
@@ -7,7 +9,7 @@ jobs:
     - stage: build
       script:
         - mvn clean install -Dmaven.test.skip=true
-        - vboard-web-fo/install-build.sh
+        - vboard-front/install-build.sh
     - stage: test
       script:
         - mvn test

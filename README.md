@@ -34,7 +34,7 @@ V.Board is made of the folling modules, launched as `docker-compose` services:
 - `batchs`: Java batch job to update the ElasticSearch index
 
 ## Docker services
-Some extra `docker-compose` services are used: 
+Some extra `docker-compose` services are used:
 
 - `elasticsearch`: a standard Elasticsearch instance
 - `wsdb`: MySQL database for the backend
