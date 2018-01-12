@@ -22,7 +22,7 @@ if [ -n "${KCK_REALM:-}" ] || [ -n "${KCK_PUBLIC_HOST:-}" ] || [ -n "${KEYCLOAK_
 
     echo 'Inserting $KCK_* env variables in keycloak.json'
     sed -i "s/\$KCK_REALM/$KCK_REALM/" /var/www/vboard/compile/scripts/keycloak.json
-    sed -i "s/\$$KCK_PUBLIC_HOST/$KCK_PUBLIC_HOST/" /var/www/vboard/compile/scripts/keycloak.json
+    sed -i "s/\$KCK_PUBLIC_HOST/$KCK_PUBLIC_HOST/" /var/www/vboard/compile/scripts/keycloak.json
 
     echo 'Inserting $KEYCLOAK_JS_URL in index.html'
     sed -i "s~>window.Keycloak = 'DISABLED'~ src=\"$KEYCLOAK_JS_URL\">~" /var/www/vboard/index.html
