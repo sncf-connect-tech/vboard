@@ -1,5 +1,7 @@
 [![](https://travis-ci.org/voyages-sncf-technologies/vboard.svg?branch=master)](https://travis-ci.org/voyages-sncf-technologies/vboard)
 
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+
 V.Board is an information sharing app. It allows users to share "pins", that is byte-size pieces of information: an URL, a picture and a short description.
 V.Board is designed to be used for communication among an organization teams: project advancement, technology watch, etc.
 
