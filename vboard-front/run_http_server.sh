@@ -8,7 +8,7 @@ if ! [ -d /var/www/vboard/compile ]; then
 fi
 
 echo 'Inserting $VBOARD_WP_PUBLIC_HOST or /vblog in config.js'
-sed -i "s/\$VBOARD_WP_PUBLIC_HOST/${VBOARD_WP_PUBLIC_HOST:-/vblog}/" /var/www/vboard/compile/scripts/config.js
+sed -i "s~\$VBOARD_WP_PUBLIC_HOST~${VBOARD_WP_PUBLIC_HOST:-/vblog}~" /var/www/vboard/compile/scripts/config.js
 echo 'Inserting $VBOARD_LOCALISATIONS in config.js'
 sed -i "s/\$VBOARD_WP_PUBLIC_HOST/${VBOARD_LOCALISATIONS:-}/" /var/www/vboard/compile/scripts/config.js
 
