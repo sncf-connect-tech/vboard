@@ -21,14 +21,14 @@
         <buildDate>${maven.build.timestamp}</buildDate>
 
         <java.version>1.8</java.version>
-        <springboot.version>1.5.1.RELEASE</springboot.version>
+        <springboot.version>1.5.9.RELEASE</springboot.version>
         <commons-io.version>2.4</commons-io.version>
         <elasticsearch.version>1.5.2</elasticsearch.version>
         <mockito.version>1.10.19</mockito.version>
         <restassured.version>2.4.1</restassured.version>
         <jest.version>0.1.6</jest.version>
-        <opensaml.version>2.6.4</opensaml.version>
         <keycloak.version>3.2.0.Final</keycloak.version>
+        <logback.version>1.2.3</logback.version><!-- Must be >=1.2.0 for security reasons, cf. CVE-2017-5929 -->
     </properties>
 
     <!-- ================= -->
@@ -175,12 +175,6 @@
             <groupId>io.searchbox</groupId>
             <artifactId>jest</artifactId>
             <version>${jest.version}</version>
-        </dependency>
-        <!-- OpenSAML -->
-        <dependency>
-            <groupId>org.opensaml</groupId>
-            <artifactId>opensaml</artifactId>
-            <version>${opensaml.version}</version>
         </dependency>
         <!-- RSS -->
         <dependency>
