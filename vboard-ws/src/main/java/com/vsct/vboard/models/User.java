@@ -36,6 +36,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.countMatches;
+
 @Entity
 @Table(name = "users")
 @SuppressFBWarnings("STT_STRING_PARSING_A_FIELD")
@@ -253,7 +255,7 @@ public class User implements Profil, Serializable {
 
     // Get an optional email from a given string (with the format firstName,LastName,email)
     static public Optional<String> getEmailFromString(String user) {
-        return Optional.ofNullable(org.apache.commons.lang.StringUtils.countMatches(user, ",") == 2 ? user.split(",")[2] : null);
+        return Optional.ofNullable(countMatches(user, ",") == 2 ? user.split(",")[2] : null);
     }
 
     @Override

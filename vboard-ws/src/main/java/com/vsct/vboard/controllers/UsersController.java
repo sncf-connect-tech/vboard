@@ -26,7 +26,7 @@ import com.vsct.vboard.parameterFormat.UserParams;
 import com.vsct.vboard.parameterFormat.UserParamsUpdate;
 import com.vsct.vboard.services.UploadsManager;
 import com.vsct.vboard.utils.JavaUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;

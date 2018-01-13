@@ -1,7 +1,10 @@
+[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
+[![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
+
 [![TravisCI build](https://travis-ci.org/voyages-sncf-technologies/vboard.svg?branch=master)](https://travis-ci.org/voyages-sncf-technologies/vboard) [![RSS from AllMyChanges](https://img.shields.io/badge/rss-allmychanges-yellow.svg)](https://allmychanges.com/rss/2b583bf388b767a02deb52966222e624/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-[![Known npm Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-front%2Fpackage.json)
+Dependency analysis: [![Known npm Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-front%2Fpackage.json)
  (npm) [![Known Maven Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-ws%2Fpom.xml)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-ws%2Fpom.xml) (Maven)
 
 
