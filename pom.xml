@@ -19,30 +19,6 @@
         <url>https://github.com/voyages-sncf-technologies/vboard</url>
     </scm>
 
-    <!-- =========================== -->
-    <!-- = Developers informations = -->
-    <!-- =========================== -->
-    <developers>
-        <developer>
-            <id>lucas_cimon</id>
-            <name>CIMON Lucas</name>
-            <email>LCimon#AT#oui.sncf</email>
-            <organization>oui.sncf</organization>
-            <roles>
-                <role>lead developer</role>
-            </roles>
-        </developer>
-        <developer>
-            <id>thomas_garesse</id>
-            <name>GARESSE Thomas</name>
-            <email>TGaresse#AT#oui.sncf</email>
-            <organization>oui.sncf</organization>
-            <roles>
-                <role>developer</role>
-            </roles>
-        </developer>
-    </developers>
-
     <!-- ================= -->
     <!-- = Build plugins = -->
     <!-- ================= -->
