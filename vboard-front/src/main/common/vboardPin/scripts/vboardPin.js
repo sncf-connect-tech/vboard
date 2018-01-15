@@ -42,7 +42,7 @@ angular.module('vboard').directive('vboardPin', function () {
     };
 });
 
-angular.module('vboard').controller('VboardPinController', function ($scope, $rootScope, vboardAuth, vboardImgs, vboardPinsCollection, ngDialog, $http, API_ENDPOINT, vboardMessageInterceptor, $sce) {
+angular.module('vboard').controller('VboardPinController', function ($scope, $rootScope, vboardAuth, vboardImgs, vboardPinsCollection, ngDialog, $http, CONFIG, vboardMessageInterceptor, $sce) {
 
     /** Init */
     $scope.$on('userAuthenticated', function () {
@@ -97,7 +97,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     // Also check if the user is authenticated and if he has the newsletter role.
     $scope.setPerm = function () {
         $scope.setModificationPerm();
-        $scope.connected = $rootScope.userAuthenticated ? true: false;
+        $scope.connected = $rootScope.userAuthenticated;
         $scope.hasNewsletterRole = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.role.indexOf('Newsletter') >= 0 : false;
     };
 
@@ -255,7 +255,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // Allow a newsletter user to add or remove the tad #newsletter to a pin
     $scope.toggleNewsletterTag = function () {
-        $http.post(API_ENDPOINT + '/pins/toggleNewsletterLabel/' + $scope.pin.pinId).then(function () {
+        $http.post(CONFIG.apiEndpoint + '/pins/toggleNewsletterLabel/' + $scope.pin.pinId).then(function () {
             vboardMessageInterceptor.showInfoMessage("Label changé");
         }, function (error) {
             console.error('error: ', error);
@@ -267,7 +267,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // Save a pin to be able to read it later without searching too long for it. (Set as favorite)
     $scope.savePin = function () {
-        $http.post(API_ENDPOINT + '/savedpins/' + $scope.pin.pinId).then(function () {
+        $http.post(CONFIG.apiEndpoint + '/savedpins/' + $scope.pin.pinId).then(function () {
             vboardMessageInterceptor.showInfoMessage("Epingle enregistrée");
             $scope.saved.push($scope.pin.pinId);
         }, function (error) {
@@ -277,7 +277,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // UnSave a pin (opposite of previous function)
     $scope.unSavePin = function () {
-        $http.delete(API_ENDPOINT + '/savedpins/' + $scope.pin.pinId).then(function () {
+        $http.delete(CONFIG.apiEndpoint + '/savedpins/' + $scope.pin.pinId).then(function () {
             vboardMessageInterceptor.showInfoMessage("Epingle retirée des favoris");
             var index = $scope.saved.indexOf($scope.pin.pinId);
             if (index > -1) {

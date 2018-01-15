@@ -19,7 +19,7 @@
 'use strict';
 
 /* eslint-disable complexity */
-angular.module('vboard').controller('VboardAddPinDialogController', function (vboardPinsCollection, $scope, $rootScope, ngDialog, vboardImgs, vboardAuth, $http, API_ENDPOINT, $timeout, $sce, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardAddPinDialogController', function (vboardPinsCollection, $scope, $rootScope, ngDialog, vboardImgs, vboardAuth, $http, CONFIG, $timeout, $sce, vboardMessageInterceptor) {
 
     // Init
     // $scope.pin is only defined when the pin is updated (and not created)
@@ -62,7 +62,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
     // Add automatic tags (based on most popular pin labels put, if put regularly
     // If more than 50% of pins posted by a user have the same tags, they are automatically added in the creation of the pin (they can be removed)
-    $http.get(API_ENDPOINT + '/pins/getMostUsedLabels').then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/pins/getMostUsedLabels').then(function (response) {
         if (!$scope.pin && response.data.length > 0) {
             var labels = response.data.split(",");
             labels.forEach(function (label) {
@@ -218,7 +218,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
     $scope.getInfoFromURL = function(url) {
         if (url && url.indexOf("http") === 0 && url.indexOf("https") !== 0) { // https pages cannot be scrapped by the current scrapper
-            $http.post(API_ENDPOINT + '/pins/url/', {
+            $http.post(CONFIG.apiEndpoint + '/pins/url/', {
                 urlinfo: url
             }).then(function (response) {
                 if (response.status !== 200) {

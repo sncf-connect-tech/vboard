@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardTeamProfilController', function ($routeParams, $scope, vboardAuth, vboardMessageInterceptor, vboardImgs, $timeout, $rootScope, $location, $window, $http, API_ENDPOINT, CONFIG) {
+angular.module('vboard').controller('VboardTeamProfilController', function ($routeParams, $scope, vboardAuth, vboardMessageInterceptor, vboardImgs, $timeout, $rootScope, $location, $window, $http, CONFIG) {
 
     $scope.name = $routeParams.teamName;
     $scope.defaultAvatar = "images/avatar.png";
@@ -170,7 +170,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
     $scope.userSuggest = [];
     // Get the list of all VBoard users
     $scope.getUsers = function () {
-        $http.get(API_ENDPOINT + '/users/getAll/').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('User search failed:' + JSON.stringify(response));
             }
@@ -229,7 +229,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
     };
 
     /** Gamification */
-    $http.get(API_ENDPOINT + '/gamification/getBadges/team/' + $scope.name).then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/gamification/getBadges/team/' + $scope.name).then(function (response) {
         if (response.status !== 200) {
             throw new Error('Badges search failed:' + JSON.stringify(response));
         }
@@ -239,7 +239,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         console.log('error: ', error);
     });
 
-    $http.get(API_ENDPOINT + '/gamification/getTeamStatsPercentage/' + $scope.name).then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/gamification/getTeamStatsPercentage/' + $scope.name).then(function (response) {
         if (response.status !== 200) {
             throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
         }

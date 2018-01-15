@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardProfilSearchController', function ($rootScope, $scope, $http, API_ENDPOINT, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilSearchController', function ($rootScope, $scope, $http, CONFIG, vboardMessageInterceptor) {
 // Reactivate the search by saved labels
     $rootScope.disableFavoriteLabels = false;
     // Hide the search toolbar
@@ -39,7 +39,7 @@ angular.module('vboard').controller('VboardProfilSearchController', function ($r
     $scope.user = 'Rechercher,utilisateur,@';
     $scope.userSuggest = [];
     // Get the list of all VBoard users
-    $http.get(API_ENDPOINT + '/users/getAll/').then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response) {
         if (response.status !== 200) {
             throw new Error('User search failed:' + JSON.stringify(response));
         }
@@ -60,7 +60,7 @@ angular.module('vboard').controller('VboardProfilSearchController', function ($r
     $scope.team = 'Rechercher équipe';
     $scope.teamSuggest = [];
     // List of teams
-    $http.get(API_ENDPOINT + '/users/teams').then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/users/teams').then(function (response) {
         if (response.status !== 200) {
             throw new Error('User search failed:' + JSON.stringify(response));
         }

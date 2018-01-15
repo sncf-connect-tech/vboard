@@ -36,7 +36,7 @@ angular.module('vboard').directive('vboardToolbar', function () {
     }
 });
 
-angular.module('vboard').controller('VboardToolbarController', function ($scope, $rootScope, $window, ngDialog, $location, $http, $timeout, $interval, vboardPinsCollection, vboardMessageInterceptor, API_ENDPOINT, CONFIG, vboardAuth, vboardKeycloakAuth) {
+angular.module('vboard').controller('VboardToolbarController', function ($scope, $rootScope, $window, ngDialog, $location, $http, $timeout, $interval, vboardPinsCollection, vboardMessageInterceptor, CONFIG, vboardAuth, vboardKeycloakAuth) {
 
     $scope.blogUrl = CONFIG.blogUrl;
     $scope.search = {
@@ -176,7 +176,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     $scope.getNotif = function () {
         var previewNotificationNumber = $scope.notificationsUnseen ? $scope.notificationsUnseen.length : 0;
         // API call on the unclicked notification: notification on which the user never clicked on.
-        $http.get(API_ENDPOINT + '/notifications/unclicked').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/notifications/unclicked').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Notifications get failed:' + JSON.stringify(response));
             }
@@ -214,7 +214,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // See notification historic (add 5 notification by default: number)
     $scope.getSeenNotif = function (number) {
-        $http.get(API_ENDPOINT + '/notifications/seen').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/notifications/seen').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Notifications get failed:' + JSON.stringify(response));
             }
@@ -237,7 +237,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     // When the user click on the notification button, he sees the notification and so all notifications not seen are set to seen under 7s
     $scope.notificationsCheck = function () {
         $scope.notificationsUnseen.forEach( function(notif) {
-            $http.post(API_ENDPOINT + '/notifications/seen/' + notif.id);
+            $http.post(CONFIG.apiEndpoint + '/notifications/seen/' + notif.id);
             $timeout(function () {
                 _.remove($scope.notificationsUnseen, notif);
             }, 7000);

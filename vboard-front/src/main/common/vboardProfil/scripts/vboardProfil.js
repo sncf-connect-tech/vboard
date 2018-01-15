@@ -28,7 +28,7 @@ angular.module('vboard').directive('vboardProfil', function () {
 });
 
 
-angular.module('vboard').controller('VboardProfilController', function ($scope, $rootScope, $timeout, $window, vboardPinsCollection, vboardAuth, $location, $element, $http, API_ENDPOINT, vboardImgs, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilController', function ($scope, $rootScope, $timeout, $window, vboardPinsCollection, vboardAuth, $location, $element, $http, CONFIG, vboardImgs, vboardMessageInterceptor) {
 
 
     /** Init */
@@ -167,7 +167,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     };
 
     // List of teams
-    $http.get(API_ENDPOINT + '/users/teams').then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/users/teams').then(function (response) {
         if (response.status !== 200) {
             throw new Error('User search failed:' + JSON.stringify(response));
         }
@@ -244,7 +244,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             labels = labels.join(',');
             /* eslint-disable camelcase */
             $rootScope.userAuthenticated.favorite_labels = labels;
-            $http.post(API_ENDPOINT + '/users/favoriteLabels', {
+            $http.post(CONFIG.apiEndpoint + '/users/favoriteLabels', {
                 labels: labels
             }).then(function (response) {
                 if (response.status !== 200) {
@@ -259,7 +259,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
 
     /** Gamification */
     var gamification = function () {
-        $http.get(API_ENDPOINT + '/gamification/getBadges').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/gamification/getBadges').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Badges search failed:' + JSON.stringify(response));
             }
@@ -269,7 +269,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             console.error('error: ', error);
         });
 
-        $http.get(API_ENDPOINT + '/gamification/getStats').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/gamification/getStats').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Stats search failed:' + JSON.stringify(response));
             }
@@ -279,7 +279,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             console.error('error: ', error);
         });
 
-        $http.get(API_ENDPOINT + '/gamification/getStatsPercentage').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
             }

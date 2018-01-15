@@ -27,11 +27,11 @@ angular.module('vboard').directive('vboardProfilAdmin', function () {
     }
 });
 
-angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http, API_ENDPOINT, vboardAuth, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http, CONFIG, vboardAuth, vboardMessageInterceptor) {
 
     var adminInit = function () {
 
-        $http.get(API_ENDPOINT + '/messages').then( function (success) {
+        $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
             if (success.data !== null || success.data !== '') {
                 $scope.message = success.data;
             }
@@ -44,7 +44,7 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
                 $scope.newsletterMembers.push(newsletterMember);
             }
             // Get the list of all VBoard users
-            $http.get(API_ENDPOINT + '/users/getAll/').then(function (response2) {
+            $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response2) {
                 if (response2.status !== 200) {
                     throw new Error('User search failed:' + JSON.stringify(response2));
                 }
@@ -70,7 +70,7 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
                 $scope.moderatorMembers.push(moderatorMember);
             }
             // Get the list of all VBoard users
-            $http.get(API_ENDPOINT + '/users/getAll/').then(function (response2) {
+            $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response2) {
                 if (response2.status !== 200) {
                     throw new Error('User search failed:' + JSON.stringify(response2));
                 }

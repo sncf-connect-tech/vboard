@@ -27,7 +27,7 @@ angular.module('vboard').directive('vboardNotification', function () {
     }
 });
 
-angular.module('vboard').controller('VboardNotificationController', function ($scope, $http, $rootScope, API_ENDPOINT) {
+angular.module('vboard').controller('VboardNotificationController', function ($scope, $http, $rootScope, CONFIG) {
 
     /** Retrieve the name of the notification's author */
     // Check whether the user format is valid (version compatibility)
@@ -55,7 +55,7 @@ angular.module('vboard').controller('VboardNotificationController', function ($s
 
     // Notify the back-end that the notification has been clicked on, and set it as seen by the user (front)
     $scope.notificationClick = function () {
-        $http.post(API_ENDPOINT + '/notifications/clicked/' + $scope.notification.id);
+        $http.post(CONFIG.apiEndpoint + '/notifications/clicked/' + $scope.notification.id);
         $scope.notification.seen = true;
     };
 

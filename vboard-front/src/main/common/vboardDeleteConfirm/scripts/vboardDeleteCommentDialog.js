@@ -27,11 +27,11 @@ angular.module('vboard').directive('vboardDeleteComment', function () {
     }
 });
 
-angular.module('vboard').controller('VboardDeleteCommentDialogController', function (vboardPinsCollection, $scope, $http, API_ENDPOINT, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardDeleteCommentDialogController', function (vboardPinsCollection, $scope, $http, CONFIG, vboardMessageInterceptor) {
 
     // Comment Deletion validation
     $scope.submit = function () {
-        $http.delete(API_ENDPOINT + '/comments/', {
+        $http.delete(CONFIG.apiEndpoint + '/comments/', {
             params: {
                 id: $scope.comment.id
             }

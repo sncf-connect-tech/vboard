@@ -19,6 +19,8 @@
 'use strict';
 
 angular.module('vboard').constant('CONFIG', {
+    apiEndpoint: '/api/v1',
     blogUrl: '$VBOARD_WP_PUBLIC_HOST',
+    displayPinsFromLastMonthsCount: 36, // By default, only pins from the last 3 years can be seen (can be forced in the url call directly (?from=))
     localisations: '$VBOARD_LOCALISATIONS'.split(';').map(function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; }),
 });

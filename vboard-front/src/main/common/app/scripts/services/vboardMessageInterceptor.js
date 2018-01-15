@@ -21,7 +21,7 @@
 /**
  * Catch errors when API calls do not return a valid response (to put in a promise or call back).
  */
-angular.module('vboard').service('vboardMessageInterceptor', function ($rootScope, $timeout, $http, API_ENDPOINT) {
+angular.module('vboard').service('vboardMessageInterceptor', function ($rootScope, $timeout, $http, CONFIG) {
 
     var messageDisplay = false;
     var SHORT_TIME_DISPLAY = 4000;
@@ -123,7 +123,7 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     };
 
     this.showMessageAdmin = function (type, message) {
-        $http.post(API_ENDPOINT + '/messages', {
+        $http.post(CONFIG.apiEndpoint + '/messages', {
             type: type,
             content: message
         });
@@ -151,13 +151,13 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     };
 
     this.hideMessageAdmin = function () {
-        $http.post(API_ENDPOINT + '/messages/remove');
+        $http.post(CONFIG.apiEndpoint + '/messages/remove');
         $rootScope.message.type = null;
     };
 
     this.getGeneralMessage = function () {
         var self = this;
-        return $http.get(API_ENDPOINT + '/messages').then( function (success) {
+        return $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
             if (success.data === null || success.data === "") {
                 messageDisplay = false;
             } else {

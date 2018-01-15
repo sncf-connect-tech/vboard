@@ -20,11 +20,7 @@
 
 angular.module('vboard', ['ngDialog', 'nsPopover', 'ngSanitize', 'ngRoute', 'ngImgCrop', 'ngCookies', 'ui.select']);
 
-angular.module('vboard').constant('NB_MONTHS_INITIAL', 36); // By default, only pins from the last 3 years can be seen (can be forced in the url call directly (?from=))
-angular.module('vboard').constant('NB_MORE_MONTHS', 3);
-angular.module('vboard').constant('API_ENDPOINT', '/api/v1');
-
-angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $interval, vboardPinsCollection, API_ENDPOINT, $location, vboardMessageInterceptor, $cookieStore) {
+angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $interval, vboardPinsCollection, CONFIG, $location, vboardMessageInterceptor, $cookieStore) {
 
     // Used to change the color of a pin in light blue to show the user the pins added from its last connection.
     /* eslint-disable camelcase */
@@ -69,7 +65,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     $timeout(function () {
         // Set last connection to set it even if the user didn't quit the app
         $cookieStore.put('lastConnection', new Date());
-        $http.post(API_ENDPOINT + '/users/setLastConnection');
+        $http.post(CONFIG.apiEndpoint + '/users/setLastConnection');
     }, second*30);
 
 
@@ -82,7 +78,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     window.onbeforeunload = function () {
         if ($rootScope.userAuthenticated) {
             $cookieStore.put('lastConnection', new Date());
-            $http.post(API_ENDPOINT + '/users/setLastConnection');
+            $http.post(CONFIG.apiEndpoint + '/users/setLastConnection');
         }
     };
 

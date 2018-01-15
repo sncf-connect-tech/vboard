@@ -27,7 +27,7 @@ angular.module('vboard').directive('vboardLeaderBoard', function () {
     };
 });
 
-angular.module('vboard').controller('VboardLeaderBoardController', function ($rootScope, $scope, $http, API_ENDPOINT, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardLeaderBoardController', function ($rootScope, $scope, $http, CONFIG, vboardMessageInterceptor) {
 
     /** Hide the search toolbar */
     $rootScope.hideSearchField();
@@ -38,7 +38,7 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
     /** Get the userLeaderBoard */
     $scope.userLeaderBoard = function () {
         $scope.teamStat = false;
-        $http.get(API_ENDPOINT + '/gamification/getLeaders').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/gamification/getLeaders').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Leaders search failed:' + JSON.stringify(response));
             }
@@ -55,7 +55,7 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
     $scope.teamLeaderBoard = function () {
         $scope.teamStat = true;
         $scope.leaders = null;
-        $http.get(API_ENDPOINT + '/gamification/getLeaders/teams').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/gamification/getLeaders/teams').then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Leaders search failed:' + JSON.stringify(response));
             }
@@ -142,9 +142,9 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
         if (profil) {
             var serviceUrl = null;
             if (profil.name) {
-                serviceUrl = API_ENDPOINT + '/gamification/getPoints/team/' + profil.name;
+                serviceUrl = CONFIG.apiEndpoint + '/gamification/getPoints/team/' + profil.name;
             } else if (profil.email) {
-                serviceUrl = API_ENDPOINT + '/gamification/getPoints/' + profil.email;
+                serviceUrl = CONFIG.apiEndpoint + '/gamification/getPoints/' + profil.email;
             }
 
             if (serviceUrl) {

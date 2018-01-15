@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardProfilPublicController', function ($scope, $rootScope, $routeParams, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, API_ENDPOINT, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilPublicController', function ($scope, $rootScope, $routeParams, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, CONFIG, vboardMessageInterceptor) {
 
     $scope.email = $routeParams.email;
     $scope.public = true;
@@ -68,7 +68,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
     };
 
     /** Gamification */
-    $http.get(API_ENDPOINT + '/gamification/getBadges/' + $scope.email).then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/gamification/getBadges/' + $scope.email).then(function (response) {
         if (response.status !== 200) {
             throw new Error('Badges search failed:' + JSON.stringify(response));
         }
@@ -78,7 +78,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         console.log('error: ', error);
     });
 
-    $http.get(API_ENDPOINT + '/gamification/getStats/' + $scope.email).then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/gamification/getStats/' + $scope.email).then(function (response) {
         if (response.status !== 200) {
             throw new Error('Stats search failed:' + JSON.stringify(response));
         }
@@ -88,7 +88,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         console.log('error: ', error);
     });
 
-    $http.get(API_ENDPOINT + '/gamification/getStatsPercentage/' + $scope.email).then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage/' + $scope.email).then(function (response) {
         if (response.status !== 200) {
             throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
         }

@@ -27,7 +27,7 @@ angular.module('vboard').directive('vboardProfilNewsletter', function () {
     }
 });
 
-angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, $rootScope, $http, API_ENDPOINT, ngDialog, vboardMessageInterceptor, vboardPinsCollection) {
+angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, $rootScope, $http, CONFIG, ngDialog, vboardMessageInterceptor, vboardPinsCollection) {
 
     // Check if the last newsletter has been sent more than 20 days ago
     $scope.canSendNewsletter = false;
@@ -40,7 +40,7 @@ angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, 
 
     $scope.setLabel = function (label) {
         $scope.label = label.indexOf('#') === 0 ? label : '#' + label;
-        $http.post(API_ENDPOINT + '/users/nlLabel', {
+        $http.post(CONFIG.apiEndpoint + '/users/nlLabel', {
             label: label
         });
         vboardMessageInterceptor.showSuccessMessage("Le label de newsletter a été sauvegardé");
@@ -60,7 +60,7 @@ angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, 
         if (email && email.title && email.message) {
             // Allow the user to write a multiline message in the body of the email (replace line break with <br>)
             var messageHTML = email.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
-            $http.post(API_ENDPOINT + '/messages/sendEmails/nltest', {
+            $http.post(CONFIG.apiEndpoint + '/messages/sendEmails/nltest', {
                 title: email.title,
                 firstMessage: messageHTML
             });
@@ -85,7 +85,7 @@ angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, 
     // Submit the newsletter to all user (that accepts emails)
     $scope.newsletterSubmit = function (email) {
         var messageHTML = email.message.replace(/(?:\r\n|\r|\n)/g, '<br>');
-        $http.post(API_ENDPOINT + '/messages/sendEmails/nl', {
+        $http.post(CONFIG.apiEndpoint + '/messages/sendEmails/nl', {
             title: email.title,
             firstMessage: messageHTML
         });
@@ -95,7 +95,7 @@ angular.module('vboard').controller('VboardProfilNewsletter', function ($scope, 
     };
 
     // Retrieve the last newsletter object (which contain the date where it was sent)
-    $http.get(API_ENDPOINT + '/messages/getLastNL').then(function (response) {
+    $http.get(CONFIG.apiEndpoint + '/messages/getLastNL').then(function (response) {
         $scope.lastDate = moment(response.data.post_date_utc).format('L');
         // Check whether the last newsletter was sent in the last 10 minutes (to avoid duplications)
         $scope.canSendNewsletter =  moment(response.data.post_date_utc).add(10, 'minutes').isBefore(moment());

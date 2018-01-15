@@ -27,7 +27,7 @@ angular.module('vboard').directive('vboardComment', function () {
     }
 });
 
-angular.module('vboard').controller('VboardCommentController', function ($scope, $rootScope, $http, vboardAuth, vboardImgs, vboardMessageInterceptor, vboardPinsCollection, API_ENDPOINT, ngDialog) {
+angular.module('vboard').controller('VboardCommentController', function ($scope, $rootScope, $http, vboardAuth, vboardImgs, vboardMessageInterceptor, vboardPinsCollection, CONFIG, ngDialog) {
 
     $scope.avatar = "images/avatar.png";
 

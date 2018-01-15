@@ -21,12 +21,12 @@
 /**
  * Service to manage Images
  */
-angular.module('vboard').service('vboardImgs', function ($http, $q, $rootScope, API_ENDPOINT) {
+angular.module('vboard').service('vboardImgs', function ($http, $q, $rootScope, CONFIG) {
 
 
     /** Retrieve user's avatar (base64) */
     this.getAvatar = function (email) {
-        return $http.get(API_ENDPOINT + '/users/avatar/' + email).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/users/avatar/' + email).then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Avatar search failed:' + JSON.stringify(response));
             }
@@ -38,7 +38,7 @@ angular.module('vboard').service('vboardImgs', function ($http, $q, $rootScope, 
 
     /** Retrieve pin's image */
     this.getPinImage = function (pinId) {
-        return $http.get(API_ENDPOINT + '/pins/image/' + pinId).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/pins/image/' + pinId).then(function (response) {
             if (response.status !== 200) {
                 throw new Error('Pin Image search failed:' + JSON.stringify(response));
             }

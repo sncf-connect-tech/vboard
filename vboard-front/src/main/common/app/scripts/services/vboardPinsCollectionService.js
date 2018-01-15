@@ -21,7 +21,7 @@
 /**
  * Service de gestion des Pins
  */
-angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $q, $location, $http, VboardPin, vboardPinsCollectionUtils, API_ENDPOINT, vboardMessageInterceptor) {
+angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $q, $location, $http, VboardPin, vboardPinsCollectionUtils, CONFIG, vboardMessageInterceptor) {
 
     /**
      * Private section
@@ -34,7 +34,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         isUseLookingAtFavoritePins = false;
         var search = getByPopularity ? '/popular' : '';
         // API call
-        return $http.get(API_ENDPOINT + '/pins' + search, {
+        return $http.get(CONFIG.apiEndpoint + '/pins' + search, {
             params: {
                 text: text,
                 from: from,
@@ -45,17 +45,16 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
                 throw new Error('Pins search failed:' + JSON.stringify(response));
             }
             // Format the pins (see vboardPinService.js)
-            var list = _.map(response.data, function (datum) {
+            return _.map(response.data, function (datum) {
                 return new VboardPin(datum);
             });
-            return list;
         });
     };
 
     /* Get Elasticsearch Pins posted by an author*/
     var fetchPinsByAuthor = function (author, from) {
         // API call
-        return $http.get(API_ENDPOINT + '/pins/author', {
+        return $http.get(CONFIG.apiEndpoint + '/pins/author', {
             params: {
                 author: author,
                 from: from
@@ -64,25 +63,23 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
             if (response.status !== 200 || response.statusText !== "OK") {
                 throw new Error('Pins search failed:' + JSON.stringify(response));
             }
-            var list = _.map(response.data, function (datum) {
+            return _.map(response.data, function (datum) {
                 return new VboardPin(datum);
             });
-            return list;
         });
     };
 
     /* Get Elasticsearch Pin with a certain id */
     var fetchPinById = function (id) {
         // API call
-        return $http.get(API_ENDPOINT + '/pins/id/' + id).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/pins/id/' + id).then(function (response) {
             if (response.status !== 200 || response.statusText !== "OK") {
                 throw new Error('Pin search failed:' + JSON.stringify(response));
             }
             // Format the pins (see vboardPinService.js)
-            var list = _.map(response.data, function (datum) {
+            return _.map(response.data, function (datum) {
                 return new VboardPin(datum);
             });
-            return list;
         });
     };
 
@@ -101,7 +98,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     /* eslint-disable complexity */
     var getControlParams = function () {
         var urlParams = $location.search();
-        var params = {
+        return {
             text: urlParams.text || '',
             author: urlParams.author || '',
             label: urlParams.label || '',
@@ -109,7 +106,6 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
             from: urlParams.from || vboardPinsCollectionUtils.initialFrom(),
             offset: urlParams.offset || scrollFrom
         };
-        return params;
     };
 
 
@@ -189,7 +185,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         this.resetScroll();
         var self = this;
         // Get the savedPins object
-        $http.get(API_ENDPOINT + '/savedpins').then(function (response) {
+        $http.get(CONFIG.apiEndpoint + '/savedpins').then(function (response) {
             if (response.status !== 200 || response.statusText !== "OK") {
                 throw new Error('Pins search failed:' + JSON.stringify(response));
             }
@@ -197,7 +193,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
             var nb = response.data.length;
             response.data.forEach(function (savedPin) {
                 // For each getSavedPins, get the actual pins to display
-                $http.get(API_ENDPOINT + '/pins/' + savedPin.pin_id).then(function (response2) {
+                $http.get(CONFIG.apiEndpoint + '/pins/' + savedPin.pin_id).then(function (response2) {
                     // If a pin has been deleted (but not the saved one, which is only a precaution, it shouldn't happend
                     // The server will return an empty data.
                     if (!_.isEmpty(response2.data)) {
@@ -220,10 +216,9 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         // Pins are sorted by date
         listPin = _.sortBy(listPin, function(pin) { var date = new Date(pin.post_date_utc); return -date });
         // And mapped as vboardPinService.js model
-        var list = _.map(listPin, function (datum) {
+        self.allPins = _.map(listPin, function (datum) {
             return new VboardPin(datum);
         });
-        self.allPins = list;
         self.replacePinsAndLabels();
         $rootScope.$broadcast('vboardPinsCollectionUpdated');
     };
@@ -282,7 +277,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     /** Add a new pin */
     this.addPin = function (pinTitle, pinUrl, pinImgTeam, pinImgType, pinDescription, pinLabels, pinAuthor) {
-        return $http.post(API_ENDPOINT + '/pins', {
+        return $http.post(CONFIG.apiEndpoint + '/pins', {
             title: pinTitle,
             url: pinUrl,
             imgType: pinImgType,
@@ -294,7 +289,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     /** Pin update */
     this.updatePin = function (pinId, pinTitle, pinUrl, pinImgTeam, pinImgType, pinDescription, pinLabels, pinAuthor) {
-        return $http.post(API_ENDPOINT + '/pins/update/' + pinId, {
+        return $http.post(CONFIG.apiEndpoint + '/pins/update/' + pinId, {
             title: pinTitle,
             url: pinUrl,
             imgType: pinImgType,
@@ -307,7 +302,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     /** Pin deletion */
     this.deletePin = function (pinId) {
-        return $http.delete(API_ENDPOINT + '/pins/'+ pinId).then(function () {
+        return $http.delete(CONFIG.apiEndpoint + '/pins/'+ pinId).then(function () {
             // send an event to remove it from the user view
             $rootScope.$broadcast('vboardPinsCollectionUpdated');
         });
@@ -371,7 +366,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     // Get every labels once put on a pin (mysql search)
     this.getEveryLabels = function () {
-        return $http.get(API_ENDPOINT + '/labels').then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/labels').then(function (response) {
             return response.data;
         }, function(error) {
             vboardMessageInterceptor.showErrorMessage("La récupération de tous les labels a échoué. (Status Code: " + error.status + ')');
@@ -404,7 +399,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     /* Retrieve savedPins by the user to be able to show if a pin has already been saved or not */
     this.getUserSavedPins = function () {
         // API call
-        return $http.get(API_ENDPOINT + '/savedpins').then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/savedpins').then(function (response) {
             return response;
         }, function(error) {
             vboardMessageInterceptor.showErrorMessage("La récupération de vos épingles enregistrées a échoué. (Status Code: " + error.status + ')');
@@ -414,7 +409,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     /* Retrieve all likes for a user */
     this.getUserLikes = function () {
         // API call
-        return $http.get(API_ENDPOINT + '/likes/by_user/'+$rootScope.userAuthenticated.email).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/likes/by_user/'+$rootScope.userAuthenticated.email).then(function (response) {
             return response;
         }, function(error) {
             vboardMessageInterceptor.showErrorMessage("La récupération de vos likes a échoué. (Status Code: " + error.status + ')');
@@ -423,7 +418,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     this.addLike = function (pin) {
         // API call
-        return $http.post(API_ENDPOINT + '/likes/', {
+        return $http.post(CONFIG.apiEndpoint + '/likes/', {
             pinId: pin,
             email: $rootScope.userAuthenticated.email
         });
@@ -431,7 +426,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     this.removeLike = function (pin) {
         // API call
-        return $http.delete(API_ENDPOINT + '/likes/delete', {
+        return $http.delete(CONFIG.apiEndpoint + '/likes/delete', {
             params: {
                 pinId: pin,
                 email: $rootScope.userAuthenticated.email
@@ -442,7 +437,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     /* Show all likes (who) on a pin */
     this.seeLikes = function (pinId) {
         // API call
-        return $http.get(API_ENDPOINT + '/likes/by_pin/' + pinId).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/likes/by_pin/' + pinId).then(function (response) {
             return response;
         }, function errorCallBack(response) {
             vboardMessageInterceptor.showErrorMessage("Impossible de récupérer les likes de l'épingle. (Status Code: " + response.status + ')');
@@ -450,7 +445,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     };
 
     this.addComment = function (comment, pinId) {
-        return $http.post(API_ENDPOINT + '/comments/', {
+        return $http.post(CONFIG.apiEndpoint + '/comments/', {
             text: comment,
             pinId: pinId,
             author: $rootScope.userAuthenticated.first_name + ',' + $rootScope.userAuthenticated.last_name + ',' + $rootScope.userAuthenticated.email
@@ -462,7 +457,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     };
 
     this.updateComment = function (commentId, text) {
-        return $http.post(API_ENDPOINT + '/comments/update/' + commentId, {
+        return $http.post(CONFIG.apiEndpoint + '/comments/update/' + commentId, {
             text: text
         }).then(function (response) {
             return response;
@@ -473,7 +468,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
     /* Retrieve all comments on a pin */
     this.getComments = function (pinId) {
-        return $http.get(API_ENDPOINT + '/comments/' + pinId).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/comments/' + pinId).then(function (response) {
             return response;
         }, function(error) {
             vboardMessageInterceptor.showErrorMessage("La récupération des commentaires a échoué. (Status Code: " + error.status + ')');
@@ -485,21 +480,10 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 /**
  * Service for pin management (not really used, but can be used to scroll not by adding a certain amont of pins but the pins from the last 3 months each time)
  */
-angular.module('vboard').service('vboardPinsCollectionUtils', function(NB_MONTHS_INITIAL, NB_MORE_MONTHS) {
+angular.module('vboard').service('vboardPinsCollectionUtils', function(CONFIG) {
     /* Return a date like '2015-04-01' which is now minus xxx months */
     this.initialFrom = function() {
-        var initFrom = moment().subtract(NB_MONTHS_INITIAL, 'months');
+        var initFrom = moment().subtract(CONFIG.displayPinsFromLastMonthsCount, 'months');
         return initFrom.format('YYYY-MM-DD');
-    };
-    /* Return a date like '2015-04-01' */
-    this.extendsFrom = function(initialFrom) {
-        var startMonth = moment(initialFrom, 'YYYY-MM-DD');
-        var newStartMonth;
-        if (moment(initialFrom, 'YYYY-MM-DD') > moment('2010-01-01', 'YYYY-MM-DD')) {
-            newStartMonth = startMonth.clone().subtract(NB_MORE_MONTHS, 'months');
-        } else {
-            newStartMonth = startMonth;
-        }
-        return newStartMonth.format('YYYY-MM-DD');
     };
 });

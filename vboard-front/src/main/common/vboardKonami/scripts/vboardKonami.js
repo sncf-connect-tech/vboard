@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardKonami', function ($scope, vboardMessageInterceptor, $http, API_ENDPOINT, $location) {
+angular.module('vboard').controller('VboardKonami', function ($scope, vboardMessageInterceptor, $http, CONFIG, $location) {
 
     var konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
     var index = 0;
@@ -57,8 +57,8 @@ angular.module('vboard').controller('VboardKonami', function ($scope, vboardMess
             if (!executed) {
                 vboardMessageInterceptor.showSuccessMessage("Konami Code !! (En cours de création, retentez plus tard)");
                 executed = true;
-                $http.post(API_ENDPOINT + '/gamification/secret');
-                $http.post(API_ENDPOINT + '/konami/new/' + 0);
+                $http.post(CONFIG.apiEndpoint + '/gamification/secret');
+                $http.post(CONFIG.apiEndpoint + '/konami/new/' + 0);
                 $location.path('konami-page');
             } else {
                 messageDisplay();
@@ -75,12 +75,12 @@ angular.module('vboard').controller('VboardKonami', function ($scope, vboardMess
 
 });
 
-angular.module('vboard').controller('VboardKonamiExecute', function ($http, API_ENDPOINT, $scope, $rootScope) {
+angular.module('vboard').controller('VboardKonamiExecute', function ($http, CONFIG, $scope, $rootScope) {
 
     /** Cache la barre de recherche */
     $rootScope.hideSearchField();
 
-    $http.get(API_ENDPOINT + '/konami').then(function(response) {
+    $http.get(CONFIG.apiEndpoint + '/konami').then(function(response) {
         $scope.curious = response.data;
     });
 

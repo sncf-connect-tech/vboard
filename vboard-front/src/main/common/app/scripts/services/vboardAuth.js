@@ -21,11 +21,11 @@
 /**
  * Service to manage authentication
  */
-angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_ENDPOINT, vboardMessageInterceptor, CONFIG, vboardPinsCollection, vboardKeycloakAuth) {
+angular.module('vboard').service('vboardAuth', function($rootScope, $http, vboardMessageInterceptor, CONFIG, vboardPinsCollection, vboardKeycloakAuth) {
 
     this.login = function() {
         if (angular.isUndefined($rootScope.userAuthenticated) && vboardKeycloakAuth.authenticated) {
-            $http.get(API_ENDPOINT + '/authentication/login').then(function(response) {
+            $http.get(CONFIG.apiEndpoint + '/authentication/login').then(function(response) {
                 var user = response.data;
                 $rootScope.userAuthenticated = user;
                 $rootScope.$broadcast('userAuthenticated');
@@ -34,7 +34,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
                     $rootScope.userAuthenticated.lastConnection = user.last_connection;
                     $rootScope.$broadcast('vboardUserLastConnectionSet');
                 }
-                $http.post(API_ENDPOINT + '/gamification/connexion');
+                $http.post(CONFIG.apiEndpoint + '/gamification/connexion');
                 $rootScope.islogin = false;
                 $rootScope.$broadcast('islogin');
             }).catch(function(err) {
@@ -44,7 +44,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
     };
 
     this.logout = function() {
-        $http.post(API_ENDPOINT + '/authentication/logout').then(function() {
+        $http.post(CONFIG.apiEndpoint + '/authentication/logout').then(function() {
             vboardKeycloakAuth.logout();
         });
     };
@@ -59,7 +59,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Get User */
     this.getUserByEmail = function (email) {
-        return $http.get(API_ENDPOINT + '/users/' + email).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/users/' + email).then(function (response) {
             if (response.status !== 200 || response.statusText !== "OK") {
                 throw new Error('User search failed:' + JSON.stringify(response));
             }
@@ -85,7 +85,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Add User */
     this.addUser = function (user) {
-        return $http.post(API_ENDPOINT + '/users', {
+        return $http.post(CONFIG.apiEndpoint + '/users', {
             email: user.email,
             firstName: user.first_name,
             lastName: user.last_name
@@ -94,7 +94,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Update User */
     this.updateUser = function (user) {
-        return $http.post(API_ENDPOINT + '/users/update', {
+        return $http.post(CONFIG.apiEndpoint + '/users/update', {
             email: user.email, // As ID
             // To update:
             avatar: user.avatar,
@@ -109,7 +109,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Get the team object from its name */
     this.getTeam = function (name) {
-        return $http.get(API_ENDPOINT + '/teams/' + name).then(function (response) {
+        return $http.get(CONFIG.apiEndpoint + '/teams/' + name).then(function (response) {
             if (response.status !== 200 || response.statusText !== "OK") {
                 throw new Error('Team search failed:' + JSON.stringify(response));
             }
@@ -121,14 +121,14 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Add a new Team in the database */
     this.addTeam = function (name) {
-        return $http.post(API_ENDPOINT + '/teams', {
+        return $http.post(CONFIG.apiEndpoint + '/teams', {
             name: name
         });
     };
 
     /** Update a team */
     this.updateTeam = function (team) {
-        return $http.post(API_ENDPOINT + '/teams/update', {
+        return $http.post(CONFIG.apiEndpoint + '/teams/update', {
             name: team.name,
             email: team.email,
             avatar: team.avatar,
@@ -142,35 +142,35 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, API_E
 
     /** Set the list of users in a team (val is the list) */
     this.setMembers = function (name, val) {
-        return $http.post(API_ENDPOINT + '/teams/setMembers/' + name, {
+        return $http.post(CONFIG.apiEndpoint + '/teams/setMembers/' + name, {
             members: val.toString()
         });
     };
 
     /** Set a role to a user */
     this.setRole = function (email, role) {
-        return $http.post(API_ENDPOINT + '/users/setRole/' + role, {
+        return $http.post(CONFIG.apiEndpoint + '/users/setRole/' + role, {
             email: email
         });
     };
 
     /** Add a role to a user */
     this.addRole = function (email, role) {
-        return $http.post(API_ENDPOINT + '/users/addRole/' + role, {
+        return $http.post(CONFIG.apiEndpoint + '/users/addRole/' + role, {
             email: email
         });
     };
 
     /** Remove a role to a user */
     this.removeRole = function (email, role) {
-        return $http.post(API_ENDPOINT + '/users/removeRole/' + role, {
+        return $http.post(CONFIG.apiEndpoint + '/users/removeRole/' + role, {
             email: email
         });
     };
 
     /** Get all user that have a specific role */
     this.getRole = function (role) {
-        return $http.get(API_ENDPOINT + '/users/getRole/' + role);
+        return $http.get(CONFIG.apiEndpoint + '/users/getRole/' + role);
     };
 
 });
