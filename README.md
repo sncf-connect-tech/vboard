@@ -1,5 +1,6 @@
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 [![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
+-> come look at our [good first issues](https://github.com/voyages-sncf-technologies/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 [![TravisCI build](https://travis-ci.org/voyages-sncf-technologies/vboard.svg?branch=master)](https://travis-ci.org/voyages-sncf-technologies/vboard) [![RSS from AllMyChanges](https://img.shields.io/badge/rss-allmychanges-yellow.svg)](https://allmychanges.com/rss/2b583bf388b767a02deb52966222e624/)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
