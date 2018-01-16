@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-md-6">
                     <label class="t-color-blue--text">Nom: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.last_name }}" disabled>
-                    <div data-ng-if="!public"><label  class="t-color-blue--text">Role: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.role ? user.role : 'Utilisateur' }}" disabled></div>
+                    <div data-ng-if="!public"><label  class="t-color-blue--text">Role: </label><input class="input t-color-lightblue--border" type="text" value="{{ user.roles ? user.roles : 'Utilisateur' }}" disabled></div>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <vboard-profil-admin></vboard-profil-admin>
         </div>
 
-        <div data-ng-if="user.role.indexOf('Newsletter') >= 0 && !public" class="profil--card box-shadow">
+        <div data-ng-if="user.roles.indexOf('Newsletter') >= 0 && !public" class="profil--card box-shadow">
             <vboard-profil-newsletter></vboard-profil-newsletter>
         </div>
 

@@ -31,6 +31,7 @@ services:
       - SERVICE_80_NAME=${PROJECT_NAME}-front
       - SERVICE_80_VERSION=${TAG}
     environment:
+      - VBOARD_API_ENDPOINT=/api/v1
       - VBOARD_HOSTNAME=localhost
       - VBOARD_WS_HOST=ws:8080
     ports:

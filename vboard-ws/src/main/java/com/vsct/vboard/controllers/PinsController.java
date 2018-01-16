@@ -450,74 +450,79 @@ public class PinsController {
     @RequestMapping(value = "/url", method = RequestMethod.POST)
     @ResponseBody
     @Valid
-    public String getURL(@Valid @RequestBody String urlinfo) {
-        final String url = JavaUtils.extractJSONObject(urlinfo, "urlinfo");
+    public String getURL(@Valid @RequestBody String urlInfo) {
+        final String url = JavaUtils.extractJSONObject(urlInfo, "urlinfo");
         JSONObject info = new JSONObject();
         try {
             info.put("title", "");
             info.put("image", "");
             info.put("description", "");
-            String html = fetchWebPageContent(url);
+            String html;
+            try {
+                html = fetchWebPageContent(url);
+            } catch (VBoardException e) {
+                logger.error("Could not fetch web page to extract info for url: " + url, e);
+                return info.toString();
+            }
 
             /* Retrieve the html code between the titel tags */
-            Pattern patternTitle = Pattern.compile("<title>(.*?)</title>");
-            Matcher matcherTitle = patternTitle.matcher(html);
-            matcherTitle.find();
-            info.put("title", matcherTitle.group(1).trim());
+            final Pattern patternTitle = Pattern.compile("<title>(.*?)</title>");
+            final Matcher matcherTitle = patternTitle.matcher(html);
+            if (matcherTitle.find()) {
+                info.put("title", matcherTitle.group(1).trim());
+            }
 
             /* Retrieve the html code between the body tags */
-            Pattern patternBody = Pattern.compile("<body(.*?)</body>");
-            Matcher matcherBody = patternBody.matcher(html);
-            matcherBody.find();
-            String body = matcherBody.group(1);
+            final Pattern patternBody = Pattern.compile("<body(.*?)</body>");
+            final Matcher matcherBody = patternBody.matcher(html);
+            String body = "";
+            if (matcherBody.find()) {
+                body = matcherBody.group(1);
+            }
 
             /* Retrieve the html code between the img tags */
-            Pattern patternImage = Pattern.compile("<img(.*?)>");
-            Matcher matcherImage = patternImage.matcher(body);
-            String img = "";
-            String src = "";
-            boolean found = false;
-            while (!found && matcherImage.find()) { // Try to find a suitable image (we stop when no more image are found or if one is found)
-                img = matcherImage.group(1);
-                /* Retrieve the image's width */
-                Pattern patternWidth = Pattern.compile("width=\"(.*?)\"");
-                Matcher matcherWidth = patternWidth.matcher(img);
+            String imgSrcUrl = "";
+            final Pattern patternImage = Pattern.compile("<img(.*?)>");
+            final Matcher matcherImage = patternImage.matcher(body);
+            while (matcherImage.find()) { // Try to find a suitable image (we stop when no more images are found or if one is found)
+                String imgTag = matcherImage.group(1);
                 /* Retrieve the image's source */
                 Pattern patternSrc = Pattern.compile("src=\"(.*?)\"");
-                Matcher matcherSrc = patternSrc.matcher(img);
-                if (matcherWidth.find() && matcherSrc.find()) {
-                    String width = matcherWidth.group(1);
-                    src = matcherSrc.group(1);
-                    /* Retrieve an image with a link (not base64 or nothing) and check it's size to avoid ads or 1px image or a logo (small images) */
-                    if (Integer.parseInt(width) > 250 && src.startsWith("http")) {
-                        found = true;
-                        info.put("image", src);
-                    }
+                Matcher matcherSrc = patternSrc.matcher(imgTag);
+                if (matcherSrc.find()) {
+                    imgSrcUrl = matcherSrc.group(1);
+                    info.put("image", imgSrcUrl);
+                    break;
                 }
             }
 
-            /* Retrueve the html code just after the previous image found or if not found, just after the h1 tag */
-            if (isBlank(img)) {
-                src = "<h1>";
+            /* Retrieve the html code just after the previous image found or if not found, just after the h1 tag */
+            String startingPoint = imgSrcUrl;
+            if (isBlank(startingPoint)) {
+                startingPoint = "<h1>";
             }
-            Pattern patternMain = Pattern.compile(src + "(.*?)</body");
-            Matcher matcherMain = patternMain.matcher(html);
-            matcherMain.find();
-            String main = matcherMain.group(1);
+            final Pattern patternMain = Pattern.compile(startingPoint + "(.*?)</body");
+            final Matcher matcherMain = patternMain.matcher(html);
+            String main = "";
+            if (matcherMain.find()) {
+                main = matcherMain.group(1);
+            }
 
             /* Retrieve the html code between the p tag inside the previous code */
-            Pattern patternDesc = Pattern.compile("<p(.*?)</p>");
-            Matcher matcherDesc = patternDesc.matcher(main);
-            matcherDesc.find();
-            /* Remove all empty spaces (double ones) and check that the length is not too smal (avoid empty tags od adds) */
-            String description = matcherDesc.group(1).replace("  ", " ");
-            while (description.length() < 150 && matcherDesc.find()) {
+            final Pattern patternDesc = Pattern.compile("<p(.*?)</p>");
+            final Matcher matcherDesc = patternDesc.matcher(main);
+            String description = "";
+            if (matcherDesc.find()) {
+                /* Remove all empty spaces (double ones) and check that the length is not too smal (avoid empty tags od adds) */
                 description = matcherDesc.group(1).replace("  ", " ");
+                while (description.length() < 150 && matcherDesc.find()) {
+                    description = matcherDesc.group(1).replace("  ", " ");
+                }
             }
 
-            /* Remove html Tags */
-            Pattern patternTag = Pattern.compile("<(.*?)>");
-            Matcher matcherTag = patternTag.matcher(description);
+            /* Remove HTML tags */
+            final Pattern patternTag = Pattern.compile("<(.*?)>");
+            final Matcher matcherTag = patternTag.matcher(description);
             description = matcherTag.replaceAll("");
             // > : The tag of the linked image (linked to the p tag) is not replaced because the open < is not there
             description = description.substring(description.indexOf('>') + 1);

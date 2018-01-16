@@ -22,6 +22,6 @@ uploads:
   providerPath: /tmp/
   wordpressImagePath: /tmp/
 proxy:
-  hostname: dummy
+  hostname:
 emails:
   hostname: dummy

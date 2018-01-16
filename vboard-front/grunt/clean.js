@@ -25,16 +25,16 @@ module.exports = {
         'grunt-target/scripts/*',
         'grunt-target/styles/*',
         '!grunt-target/compile/scripts/*.*.js',
-        '!grunt-target/compile/scripts/*.json',
         '!grunt-target/compile/styles/*.*.css',
         '!grunt-target/compile/scripts/*.*.js.map',
-        '!grunt-target/compile/styles/*.*.css.map'
+        '!grunt-target/compile/styles/*.*.css.map',
+        '!grunt-target/compile/scripts/config.js'
     ],
     fileRevs: [
         'grunt-target/compile/scripts/*.*.js',
-        'grunt-target/compile/scripts/*.json',
         'grunt-target/compile/scripts/*.*.js.map',
         'grunt-target/compile/styles/*.*.css',
-        'grunt-target/compile/styles/*.*.css.map'
+        'grunt-target/compile/styles/*.*.css.map',
+        '!grunt-target/compile/scripts/config.js'
     ]
 };

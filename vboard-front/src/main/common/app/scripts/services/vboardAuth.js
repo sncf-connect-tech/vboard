@@ -54,7 +54,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, vboar
     };
 
     this.isModerator = function () {
-        return $rootScope.userAuthenticated ? $rootScope.userAuthenticated.role.indexOf('Moderateur') >= 0: false;
+        return $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.indexOf('Moderateur') >= 0: false;
     };
 
     /** Get User */
