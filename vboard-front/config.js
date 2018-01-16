@@ -18,9 +18,17 @@
 
 'use strict';
 
+var apiEndpoint = '$VBOARD_API_ENDPOINT',
+    blogUrl = '$VBOARD_WP_PUBLIC_HOST',
+    localisations = '$VBOARD_LOCALISATIONS',
+    displayPinsFromLastMonthsCount = '$VBOARD_PINS_MONTHS_COUNT';
+
+var startsWithDollar = function (str) { return str.indexOf('$') === 0; };
+
 angular.module('vboard').constant('CONFIG', {
-    apiEndpoint: '/api/v1',
-    blogUrl: '$VBOARD_WP_PUBLIC_HOST',
-    displayPinsFromLastMonthsCount: 36, // By default, only pins from the last 3 years can be seen (can be forced in the url call directly (?from=))
-    localisations: '$VBOARD_LOCALISATIONS'.split(';').map(function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; }),
+    apiEndpoint: startsWithDollar(apiEndpoint) ? '/vboard' : apiEndpoint,
+    blogUrl: startsWithDollar(blogUrl) ? null : blogUrl,
+    // By default, display only pins from the last 3 years:
+    localisations: startsWithDollar(localisations) ? [] : localisations.split(';').map(function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; }),
+    displayPinsFromLastMonthsCount: startsWithDollar(displayPinsFromLastMonthsCount) ? 36 : displayPinsFromLastMonthsCount,
 });
