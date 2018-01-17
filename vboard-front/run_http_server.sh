@@ -9,9 +9,9 @@ fi
 
 if [ -n "${VBOARD_API_ENDPOINT:-}" ]; then
     echo 'Inserting $VBOARD_API_ENDPOINT in index.html'
-    sed -i "s/\$VBOARD_API_ENDPOINT/${VBOARD_API_ENDPOINT:-}/" /var/www/vboard/index.html
+    sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/index.html
     echo 'Inserting $VBOARD_API_ENDPOINT in config.js'
-    sed -i "s/\$VBOARD_API_ENDPOINT/${VBOARD_API_ENDPOINT:-}/" /var/www/vboard/compile/scripts/config.js
+    sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/compile/scripts/config.js
 fi
 if [ -n "${VBOARD_WP_PUBLIC_HOST:-}" ]; then
     echo 'Inserting $VBOARD_WP_PUBLIC_HOST or /vblog in config.js'
@@ -19,11 +19,11 @@ if [ -n "${VBOARD_WP_PUBLIC_HOST:-}" ]; then
 fi
 if [ -n "${VBOARD_LOCALISATIONS:-}" ]; then
     echo 'Inserting $VBOARD_LOCALISATIONS in config.js'
-    sed -i "s/\$VBOARD_LOCALISATIONS/${VBOARD_LOCALISATIONS:-}/" /var/www/vboard/compile/scripts/config.js
+    sed -i "s~\$VBOARD_LOCALISATIONS~${VBOARD_LOCALISATIONS:-}~" /var/www/vboard/compile/scripts/config.js
 fi
 if [ -n "${VBOARD_PINS_MONTHS_COUNT:-}" ]; then
     echo 'Inserting $VBOARD_PINS_MONTHS_COUNT in config.js'
-    sed -i "s/\$VBOARD_PINS_MONTHS_COUNT/${VBOARD_PINS_MONTHS_COUNT:-}/" /var/www/vboard/compile/scripts/config.js
+    sed -i "s~\$VBOARD_PINS_MONTHS_COUNT~${VBOARD_PINS_MONTHS_COUNT:-}~" /var/www/vboard/compile/scripts/config.js
 fi
 
 if [ -n "${KCK_REALM:-}" ] || [ -n "${KCK_PUBLIC_HOST:-}" ] || [ -n "${KEYCLOAK_JS_URL:-}" ]; then
