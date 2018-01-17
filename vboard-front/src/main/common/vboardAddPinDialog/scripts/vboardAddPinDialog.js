@@ -153,7 +153,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         $scope.popupTitle = "Modification d'épingle";
         if ($scope.pin.author.split(',').length === 3) {
             $scope.editablePin.author = $scope.pin.author.split(',').length === 3 ? $scope.pin.author.split(',')[0] + ' ' + $scope.pin.author.split(',')[1] : $scope.pin.author;
-            $scope.editablePin.avatar = $scope.pin.author.split(',').length === 3 ? "/avatar/" + $scope.author.split(',')[2] + ".png": $scope.pin.author;
+            $scope.editablePin.avatar = $scope.pin.author.split(',').length === 3 ? "/avatar/" + $scope.pin.author.split(',')[2] + ".png": $scope.pin.author;
         }
     }
 

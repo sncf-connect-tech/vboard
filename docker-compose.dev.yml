@@ -14,7 +14,6 @@ services:
       # Mouting the following directory "overrides" the one in the built container.
       # We do this to benefit from "grunt watch" regenerating the statics
       - ./vboard-front/grunt-target:/var/www/vboard
-    volumes:
       - ./statics:/var/vboard/statics
     ports:
       - 80:80
