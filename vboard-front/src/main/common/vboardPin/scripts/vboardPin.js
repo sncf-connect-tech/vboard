@@ -44,70 +44,28 @@ angular.module('vboard').directive('vboardPin', function () {
 
 angular.module('vboard').controller('VboardPinController', function ($scope, $rootScope, vboardAuth, vboardImgs, vboardPinsCollection, ngDialog, $http, CONFIG, vboardMessageInterceptor, $sce) {
 
-    /** Init */
-    $scope.$on('userAuthenticated', function () {
-        $scope.setPerm();
-    });
+    $scope.authorLink = '';
+    $scope.likesAuthors = "";
+    $scope.newComment = false;
+    $scope.pinAvatar = "images/avatar.png";
 
-    $scope.$watch('pin.imgType', function () {
-        $scope.loadImage();
-    });
-
-    // Enable bootstrap tooltip using jquery
-    $('[data-toggle="tooltip"]').tooltip();
-
-    $scope.init = function () {
-        $scope.pinAvatar = "images/avatar.png";
-        // Check whether the user format is valid (version compatibility)
-        var fullAuthor = $scope.pin.author && $scope.pin.author.indexOf(',', $scope.pin.author.indexOf(',') + 1) > -1;
-        if (fullAuthor) {
-            var email = $scope.pin.author.split(',')[2];
-            $scope.pinAvatar = "/avatar/" + email + ".png";
-        } else {
-            vboardAuth.getUserByEmail($scope.pin.author).then(function (success) {
-                if (success !== null && success !== '') {
-                    $scope.readableAuthor = success.first_name + ' ' + success.last_name;
-                    $scope.authorLink = "#profil/" + success.email;
-                    if (success.avatar) {
-                        $scope.pinAvatar = "/avatar/" + success.email + ".png";
-                    }
-                } else {
-                    // Find or create the user if the name of the author is only constituted of an email (used mainly for vblog pins)
-                    if ($rootScope.userAuthenticated && $scope.pin.author === $rootScope.userAuthenticated.email) {
-                        vboardAuth.getUser($rootScope.userAuthenticated);
-                    }
-                }
-            });
-        }
-        $scope.readableAuthor = (fullAuthor) ? $scope.pin.author.split(',')[0] + ' ' + $scope.pin.author.split(',')[1] : $scope.pin.author;
-
-        // Return the link to see the user's public profil
-        $scope.authorLink = ($scope.pin.author && $scope.pin.author.indexOf(',') > -1 && $scope.pin.author.indexOf('@') > -1) ? "#profil/" + $scope.pin.author.split(',')[2] : "";
-    };
-
-    $scope.init();
-
-    $scope.$on('vboardUserLastConnectionSet', function () {
-        if ($rootScope.lastConnection && (new Date($rootScope.lastConnection).getTime() - new Date($scope.pin.postDateUTC).getTime() <= 0)) {
-            $scope.pinClass = "vboardPin--unsee";
-        }
-    });
+    $scope.readableAuthor = $scope.pin.author;
+    if ($scope.pin.author && $scope.pin.author.indexOf(',') > -1 && $scope.pin.author.indexOf('@') > -1) {
+        $scope.authorLink = '#profil/' + $scope.pin.author.split(',')[2];
+    }
 
     // Check whether the user is the author of the pin or an admin, so if the user can delete/update the pin.
     // Also check if the user is authenticated and if he has the newsletter role.
     $scope.setPerm = function () {
         $scope.setModificationPerm();
         $scope.connected = $rootScope.userAuthenticated;
-        $scope.hasNewsletterRole = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.role.indexOf('Newsletter') >= 0 : false;
+        $scope.hasNewsletterRole = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.indexOf('Newsletter') >= 0 : false;
     };
 
     $scope.setModificationPerm = function () {
         $scope.perm = $rootScope.userAuthenticated ? (($rootScope.userAuthenticated.first_name + ',' + $rootScope.userAuthenticated.last_name + ',' + $rootScope.userAuthenticated.email) === $scope.pin.author
         || vboardAuth.isAdmin() || vboardAuth.isModerator() || $rootScope.userAuthenticated.email === $scope.pin.author /* version compatible code*/): false;
     };
-
-    $scope.setPerm();
-
 
     /** Media */
 
@@ -155,8 +113,6 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
         });
     };
 
-    $scope.likesAuthors = "";
-
     $scope.seeLikes = function (pinId) {
         // Do not reload the likes if it has already been done (function called on mouseover)
         if ($scope.likesAuthors === "") {
@@ -172,9 +128,6 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
 
     /** Comment */
-
-    // Initialization to avoid undefined
-    $scope.newComment = false;
 
     // Actually show the section to add a comment (or hide it if it was already shown)
     $scope.addComment = function () {
@@ -220,7 +173,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     $scope.setLikesAuthors = function (email) {
         vboardAuth.getUserByEmail(email).then(function (success2) {
             if ($scope.likesAuthors.indexOf(success2.first_name + ' '+ success2.last_name) === -1) {
-                if ($scope.likesAuthors !== "") {
+                if ($scope.likesAuthors) {
                     $scope.likesAuthors = $scope.likesAuthors + '\n'
                 }
                 $scope.likesAuthors = $scope.likesAuthors + success2.first_name + ' ' + success2.last_name;
@@ -288,4 +241,46 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
         });
     };
 
+    /** Events */
+    $scope.$watch('pin.imgType', function () {
+        $scope.loadImage();
+    });
+
+    $scope.$on('userAuthenticated', function () {
+        $scope.setPerm();
+    });
+
+    $scope.$on('vboardUserLastConnectionSet', function () {
+        if ($rootScope.lastConnection && (new Date($rootScope.lastConnection).getTime() - new Date($scope.pin.postDateUTC).getTime() <= 0)) {
+            $scope.pinClass = "vboardPin--unsee";
+        }
+    });
+
+    /** Init */
+    $scope.setPerm();
+    // Check whether the user format is valid (version compatibility)
+    var fullAuthor = $scope.pin.author && $scope.pin.author.indexOf(',', $scope.pin.author.indexOf(',') + 1) > -1;
+    if (fullAuthor) {
+        var authorEmail = $scope.pin.author.split(',')[2];
+        $scope.pinAvatar = "/avatar/" + authorEmail + ".png";
+        $scope.readableAuthor = $scope.pin.author.split(',')[0] + ' ' + $scope.pin.author.split(',')[1];
+    } else {
+        vboardAuth.getUserByEmail($scope.pin.author).then(function (success) {
+            if (success) {
+                $scope.readableAuthor = success.first_name + ' ' + success.last_name;
+                $scope.authorLink = "#profil/" + success.email;
+                if (success.avatar) {
+                    $scope.pinAvatar = "/avatar/" + success.email + ".png";
+                }
+            } else {
+                // Find or create the user if the name of the author is only constituted of an email (used mainly for vblog pins)
+                if ($rootScope.userAuthenticated && $scope.pin.author === $rootScope.userAuthenticated.email) {
+                    vboardAuth.getUser($rootScope.userAuthenticated);
+                }
+            }
+        });
+    }
+
+    // Enable bootstrap tooltip using jquery
+    $('[data-toggle="tooltip"]').tooltip();
 });

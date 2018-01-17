@@ -18,7 +18,6 @@
 
 package com.vsct.vboard.config;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -32,11 +31,14 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "proxy")
 public class ProxyConfig {
-    @NotBlank
     private String hostname;
     private Integer port;
 
     public ProxyConfig() {
+    }
+
+    public boolean isEnabled() {
+        return port != null && port != 0 && !isBlank(hostname);
     }
 
     public void setHostname(String hostname) {
@@ -56,11 +58,10 @@ public class ProxyConfig {
     }
 
     public Proxy getProxy () {
-        if (!isBlank(hostname) && !"localhost".equals(hostname) && port != 0) {
-            return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(hostname, port));
-        } else {
+        if (!isEnabled()) {
             return Proxy.NO_PROXY;
         }
+        return new Proxy(Proxy.Type.HTTP, new InetSocketAddress(hostname, port));
     }
 
 }
