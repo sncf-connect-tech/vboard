@@ -76,6 +76,8 @@ services:
       - 9200
     networks:
       - back
+    volumes:
+      - ./vboard-es-conf:/usr/share/elasticsearch/config
 
 networks:
   back:
