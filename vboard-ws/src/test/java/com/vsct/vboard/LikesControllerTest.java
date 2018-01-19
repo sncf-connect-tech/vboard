@@ -18,15 +18,17 @@
 
 package com.vsct.vboard;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
 import com.vsct.vboard.config.ProxyConfig;
 import com.vsct.vboard.controllers.*;
-import com.vsct.vboard.models.*;
+import com.vsct.vboard.models.Like;
+import com.vsct.vboard.models.Pin;
+import com.vsct.vboard.models.User;
 import com.vsct.vboard.parameterFormat.LikeParams;
-import com.vsct.vboard.services.*;
+import com.vsct.vboard.services.ElasticSearchClient;
+import com.vsct.vboard.services.UploadsManager;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,8 +59,6 @@ public class LikesControllerTest {
     public int webServerPort;
 
     @Autowired
-    private ObjectMapper jsonMapper;
-    @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserDAO userDAO;
@@ -67,7 +67,7 @@ public class LikesControllerTest {
     @Autowired
     private PinDAO pinDAO;
     @Mock
-    private ElasticSearchClient elkClient;
+    private ElasticSearchClient elsClient;
     @Mock
     private UploadsManager uploadsManager;
     @Autowired
@@ -93,8 +93,8 @@ public class LikesControllerTest {
         createTestDB();
 
         MockitoAnnotations.initMocks(this);
-        PinsController pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elkClient, uploadsManager, permission, gamification, notifications, proxyConfig);
-        this.likesController = new LikesController(jdbcTemplate, likeDAO, pinDAO, userDAO, elkClient, permission, gamification);
+        PinsController pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamification, notifications, proxyConfig);
+        this.likesController = new LikesController(jdbcTemplate, likeDAO, pinDAO, userDAO, elsClient, permission, gamification);
         pinsController.deleteAllPins();
         this.likesController.deleteAllLikes();
 

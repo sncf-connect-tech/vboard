@@ -18,15 +18,17 @@
 
 package com.vsct.vboard;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.UserDAO;
-import com.vsct.vboard.controllers.*;
+import com.vsct.vboard.controllers.AuthenticationController;
+import com.vsct.vboard.controllers.NotificationsController;
+import com.vsct.vboard.controllers.TeamsController;
+import com.vsct.vboard.controllers.UsersController;
 import com.vsct.vboard.models.User;
 import com.vsct.vboard.parameterFormat.UserParams;
 import com.vsct.vboard.parameterFormat.UserParamsUpdate;
-import com.vsct.vboard.services.*;
+import com.vsct.vboard.services.UploadsManager;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
@@ -61,21 +63,13 @@ public class UserControllerTest {
 
     private UsersController userController;
     @Autowired
-    private ObjectMapper jsonMapper;
-    @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserDAO userDAO;
     @Mock
-    private ElasticSearchClient elkClient;
-    @Mock
     private UploadsManager uploadsManager;
     @Mock
     private AuthenticationController permission;
-    @Mock
-    private GamificationController gamification;
-    @Mock
-    private NotificationsController notifications;
     @Mock
     private TeamsController teamsController;
     @Mock

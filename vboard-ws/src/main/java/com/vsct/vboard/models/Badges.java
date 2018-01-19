@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -188,13 +186,43 @@ public class Badges{
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Badges badges = (Badges) o;
+
+        if (pinsPostedLevel != badges.pinsPostedLevel) return false;
+        if (likesReceivedLevel != badges.likesReceivedLevel) return false;
+        if (likesReceivedForOnePinLevel != badges.likesReceivedForOnePinLevel) return false;
+        if (likesPostedLevel != badges.likesPostedLevel) return false;
+        if (commentReceivedLevel != badges.commentReceivedLevel) return false;
+        if (commentsReceivedForOnePinLevel != badges.commentsReceivedForOnePinLevel) return false;
+        if (commentsPostedLevel != badges.commentsPostedLevel) return false;
+        if (savedPinsLevel != badges.savedPinsLevel) return false;
+        if (secretLevel != badges.secretLevel) return false;
+        if (connexionNumberLevel != badges.connexionNumberLevel) return false;
+        if (globalLevel != badges.globalLevel) return false;
+        if (email != null ? !email.equals(badges.email) : badges.email != null) return false;
+        return team != null ? team.equals(badges.team) : badges.team == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (team != null ? team.hashCode() : 0);
+        result = 31 * result + pinsPostedLevel;
+        result = 31 * result + likesReceivedLevel;
+        result = 31 * result + likesReceivedForOnePinLevel;
+        result = 31 * result + likesPostedLevel;
+        result = 31 * result + commentReceivedLevel;
+        result = 31 * result + commentsReceivedForOnePinLevel;
+        result = 31 * result + commentsPostedLevel;
+        result = 31 * result + savedPinsLevel;
+        result = 31 * result + secretLevel;
+        result = 31 * result + connexionNumberLevel;
+        result = 31 * result + globalLevel;
+        return result;
     }
 
     @Override

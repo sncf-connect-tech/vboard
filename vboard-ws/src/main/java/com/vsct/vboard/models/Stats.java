@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -183,13 +181,43 @@ public class Stats  implements Comparable<Stats>{
     public void setLastConnexion(String lastConnexion) { this.lastConnexion = lastConnexion; }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Stats stats = (Stats) o;
+
+        if (pinsPosted != stats.pinsPosted) return false;
+        if (likesReceived != stats.likesReceived) return false;
+        if (likesReceivedForOnePin != stats.likesReceivedForOnePin) return false;
+        if (likesPosted != stats.likesPosted) return false;
+        if (commentReceived != stats.commentReceived) return false;
+        if (commentsReceivedForOnePin != stats.commentsReceivedForOnePin) return false;
+        if (commentsPosted != stats.commentsPosted) return false;
+        if (savedPins != stats.savedPins) return false;
+        if (secret != stats.secret) return false;
+        if (connexionNumber != stats.connexionNumber) return false;
+        if (email != null ? !email.equals(stats.email) : stats.email != null) return false;
+        if (team != null ? !team.equals(stats.team) : stats.team != null) return false;
+        return lastConnexion != null ? lastConnexion.equals(stats.lastConnexion) : stats.lastConnexion == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (team != null ? team.hashCode() : 0);
+        result = 31 * result + pinsPosted;
+        result = 31 * result + likesReceived;
+        result = 31 * result + likesReceivedForOnePin;
+        result = 31 * result + likesPosted;
+        result = 31 * result + commentReceived;
+        result = 31 * result + commentsReceivedForOnePin;
+        result = 31 * result + commentsPosted;
+        result = 31 * result + savedPins;
+        result = 31 * result + secret;
+        result = 31 * result + connexionNumber;
+        result = 31 * result + (lastConnexion != null ? lastConnexion.hashCode() : 0);
+        return result;
     }
 
     @Override

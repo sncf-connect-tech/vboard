@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 
@@ -83,13 +81,25 @@ public class Konami {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Konami konami = (Konami) o;
+
+        if (points != konami.points) return false;
+        if (user != null ? !user.equals(konami.user) : konami.user != null) return false;
+        if (date != null ? !date.equals(konami.date) : konami.date != null) return false;
+        return firstAccess != null ? firstAccess.equals(konami.firstAccess) : konami.firstAccess == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = user != null ? user.hashCode() : 0;
+        result = 31 * result + points;
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (firstAccess != null ? firstAccess.hashCode() : 0);
+        return result;
     }
 
     @Override

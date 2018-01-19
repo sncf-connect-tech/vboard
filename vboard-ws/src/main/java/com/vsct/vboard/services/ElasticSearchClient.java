@@ -310,16 +310,16 @@ public class ElasticSearchClient {
 
     private List<HashMap> search(String query, String indexName, List<Sort> sortList, int offset) {
         Search search = this.buildSearch(query, indexName, sortList, offset);
-        SearchResult elkResult;
+        SearchResult elsResult;
         try {
-            elkResult = this.lazyGetElsClient().execute(search);
+            elsResult = this.lazyGetElsClient().execute(search);
         } catch (IOException error) {
-            throw new ElkRequestError(error);
+            throw new ElsRequestError(error);
         }
-        if (!elkResult.isSucceeded()) {
-            throw new ElkRequestError("ElasticSearch failed: " + elkResult.getErrorMessage());
+        if (!elsResult.isSucceeded()) {
+            throw new ElsRequestError("ElasticSearch failed: " + elsResult.getErrorMessage());
         }
-        List<HashMap> itemsFound = getResponseAsList(elkResult);
+        List<HashMap> itemsFound = getResponseAsList(elsResult);
         return itemsFound;
     }
 
@@ -334,8 +334,8 @@ public class ElasticSearchClient {
                 .build();
     }
 
-    public List<HashMap> getResponseAsList(SearchResult elkResult) {
-        return elkResult.getHits(HashMap.class).stream()
+    public List<HashMap> getResponseAsList(SearchResult elsResult) {
+        return elsResult.getHits(HashMap.class).stream()
                 .map(hit -> hit.source)
                 .collect(Collectors.toList());
     }
@@ -356,12 +356,12 @@ public class ElasticSearchClient {
         return pin;
     }
 
-    public static class ElkRequestError extends RuntimeException {
-        ElkRequestError(String msg) {
+    public static class ElsRequestError extends RuntimeException {
+        ElsRequestError(String msg) {
             super(msg);
         }
 
-        ElkRequestError(Throwable cause) {
+        ElsRequestError(Throwable cause) {
             super(cause);
         }
     }

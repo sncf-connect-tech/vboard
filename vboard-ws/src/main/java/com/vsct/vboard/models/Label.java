@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.Entity;
@@ -53,13 +51,19 @@ public class Label {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Label label = (Label) o;
+
+        return labelName != null ? labelName.equals(label.labelName) : label.labelName == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return labelName != null ? labelName.hashCode() : 0;
     }
 
     @Override

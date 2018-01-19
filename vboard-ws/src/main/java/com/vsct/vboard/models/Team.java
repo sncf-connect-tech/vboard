@@ -23,8 +23,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -171,13 +169,39 @@ public class Team implements Profil {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Team team = (Team) o;
+
+        if (hasCustomAvatar != team.hasCustomAvatar) return false;
+        if (Double.compare(team.latitude, latitude) != 0) return false;
+        if (Double.compare(team.longitude, longitude) != 0) return false;
+        if (name != null ? !name.equals(team.name) : team.name != null) return false;
+        if (email != null ? !email.equals(team.email) : team.email != null) return false;
+        if (members != null ? !members.equals(team.members) : team.members != null) return false;
+        if (info != null ? !info.equals(team.info) : team.info != null) return false;
+        if (localisation != null ? !localisation.equals(team.localisation) : team.localisation != null) return false;
+        return project != null ? project.equals(team.project) : team.project == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result;
+        long temp;
+        result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (hasCustomAvatar ? 1 : 0);
+        result = 31 * result + (members != null ? members.hashCode() : 0);
+        result = 31 * result + (info != null ? info.hashCode() : 0);
+        temp = Double.doubleToLongBits(latitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(longitude);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (localisation != null ? localisation.hashCode() : 0);
+        result = 31 * result + (project != null ? project.hashCode() : 0);
+        return result;
     }
 
     @Override

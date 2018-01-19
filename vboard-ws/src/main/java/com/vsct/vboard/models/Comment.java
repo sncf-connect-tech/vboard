@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 
@@ -90,15 +88,28 @@ public class Comment implements Comparable<Comment>{
 
     public void setAuthor(String author) { this.author = author; }
 
-
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Comment comment = (Comment) o;
+
+        if (id != null ? !id.equals(comment.id) : comment.id != null) return false;
+        if (pin != null ? !pin.equals(comment.pin) : comment.pin != null) return false;
+        if (author != null ? !author.equals(comment.author) : comment.author != null) return false;
+        if (text != null ? !text.equals(comment.text) : comment.text != null) return false;
+        return postDateUTC != null ? postDateUTC.equals(comment.postDateUTC) : comment.postDateUTC == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (pin != null ? pin.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (text != null ? text.hashCode() : 0);
+        result = 31 * result + (postDateUTC != null ? postDateUTC.hashCode() : 0);
+        return result;
     }
 
     @Override

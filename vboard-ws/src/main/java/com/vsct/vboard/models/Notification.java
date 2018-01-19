@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -128,13 +126,35 @@ public class Notification {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Notification that = (Notification) o;
+
+        if (seen != that.seen) return false;
+        if (clicked != that.clicked) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (link != null ? !link.equals(that.link) : that.link != null) return false;
+        if (message != null ? !message.equals(that.message) : that.message != null) return false;
+        if (type != null ? !type.equals(that.type) : that.type != null) return false;
+        if (fromUser != null ? !fromUser.equals(that.fromUser) : that.fromUser != null) return false;
+        return date != null ? date.equals(that.date) : that.date == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (link != null ? link.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (fromUser != null ? fromUser.hashCode() : 0);
+        result = 31 * result + (seen ? 1 : 0);
+        result = 31 * result + (clicked ? 1 : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        return result;
     }
 
     @Override

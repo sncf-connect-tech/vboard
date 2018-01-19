@@ -23,12 +23,10 @@
         <java.version>1.8</java.version>
         <springboot.version>1.5.9.RELEASE</springboot.version>
         <commons-io.version>2.4</commons-io.version>
-        <elasticsearch.version>1.5.2</elasticsearch.version>
         <mockito.version>1.10.19</mockito.version>
         <restassured.version>2.4.1</restassured.version>
-        <jest.version>0.1.6</jest.version>
+        <jest.version>5.3.3</jest.version>
         <keycloak.version>3.2.0.Final</keycloak.version>
-        <logback.version>1.2.3</logback.version><!-- Must be >=1.2.0 for security reasons, cf. CVE-2017-5929 -->
     </properties>
 
     <!-- ================= -->
@@ -81,13 +79,22 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Override logback version provided by Spring Boot : must be >=1.2.0 for security reasons, cf. CVE-2017-5929 -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
             <dependency>
                 <!-- Import dependency management from Spring Boot -->
+                <!-- Doc: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-dependency-management -->
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>${springboot.version}</version>
-                <type>pom</type>
                 <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -165,11 +172,6 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.version}</version>
         </dependency>
         <dependency>
             <groupId>io.searchbox</groupId>

@@ -18,7 +18,6 @@
 
 package com.vsct.vboard;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
@@ -61,8 +60,6 @@ public class CommentControllerTest {
     public int webServerPort;
 
     @Autowired
-    private ObjectMapper jsonMapper;
-    @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserDAO userDAO;
@@ -80,7 +77,7 @@ public class CommentControllerTest {
     @Mock
     private UploadsManager uploadsManager;
     @Mock
-    private ElasticSearchClient elkClient;
+    private ElasticSearchClient elsClient;
     private CommentsController commentsController;
     @Mock
     private AuthenticationController permission;
@@ -98,8 +95,8 @@ public class CommentControllerTest {
         createTestDB();
 
         MockitoAnnotations.initMocks(this);
-        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elkClient, uploadsManager, permission, gamification, notifications, proxyConfig);
-        this.commentsController = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elkClient, permission, gamification, notifications);
+        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamification, notifications, proxyConfig);
+        this.commentsController = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elsClient, permission, gamification, notifications);
         this.pinsController.deleteAllPins();
         this.commentsController.deleteAllComments();
 
@@ -192,7 +189,7 @@ public class CommentControllerTest {
         Assert.assertTrue(this.commentDAO.findAll().iterator().hasNext());
         ArrayList<Pin> pins = new ArrayList<>();
         pins.add(this.pinDAO.findByPinId("0"));
-        Mockito.doReturn(pins).when(elkClient).searchPinsById("0");
+        Mockito.doReturn(pins).when(elsClient).searchPinsById("0");
         this.pinsController.deletePinFromId("0");
         Assert.assertFalse(this.commentDAO.findAll().iterator().hasNext());
 

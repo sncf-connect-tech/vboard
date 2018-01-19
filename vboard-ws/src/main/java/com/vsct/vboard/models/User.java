@@ -24,8 +24,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -259,13 +257,49 @@ public class User implements Profil, Serializable {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (hasCustomAvatar != user.hasCustomAvatar) return false;
+        if (receiveNlEmails != user.receiveNlEmails) return false;
+        if (receivePopularPinsEmails != user.receivePopularPinsEmails) return false;
+        if (receiveLeaderboardEmails != user.receiveLeaderboardEmails) return false;
+        if (receiveRecapEmails != user.receiveRecapEmails) return false;
+        if (isAdmin != user.isAdmin) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        if (team != null ? !team.equals(user.team) : user.team != null) return false;
+        if (info != null ? !info.equals(user.info) : user.info != null) return false;
+        if (favoriteLabels != null ? !favoriteLabels.equals(user.favoriteLabels) : user.favoriteLabels != null)
+            return false;
+        if (lastConnection != null ? !lastConnection.equals(user.lastConnection) : user.lastConnection != null)
+            return false;
+        if (roles != null ? !roles.equals(user.roles) : user.roles != null) return false;
+        return newsletterLabel != null ? newsletterLabel.equals(user.newsletterLabel) : user.newsletterLabel == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = email != null ? email.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (hasCustomAvatar ? 1 : 0);
+        result = 31 * result + (team != null ? team.hashCode() : 0);
+        result = 31 * result + (info != null ? info.hashCode() : 0);
+        result = 31 * result + (favoriteLabels != null ? favoriteLabels.hashCode() : 0);
+        result = 31 * result + (lastConnection != null ? lastConnection.hashCode() : 0);
+        result = 31 * result + (receiveNlEmails ? 1 : 0);
+        result = 31 * result + (receivePopularPinsEmails ? 1 : 0);
+        result = 31 * result + (receiveLeaderboardEmails ? 1 : 0);
+        result = 31 * result + (receiveRecapEmails ? 1 : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        result = 31 * result + (newsletterLabel != null ? newsletterLabel.hashCode() : 0);
+        result = 31 * result + (isAdmin ? 1 : 0);
+        return result;
     }
 
     @Override

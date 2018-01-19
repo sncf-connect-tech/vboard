@@ -83,7 +83,7 @@ public class PinsControllerTest {
     @Autowired
     private SavedPinDAO savedPinDAO;
     @Mock
-    private ElasticSearchClient elkClient;
+    private ElasticSearchClient elsClient;
     @Mock
     private UploadsManager uploadsManager;
     @Mock
@@ -100,7 +100,7 @@ public class PinsControllerTest {
         createTestDB();
 
         MockitoAnnotations.initMocks(this);
-        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elkClient, uploadsManager, permission, gamification, notifications, proxyConfig);
+        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamification, notifications, proxyConfig);
         pinsController.deleteAllPins();
 
         RestAssuredMockMvc.mockMvc = MockMvcBuilders.standaloneSetup(pinsController).build();
@@ -202,7 +202,7 @@ public class PinsControllerTest {
         this.pinDAO.save(new Pin("0", "title", "", 0, "", "", "content", "auth", new DateTime()));
         ArrayList<Pin> pins = new ArrayList<>();
         pins.add(this.pinDAO.findByPinId("0"));
-        Mockito.doReturn(pins).when(elkClient).searchPinsById("0");
+        Mockito.doReturn(pins).when(elsClient).searchPinsById("0");
         Assert.assertNotNull(this.pinDAO.findByPinId("0"));
         this.pinsController.deletePinFromId("0");
         Assert.assertNull(this.pinDAO.findByPinId("0"));
@@ -214,7 +214,7 @@ public class PinsControllerTest {
         String [] labels = {"label"};
         ArrayList<Pin> pins = new ArrayList<>();
         pins.add(this.pinDAO.findByPinId("0"));
-        Mockito.doReturn(pins).when(elkClient).searchPinsById("0");
+        Mockito.doReturn(pins).when(elsClient).searchPinsById("0");
         try {
             this.pinsController.updatePin(new AddNewPinParams("titleupdate", "url", "imgtype", "contentupdate", labels, "auth"), "notfound");
             Assert.fail("Epingle non trouvee, sans erreur");

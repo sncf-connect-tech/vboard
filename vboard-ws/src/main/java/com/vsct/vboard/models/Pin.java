@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 
@@ -224,15 +222,39 @@ public class Pin {
         this.indexableTextContent = indexableTextContent;
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Pin pin = (Pin) o;
+
+        if (likes != pin.likes) return false;
+        if (commentsNumber != pin.commentsNumber) return false;
+        if (pinId != null ? !pinId.equals(pin.pinId) : pin.pinId != null) return false;
+        if (pinTitle != null ? !pinTitle.equals(pin.pinTitle) : pin.pinTitle != null) return false;
+        if (hrefUrl != null ? !hrefUrl.equals(pin.hrefUrl) : pin.hrefUrl != null) return false;
+        if (indexableTextContent != null ? !indexableTextContent.equals(pin.indexableTextContent) : pin.indexableTextContent != null)
+            return false;
+        if (labels != null ? !labels.equals(pin.labels) : pin.labels != null) return false;
+        if (postDateUTC != null ? !postDateUTC.equals(pin.postDateUTC) : pin.postDateUTC != null) return false;
+        if (imgType != null ? !imgType.equals(pin.imgType) : pin.imgType != null) return false;
+        return author != null ? author.equals(pin.author) : pin.author == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = pinId != null ? pinId.hashCode() : 0;
+        result = 31 * result + (pinTitle != null ? pinTitle.hashCode() : 0);
+        result = 31 * result + (hrefUrl != null ? hrefUrl.hashCode() : 0);
+        result = 31 * result + (indexableTextContent != null ? indexableTextContent.hashCode() : 0);
+        result = 31 * result + (labels != null ? labels.hashCode() : 0);
+        result = 31 * result + (postDateUTC != null ? postDateUTC.hashCode() : 0);
+        result = 31 * result + likes;
+        result = 31 * result + commentsNumber;
+        result = 31 * result + (imgType != null ? imgType.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        return result;
     }
 
     @Override

@@ -23,8 +23,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -60,15 +58,24 @@ public class Like {
         return this.author;
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Like like = (Like) o;
+
+        if (id != null ? !id.equals(like.id) : like.id != null) return false;
+        if (pin != null ? !pin.equals(like.pin) : like.pin != null) return false;
+        return author != null ? author.equals(like.author) : like.author == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (pin != null ? pin.hashCode() : 0);
+        result = 31 * result + (author != null ? author.hashCode() : 0);
+        return result;
     }
 
     @Override

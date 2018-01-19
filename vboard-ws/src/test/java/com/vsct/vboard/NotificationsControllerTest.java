@@ -70,7 +70,7 @@ public class NotificationsControllerTest {
     @Autowired
     private PinDAO pinDAO;
     @Mock
-    private ElasticSearchClient elkClient;
+    private ElasticSearchClient elsClient;
     @Mock
     private UploadsManager uploadsManager;
     @Autowired
@@ -106,9 +106,9 @@ public class NotificationsControllerTest {
         createTestDB();
 
         MockitoAnnotations.initMocks(this);
-        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elkClient, uploadsManager, permission, gamificationController, notificationsController, proxyConfig);
-        this.commentsController = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elkClient, permission, gamificationController, notificationsController);
-        LikesController likesController = new LikesController(jdbcTemplate, likeDAO, pinDAO, userDAO, elkClient, permission, gamificationController);
+        this.pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamificationController, notificationsController, proxyConfig);
+        this.commentsController = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elsClient, permission, gamificationController, notificationsController);
+        LikesController likesController = new LikesController(jdbcTemplate, likeDAO, pinDAO, userDAO, elsClient, permission, gamificationController);
         this.notificationsController = new NotificationsController(jdbcTemplate, notificationDAO, permission, pinDAO, likeDAO, userDAO, commentDAO);
         this.gamificationController = new GamificationController(gamificationService, jdbcTemplate, likeDAO, commentDAO, pinDAO, badgesDAO, statsDAO, userDAO, teamDAO, savedPinDAO, permission, notificationsController);
         this.pinsController.deleteAllPins();
@@ -256,7 +256,7 @@ public class NotificationsControllerTest {
         // Impossible to test the addNotificationsFromPin call from this.pinController while mocking this.permission.
         // this.pinsController Test. Check if the right method is called with the right arguments, then we test the method called itself with the same arguments.
         NotificationsController notificationsControllerSpy = spy(this.notificationsController);
-        PinsController pinsControllerSpy = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elkClient, uploadsManager, permission, gamificationController, notificationsControllerSpy, proxyConfig);
+        PinsController pinsControllerSpy = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamificationController, notificationsControllerSpy, proxyConfig);
         this.pinsController.deleteAllPins();
         pinsControllerSpy.addNewPin(new AddNewPinParams("title","url","im","description", labels, "emailNotifFrom,firstname,lastname"));
         verify(notificationsControllerSpy).addNotificationsFromPin(eq(this.pinDAO.findAll().iterator().next().getPinId()), eq("a ajouté une épingle avec un label que vous suivez"));
@@ -304,7 +304,7 @@ public class NotificationsControllerTest {
         // Impossible to test the addNotificationsFrom call from this.commentController while mocking this.permission.
         // this.commentController Test. Check if the right method is called with the right arguments, then we test the method called itself with the same arguments.
         NotificationsController notificationsControllerSpy = spy(this.notificationsController);
-        CommentsController commentsControllerSpy = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elkClient, permission, gamificationController, notificationsControllerSpy);
+        CommentsController commentsControllerSpy = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elsClient, permission, gamificationController, notificationsControllerSpy);
         commentsControllerSpy.addComment(new CommentParams(from.getUserString(), pin.getPinId(), "Comment message"));
         verify(notificationsControllerSpy).addNotificationsFromComment(eq(pin.getPinId()));
     }

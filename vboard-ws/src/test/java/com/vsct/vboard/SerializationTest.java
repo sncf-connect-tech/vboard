@@ -65,7 +65,7 @@ public class SerializationTest {
     }
 
     @Test
-    public void deserializeElkSource() throws IOException {
+    public void deserializeElsSource() throws IOException {
         String jsonPin = "{\"pin_id\":\"tweet-598713611012460544\",\"href_url\":\"https://twitter.com/bytesforall/status/598713611012460544\",\"labels\":\"#Netfreedom,@APC_News,@IFEX\",\"post_dateutc\":\"2015-05-26T15:13:20.475Z\",\"indexable_text_content\":\"\\\"How would you like this wrapped?\\\" https://t.co/Le1g2VLkxr #Netfreedom @APC_News @IFEX http://t.co/hw6pozn9DD\"}";
         this.jsonMapper.readValue(jsonPin, Pin.class);
     }

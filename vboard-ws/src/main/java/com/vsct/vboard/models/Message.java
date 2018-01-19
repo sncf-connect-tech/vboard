@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -87,13 +85,27 @@ public class Message {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Message message = (Message) o;
+
+        if (active != message.active) return false;
+        if (id != null ? !id.equals(message.id) : message.id != null) return false;
+        if (type != null ? !type.equals(message.type) : message.type != null) return false;
+        if (content != null ? !content.equals(message.content) : message.content != null) return false;
+        return postDateUTC != null ? postDateUTC.equals(message.postDateUTC) : message.postDateUTC == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (content != null ? content.hashCode() : 0);
+        result = 31 * result + (active ? 1 : 0);
+        result = 31 * result + (postDateUTC != null ? postDateUTC.hashCode() : 0);
+        return result;
     }
 
     @Override

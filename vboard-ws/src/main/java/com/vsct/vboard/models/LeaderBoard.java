@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 
 import java.util.HashSet;
 import java.util.List;
@@ -190,13 +188,42 @@ public class LeaderBoard {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LeaderBoard that = (LeaderBoard) o;
+
+        if (pinsPosted != null ? !pinsPosted.equals(that.pinsPosted) : that.pinsPosted != null) return false;
+        if (likesReceived != null ? !likesReceived.equals(that.likesReceived) : that.likesReceived != null)
+            return false;
+        if (likesReceivedForOnePin != null ? !likesReceivedForOnePin.equals(that.likesReceivedForOnePin) : that.likesReceivedForOnePin != null)
+            return false;
+        if (likesPosted != null ? !likesPosted.equals(that.likesPosted) : that.likesPosted != null) return false;
+        if (commentReceived != null ? !commentReceived.equals(that.commentReceived) : that.commentReceived != null)
+            return false;
+        if (commentsReceivedForOnePin != null ? !commentsReceivedForOnePin.equals(that.commentsReceivedForOnePin) : that.commentsReceivedForOnePin != null)
+            return false;
+        if (commentsPosted != null ? !commentsPosted.equals(that.commentsPosted) : that.commentsPosted != null)
+            return false;
+        if (connexions != null ? !connexions.equals(that.connexions) : that.connexions != null) return false;
+        if (savedPins != null ? !savedPins.equals(that.savedPins) : that.savedPins != null) return false;
+        return pinRead != null ? pinRead.equals(that.pinRead) : that.pinRead == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = pinsPosted != null ? pinsPosted.hashCode() : 0;
+        result = 31 * result + (likesReceived != null ? likesReceived.hashCode() : 0);
+        result = 31 * result + (likesReceivedForOnePin != null ? likesReceivedForOnePin.hashCode() : 0);
+        result = 31 * result + (likesPosted != null ? likesPosted.hashCode() : 0);
+        result = 31 * result + (commentReceived != null ? commentReceived.hashCode() : 0);
+        result = 31 * result + (commentsReceivedForOnePin != null ? commentsReceivedForOnePin.hashCode() : 0);
+        result = 31 * result + (commentsPosted != null ? commentsPosted.hashCode() : 0);
+        result = 31 * result + (connexions != null ? connexions.hashCode() : 0);
+        result = 31 * result + (savedPins != null ? savedPins.hashCode() : 0);
+        result = 31 * result + (pinRead != null ? pinRead.hashCode() : 0);
+        return result;
     }
 
     @Override

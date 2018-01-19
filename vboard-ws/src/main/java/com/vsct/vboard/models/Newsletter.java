@@ -22,8 +22,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
-import org.elasticsearch.common.lang3.builder.EqualsBuilder;
-import org.elasticsearch.common.lang3.builder.HashCodeBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -85,13 +83,26 @@ public class Newsletter {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return EqualsBuilder.reflectionEquals(this, obj);
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Newsletter that = (Newsletter) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (senderEmail != null ? !senderEmail.equals(that.senderEmail) : that.senderEmail != null) return false;
+        if (contentPin != null ? !contentPin.equals(that.contentPin) : that.contentPin != null) return false;
+        return postDateUTC != null ? postDateUTC.equals(that.postDateUTC) : that.postDateUTC == null;
     }
 
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (senderEmail != null ? senderEmail.hashCode() : 0);
+        result = 31 * result + (contentPin != null ? contentPin.hashCode() : 0);
+        result = 31 * result + (postDateUTC != null ? postDateUTC.hashCode() : 0);
+        return result;
     }
 
     @Override
