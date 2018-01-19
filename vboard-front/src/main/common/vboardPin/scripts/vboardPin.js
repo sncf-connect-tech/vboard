@@ -47,6 +47,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     $scope.authorLink = '';
     $scope.likesAuthors = "";
     $scope.newComment = false;
+    $scope.commentInput = "";
     $scope.pinAvatar = "images/avatar.png";
 
     $scope.readableAuthor = $scope.pin.author;
@@ -140,9 +141,9 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
         vboardPinsCollection.sendBroadcastUpdate();
     };
 
-    $scope.submitComment = function (comment) {
+    $scope.submitComment = function () {
         // For the data-ng-if, force the update of the last comment. (The last comment functionnality was dropped, but for version compatibility, the code remained)
-        vboardPinsCollection.addComment(comment, $scope.pin.pinId).then(function () {
+        vboardPinsCollection.addComment($scope.commentInput, $scope.pin.pinId).then(function () {
             $scope.newComment = false;
             $scope.showAllComments = null;
             $scope.createAllComments = false;

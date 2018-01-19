@@ -71,8 +71,8 @@
             <vboard-comment data-ng-if="createAllComments" ng-repeat="comment in comments | orderBy : 'post_date_utc' track by comment.id"></vboard-comment>
         </div>
         <div class="vboardPin--addComment" data-ng-if="connected && newComment">
-            <textarea placeholder="Ajouter un commentaire..." rows="5" maxlength="255" required></textarea>
-            <button type="button" data-ng-click="submitComment($event.target.value)"
+            <textarea placeholder="Ajouter un commentaire..." rows="5" maxlength="255" required ng-model="$parent.commentInput"></textarea>
+            <button type="button" data-ng-click="submitComment()"
                     class="btn t-color-midgray--background t-color-darkgray--border t-fontSize-small">
                 <span class="fi-check"></span>
             </button>
