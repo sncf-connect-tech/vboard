@@ -47,6 +47,6 @@
     -   id: angular-forbid-ngmodel-with-no-dot
         name: In AngularJS, "Whenever you have ng-model there's gotta be a dot in there somewhere"
         language: pcre
-        entry: ng-model="?[^.]+"?[ $](?!.*name=)
+        entry: ng-model="[^.]+"
         files: ^vboard-front.+\.html$
         exclude: vboard-front/src/main/common/vboardProfil.*
