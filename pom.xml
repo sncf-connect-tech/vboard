@@ -6,7 +6,7 @@
 
     <groupId>com.vsct.vboard</groupId>
     <artifactId>vboard</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
     <name>V.Board</name>
     <packaging>pom</packaging>
 
