@@ -19,8 +19,8 @@ com:
     vboard:
       hostname: localhost
 uploads:
-  providerPath: /tmp/
-  wordpressImagePath: /tmp/
+  imagesStorageDirectory: imagesStorageDir
+  blogImagesDirectory: blogImagesDir
 proxy:
   hostname:
 emails:

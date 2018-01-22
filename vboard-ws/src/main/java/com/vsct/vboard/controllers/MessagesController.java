@@ -51,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -500,9 +501,9 @@ public class MessagesController {
                     String vblogUrl = "http://" + hostName + "/vblog/wp-content/uploads";
                     DataSource img;
                     if (pin.getImgType().contains(vblogUrl)) {
-                        img = new FileDataSource(imageManager.getWordpressPath() + pin.getImgType().substring(pin.getImgType().indexOf(vblogUrl) + vblogUrl.length()));
+                        img = new FileDataSource(imageManager.getBlogImagesDirectory().resolve(pin.getImgType().substring(pin.getImgType().indexOf(vblogUrl) + vblogUrl.length())).toFile());
                     } else {
-                        img = new FileDataSource(imageManager.getPath() + "/pinImg/" + pin.getPinId() + ".png");
+                        img = new FileDataSource(imageManager.getPinsImagesDirectory().resolve(pin.getPinId() + ".png").toFile());
                     }
                     messageBodyPart.setDataHandler(new DataHandler(img));
                     messageBodyPart.setHeader("Content-ID", "<" + pin.getPinId() + ">");
@@ -516,7 +517,7 @@ public class MessagesController {
         }
         this.addLeadersImgs(multipart, users);
         messageBodyPart = new MimeBodyPart();
-        DataSource img = new FileDataSource(imageManager.getPath() + "/avatar/default.png");
+        DataSource img = new FileDataSource(imageManager.getAvatarImagesDirectory().resolve("default.png").toFile());
         messageBodyPart.setDataHandler(new DataHandler(img));
         messageBodyPart.setHeader("Content-ID", "<default>");
         multipart.addBodyPart(messageBodyPart);
@@ -530,7 +531,7 @@ public class MessagesController {
         for (Profil user : leaders) {
             if (user.hasCustomAvatar()) {
                 final BodyPart messageBodyPart = new MimeBodyPart();
-                final DataSource img = new FileDataSource(imageManager.getPath() + "/avatar/" + user.getId() + ".png");
+                final DataSource img = new FileDataSource(imageManager.getAvatarImagesDirectory().resolve(user.getId() + ".png").toFile());
                 messageBodyPart.setDataHandler(new DataHandler(img));
                 messageBodyPart.setHeader("Content-ID", "<" + user.getId() + ">");
                 multipart.addBodyPart(messageBodyPart);
@@ -564,7 +565,7 @@ public class MessagesController {
         this.addLeadersImgs(multipart, leaderBoardTeam.getAllLeaders());
 
         messageBodyPart = new MimeBodyPart();
-        DataSource img = new FileDataSource(imageManager.getPath() + "/avatar/default.png");
+        DataSource img = new FileDataSource(imageManager.getAvatarImagesDirectory().resolve("default.png").toFile());
         messageBodyPart.setDataHandler(new DataHandler(img));
         messageBodyPart.setHeader("Content-ID", "<default>");
 

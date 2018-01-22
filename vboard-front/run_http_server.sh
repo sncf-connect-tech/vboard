@@ -7,15 +7,16 @@ if ! [ -d /var/www/vboard/compile ]; then
     exit 1
 fi
 
-if [ -n "${VBOARD_API_ENDPOINT:-}" ]; then
-    echo 'Inserting $VBOARD_API_ENDPOINT in index.html'
-    sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/index.html
-    echo 'Inserting $VBOARD_API_ENDPOINT in config.js'
-    sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/compile/scripts/config.js
-fi
+: ${VBOARD_API_ENDPOINT?'Required env variable'}
+
+echo 'Inserting $VBOARD_API_ENDPOINT in index.html'
+sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/index.html
+
+echo 'Inserting $VBOARD_API_ENDPOINT in config.js'
+sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/compile/scripts/config.js
 if [ -n "${VBOARD_WP_PUBLIC_HOST:-}" ]; then
-    echo 'Inserting $VBOARD_WP_PUBLIC_HOST or /vblog in config.js'
-    sed -i "s~\$VBOARD_WP_PUBLIC_HOST~${VBOARD_WP_PUBLIC_HOST:-/vblog}~" /var/www/vboard/compile/scripts/config.js
+    echo 'Inserting $VBOARD_WP_PUBLIC_HOST in config.js'
+    sed -i "s~\$VBOARD_WP_PUBLIC_HOST~${VBOARD_WP_PUBLIC_HOST:-}~" /var/www/vboard/compile/scripts/config.js
 fi
 if [ -n "${VBOARD_LOCALISATIONS:-}" ]; then
     echo 'Inserting $VBOARD_LOCALISATIONS in config.js'

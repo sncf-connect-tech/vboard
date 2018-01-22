@@ -29,6 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
@@ -44,8 +47,14 @@ public class UploadsManager {
     private final ProxyConfig proxyConfig;
 
     @Autowired
-    UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) {
+    UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) throws IOException {
         this.uploadsConfig = uploadsConfig;
+        if (!Files.exists(getPinsImagesDirectory())) {
+            Files.createDirectory(getPinsImagesDirectory());
+        }
+        if (!Files.exists(getAvatarImagesDirectory())) {
+            Files.createDirectory(getAvatarImagesDirectory());
+        }
         this.proxyConfig = proxyConfig;
     }
 
@@ -53,7 +62,7 @@ public class UploadsManager {
     public void saveAvatar(String img, String name) {
         if (!"default".equals(img)) { // which means the user wanted to delete it's avatar, thus the default one is set
             byte[] data = Base64.getDecoder().decode(img);
-            try (OutputStream stream = new FileOutputStream(this.uploadsConfig.getProviderPath() + "avatar/" + name + ".png")) {
+            try (OutputStream stream = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
                 stream.write(data);
                 stream.close();
             } catch (Exception e) {
@@ -62,7 +71,7 @@ public class UploadsManager {
         } else {
             try { // Save the avatar the this.openAMConfig.getHostName() + /images folder (NAS)
                 InputStream is = this.getClass().getClassLoader().getResource("avatar.png").openStream();
-                OutputStream os = new FileOutputStream(this.uploadsConfig.getProviderPath() + "avatar/" + name + ".png");
+                OutputStream os = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile());
                 IOUtils.copy(is, os);
                 is.close();
                 os.close();
@@ -78,7 +87,7 @@ public class UploadsManager {
     public void savePinImage(String img, String name) {
         if (!img.startsWith("http")) { // If the image is an url, the image is downloaded and uploaded on the pinImg folder (NAS)
             byte[] data = Base64.getDecoder().decode(img);
-            try (OutputStream stream = new FileOutputStream(this.uploadsConfig.getProviderPath() + "pinImg/" + name + ".png")) {
+            try (OutputStream stream = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile())) {
                 stream.write(data);
                 stream.close();
             } catch (Exception e) {
@@ -97,7 +106,7 @@ public class UploadsManager {
             }
             try {
                 InputStream is = url.openStream();
-                OutputStream os = new FileOutputStream(this.uploadsConfig.getProviderPath() + "pinImg/" + name + ".png");
+                OutputStream os = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile());
                 byte[] b = new byte[2048];
                 int length;
 
@@ -120,7 +129,7 @@ public class UploadsManager {
      */
     public String getAvatar(String name) {
         try {
-            BufferedImage img = ImageIO.read(new File(this.uploadsConfig.getProviderPath() + "avatar/" + name + ".png"));
+            BufferedImage img = ImageIO.read(getAvatarImagesDirectory().resolve(name + ".png").toFile());
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
             ImageIO.write(img, "png", bos);
@@ -140,7 +149,7 @@ public class UploadsManager {
      */
     public String getImage(String name) {
         try {
-            BufferedImage img = ImageIO.read(new File(this.uploadsConfig.getProviderPath() + "pinImg/" + name + ".png"));
+            BufferedImage img = ImageIO.read(getPinsImagesDirectory().resolve(name + ".png").toFile());
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
             ImageIO.write(img, "png", bos);
@@ -153,12 +162,16 @@ public class UploadsManager {
         }
     }
 
-    public String getPath() {
-        return this.uploadsConfig.getProviderPath();
+    public Path getPinsImagesDirectory() {
+        return this.uploadsConfig.getImagesStorageDirectory().resolve("pinImg");
     }
 
-    public String getWordpressPath() {
-        return this.uploadsConfig.getWordpressImagePath();
+    public Path getAvatarImagesDirectory() {
+        return this.uploadsConfig.getImagesStorageDirectory().resolve("avatar");
+    }
+
+    public Path getBlogImagesDirectory() {
+        return this.uploadsConfig.getBlogImagesDirectory();
     }
 
 }

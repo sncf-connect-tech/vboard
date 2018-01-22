@@ -18,37 +18,44 @@
 
 package com.vsct.vboard.config;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "uploads")
 public class UploadsConfig {
-    @NotBlank
-    private String providerPath;
-    @NotBlank
-    private String wordpressImagePath;
+    private Path imagesStorageDirectory;
+    private Path blogImagesDirectory;
 
     public UploadsConfig() {
     }
 
-    public void setProviderPath(String providerPath) {
-        this.providerPath = providerPath;
+    public void setImagesStorageDirectory(Path imagesStorageDirectory) throws IOException {
+        if (!Files.exists(imagesStorageDirectory)) {
+            Files.createDirectory(imagesStorageDirectory);
+        }
+        this.imagesStorageDirectory = imagesStorageDirectory;
     }
 
-    public String getProviderPath() {
-        return providerPath;
+    public Path getImagesStorageDirectory() {
+        return imagesStorageDirectory;
     }
 
-    public void setWordpressImagePath(String wordpressImagePath) {
-        this.wordpressImagePath = wordpressImagePath;
+    public void setBlogImagesDirectory(Path blogImagesDirectory) throws IOException {
+        if (!Files.exists(blogImagesDirectory)) {
+            Files.createDirectory(blogImagesDirectory);
+        }
+        this.blogImagesDirectory = blogImagesDirectory;
     }
 
-    public String getWordpressImagePath() {
-        return wordpressImagePath;
+    public Path getBlogImagesDirectory() {
+        return blogImagesDirectory;
     }
 
 }

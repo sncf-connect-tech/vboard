@@ -6,17 +6,21 @@ services:
     environment:
       - JAVA_OPTS=-Derror.whitelabel.enabled=true -Dendpoints.enabled=true -Dendpoints.sensitive=false
     #  - JAVA_OPTS=-Dspring.profiles.active=dev
-    ports:
-      - 8080:8080
+    volumes:
+      - ./statics:/usr/local/tomcat/data
 
   front:
-    volumes:
-      # Mouting the following directory "overrides" the one in the built container.
-      # We do this to benefit from "grunt watch" regenerating the statics
-      - ./vboard-front/grunt-target:/var/www/vboard
-      - ./statics:/var/vboard/statics
     ports:
       - 80:80
+    environment:
+      - VBOARD_API_ENDPOINT=/vboard
+      #- VBOARD_API_ENDPOINT=http://localhost:8080/vboard
+    volumes:
+      - ./statics:/var/vboard/statics
+      # Mouting the following directory "overrides" the one in the built container.
+      # We do this to benefit from "grunt watch" regenerating the statics
+      #!! Does not work atm because grunt delete/recreate this directory
+      #- ./vboard-front/grunt-target:/var/www/vboard
 
   wsdb:
     ports:

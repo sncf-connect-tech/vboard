@@ -47,8 +47,8 @@ com:
     vboard:
       hostname: ${VBOARD_HOSTNAME}
 uploads:
-  providerPath: ${VBOARD_IMAGES_DIRECTORY}
-  wordpressImagePath: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
+  imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY}
+  blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
 proxy:
   hostname: ${PROXY_HOST}
   port: 3128

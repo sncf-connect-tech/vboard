@@ -72,15 +72,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
             .sessionAuthenticationStrategy(SESSION_AUTH_STRATEGY)
             .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         http.csrf().disable();
-        http.authorizeRequests()
-            .requestMatchers(new AntPathRequestMatcher("/**", "GET")).permitAll()
-            .antMatchers("/pins/vblog").permitAll();
+        http.authorizeRequests().antMatchers("/pins/vblog").permitAll();
 
         if (KeycloakEnabledInEnv.evaluate()) {
             configureKeycloakSecurity(http);
             // Keycloak is configured => we require auth
             http.authorizeRequests()
-                    .antMatchers("/**").authenticated();
+                .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/**", "GET")).permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/pins/url", "POST")).permitAll()
+                .antMatchers("/**").authenticated();
+        } else {
+            http.authorizeRequests().antMatchers("/**").permitAll();
         }
     }
 
