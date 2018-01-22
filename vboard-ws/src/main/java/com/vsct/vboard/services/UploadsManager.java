@@ -31,7 +31,6 @@ import org.springframework.stereotype.Service;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Base64;
 
 import javax.imageio.ImageIO;
@@ -162,15 +161,15 @@ public class UploadsManager {
         }
     }
 
-    public Path getPinsImagesDirectory() {
+    final public Path getPinsImagesDirectory() {
         return this.uploadsConfig.getImagesStorageDirectory().resolve("pinImg");
     }
 
-    public Path getAvatarImagesDirectory() {
+    final public Path getAvatarImagesDirectory() {
         return this.uploadsConfig.getImagesStorageDirectory().resolve("avatar");
     }
 
-    public Path getBlogImagesDirectory() {
+    final public Path getBlogImagesDirectory() {
         return this.uploadsConfig.getBlogImagesDirectory();
     }
 
