@@ -15,9 +15,26 @@ V.Board is designed to be used for communication among an organization teams: pr
 This software has been used at oui.sncf since July 2016.
 The public, open-source version of this project was publish in January 2018. It's current status is: **INCUBATING**
 
+![Animated demo showing how to add a pin](vboard_addpin_demo.gif)
+
+- [Features](#features)
 - [Usage](#usage)
 - [Architecture](#architecture)
   * [Docker services](#docker-services)
+
+
+# Features
+- a complete [Pinterest](https://www.pinterest.com)-like editable dashboard,
+with comments and a search bar
+- a "labels" system, with per-user favorites and notifications
+- a "likes" system
+- per-user configuration of an avatar, a team, a description...
+- simple gamification, badges & leaderboard
+- fully dockerized
+- optional email notifications
+- integrate with [KeyCloack](http://www.keycloak.org) for identity & access management
+- a REST API
+- a RSS feed
 
 
 # Usage

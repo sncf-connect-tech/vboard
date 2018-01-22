@@ -4,6 +4,7 @@ services:
     ports:
       - 8080:8080
     environment:
+      - PROXY_HOST=
       - JAVA_OPTS=-Derror.whitelabel.enabled=true -Dendpoints.enabled=true -Dendpoints.sensitive=false
     #  - JAVA_OPTS=-Dspring.profiles.active=dev
     volumes:

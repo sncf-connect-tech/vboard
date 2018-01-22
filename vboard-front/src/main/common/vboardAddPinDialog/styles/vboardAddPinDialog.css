@@ -30,7 +30,6 @@
 .vboardAddPinDialog--popin {
     border: 0.1rem solid;
     border-color: var(--color-lightblack);
-    border-bottom: none;
 }
 
 .ngdialog.ngdialog-theme-addPin .ngdialog-close::before {
