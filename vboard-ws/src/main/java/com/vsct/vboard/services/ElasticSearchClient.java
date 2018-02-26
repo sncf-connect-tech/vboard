@@ -26,7 +26,11 @@ import io.searchbox.client.JestClientFactory;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
 import io.searchbox.client.http.JestHttpClient;
-import io.searchbox.core.*;
+import io.searchbox.core.Delete;
+import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 import io.searchbox.core.search.sort.Sort;
 import io.searchbox.params.Parameters;
 import org.apache.commons.lang3.StringUtils;
@@ -300,12 +304,12 @@ public class ElasticSearchClient {
             searchId = "\"term\": { \"_id\": \"" + pinId + "\" }";
         }
         return "{" +
-                "\"query\": {" +
+            "\"query\": {" +
                 "\"filtered\": {" +
-                "\"query\":  { " + searchId + " }" +
+                    "\"query\":  { " + searchId + " }" +
                 "}" +
-                "}" +
-                "}";
+            "}" +
+        "}";
     }
 
     private List<HashMap> search(String query, String indexName, List<Sort> sortList, int offset) {

@@ -17,11 +17,15 @@ The public, open-source version of this project was publish in January 2018. It'
 
 ![Animated demo showing how to add a pin](vboard_addpin_demo.gif)
 
+<!-- toc -->
+
 - [Features](#features)
 - [Usage](#usage)
+- [Contributing](#contributing)
 - [Architecture](#architecture)
   * [Docker services](#docker-services)
 
+<!-- tocstop -->
 
 # Features
 - a complete [Pinterest](https://www.pinterest.com)-like editable dashboard,
@@ -50,6 +54,15 @@ You can also rebuild the images locally:
     vboard-front/install-build.sh # requires npm
     docker-compose -f docker-compose.yml build
     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-build
+
+You can then access the website through http://localhost
+and the swagger at http://localhost/api/v1/swagger-ui.html
+
+
+# Contributing
+
+Want to report a bug ? Suggest a feature ? Give us a hand ?
+Go have a look at our [CONTRIBUTING.md](CONTRIBUTING.md) guide.
 
 
 # Architecture

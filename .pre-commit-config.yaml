@@ -31,22 +31,25 @@
     sha: v1.0.1
     hooks:
     -   id: markdown-toc
+        files: ^README\.md$
+    -   id: markdown-toc
+        files: ^CONTRIBUTING\.md$
 # vboard-front
 -   repo: local
     hooks:
     -   id: angular-forbid-$apply
         name: In AngularJS, use $digest over $apply
-        language: pcre
+        language: pygrep
         entry: $apply
         files: ^vboard-front.+\.js$
     -   id: angular-forbid-ngrepeat-without-trackby
         name: In AngularJS, ALWAYS use 'track by' with ng-repeat
-        language: pcre
+        language: pygrep
         entry: ng-repeat(?!.*track by)
         files: ^vboard-front.+\.html$
     -   id: angular-forbid-ngmodel-with-no-dot
         name: In AngularJS, "Whenever you have ng-model there's gotta be a dot in there somewhere"
-        language: pcre
+        language: pygrep
         entry: ng-model="[^.]+"
         files: ^vboard-front.+\.html$
         exclude: vboard-front/src/main/common/vboardProfil.*
