@@ -29,6 +29,8 @@ There are many ways you can help us in this project:
 Overall, don't hesitate to get in touch with us throught this project [issues](https://github.com/voyages-sncf-technologies/vboard/issues) for any request,
 even for simple questions.
 
+We use [HitHub projects](https://github.com/voyages-sncf-technologies/vboard/projects/1) as a simple workflow to triage the issues.
+
 # Suggesting new features
 
 First off, make sure it hasn't been suggested before by making a quick [issues search](https://github.com/voyages-sncf-technologies/vboard/issues).
