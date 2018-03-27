@@ -24,6 +24,7 @@ The public, open-source version of this project was publish in January 2018. It'
 - [Contributing](#contributing)
 - [Architecture](#architecture)
   * [Docker services](#docker-services)
+  * [Release on Docker hub](#release-on-docker-hub)
 
 <!-- tocstop -->
 
@@ -83,3 +84,10 @@ There are also some volumes used by the stack:
 - `images`: contains all images for vboard pins and users
 It is shared between the `ws` and `front` services: `ws` writes in it and `front` reads from it.
 - `wsdb-data`: contains the backend database
+
+## Release on Docker hub
+```
+docker login
+docker-compose build vboard/vboard-batchs vboard/vboard-front vboard/vboard-ws
+docker-compose push
+```
