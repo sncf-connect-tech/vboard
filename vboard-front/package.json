@@ -34,7 +34,7 @@
     "karma-jasmine": "0.3.5",
     "karma-phantomjs-launcher": "0.1.4",
     "load-grunt-config": "0.16.0",
-    "moment": "2.17.1",
+    "moment": "2.19.3",
     "time-grunt": "1.0.0",
     "wiredep": "latest"
   },
