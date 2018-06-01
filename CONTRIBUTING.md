@@ -1,5 +1,7 @@
 ![Two hands crossing their little fingers](docs/contributing.svg)
 
+<!-- To update this ToC: markdown-toc --indent "    " -i CONTRIBUTING.md -->
+
 <!-- toc -->
 
 - [Introduction](#introduction)
@@ -24,26 +26,26 @@ There are many ways you can help us in this project:
 - help us by **communicating** around the project: present it to your coworkers, and maybe use it in your organization !
 - suggest **new features** and/or improvements to existing ones: get a look at the "[suggesting new features](#Suggesting-new-features)" section below detailing how to proceed
 - tell us when you face **bugs** by creating a [bug report issue](#reporting-a-bug)
-- **contribute some code** to the project, by making a [pull request](#pull-request)
+- **contribute some code** to the project, by making a [pull request](#code)
 
 Overall, don't hesitate to get in touch with us throught this project [issues](https://github.com/voyages-sncf-technologies/vboard/issues) for any request,
 even for simple questions.
 
-We use [HitHub projects](https://github.com/voyages-sncf-technologies/vboard/projects/1) as a simple workflow to triage the issues.
+We use [GitHub projects](https://github.com/voyages-sncf-technologies/vboard/projects/1) as a simple workflow to triage the issues.
 
 # Suggesting new features
 
-First off, make sure it hasn't been suggested before by making a quick [issues search](https://github.com/voyages-sncf-technologies/vboard/issues).
+First off, make sure it hasn't been suggested yet by making a quick [issues search](https://github.com/voyages-sncf-technologies/vboard/issues).
 
-if not, simply open an issue including the following information:
+If not, simply open an issue including the following information:
 - a short description of what you have in mind
 - **why** you need this feature : this will help us to understand your need and maybe suggest an existing solution or an alternative approach
 - as much explanatory documentation as you are willing to add:
   * a simple diagram is often very helpful
   * a [user story](https://en.wikipedia.org/wiki/User_story) or a user-centered usage scenario
-  * in case of REST API changes, a Swagger spec
+  * in case of REST API changes, a [Swagger](https://swagger.io) spec
   * in case of front end features, try to include some UI wireframe / mockup
-- finally, if you are willing to work on a PR to implement it
+- finally, whether you are willing to work on a PR to implement it
 
 
 # Reporting a bug
@@ -54,7 +56,7 @@ If not, please open an issue including the following information:
 - the current version of V.Board you are using
 - some **detailed steps to reproduce it**
 - if this bug seems related to the front end code, please include a screenshot and the [JS console errors](https://webmasters.stackexchange.com/a/77337) whenever possible
-- if this bug seems related to the back end code, please include the Java logs and stack trace whenever possible whenever possible
+- if this bug seems related to the back end code, please include the Java logs and stack trace whenever possible
 
 
 # Code
@@ -63,7 +65,7 @@ For newcomers, we maintin a list of [good first issues](https://github.com/voyag
 including bug fixes and minor improvments,
 to get you started with the code.
 
-The overall process to contribute code to the project is like the following:
+The overall process to contribute code to the project is:
 1. Make sure there is an issue detailing the feature you want to implement or bug you want to fix.
 Ideally, indicate in this issue that you intend to work on it to begin with.
 2. [Fork this repository](https://help.github.com/articles/fork-a-repo/) under your GitHub username,
@@ -71,7 +73,7 @@ and install your [development environment](#development-environment).
 3. Write some code !
 4. Commit and push your changes on your forked repo, ideally on a specific branch and not on `master` (to allow you to work on different issues in parallel).
 During this step, the [pre-commit hooks](#pre-commit-hooks) should be executed to detect some issues before you commit.
-5. [Create a pull request](https://help.github.com/articles/creating-a-pull-request/), and make sure the [Travis CI]("continuous-integration) build passes.
+5. [Create a pull request](https://help.github.com/articles/creating-a-pull-request/), and make sure the [Travis CI](#continuous-integration) build passes.
 Then mention in the related issue that you created this PR, and ask for a [code review](#code-review).
 6. It is very likely you will be asked to make some minor changes: simply add commits in your branch on your forked repo,
 they will be automatically taken into account in the pull request, and then [squashed](https://help.github.com/articles/about-pull-request-merges/#squash-and-merge-your-pull-request-commits) by GitHub when merged.
@@ -94,8 +96,9 @@ It may suffice if you don't want to install NodeJS for example, but will not be 
 ## pre-commit hooks
 
 In order to execute a number of checks before each commit, this project uses `git` [pre-commit](http://pre-commit.com) hooks.
-They are executed by [Travis CI](https://travis-ci.org/voyages-sncf-technologies/vboard)
-and no PR will be merged unless they the hooks pass.
+They are listed in the [.pre-commit-config.yaml](.pre-commit-config.yaml) configuration file
+and are executed by [Travis CI](https://travis-ci.org/voyages-sncf-technologies/vboard).
+No PR will be merged unless they the hooks pass.
 
 As much as possible, please try to install them on your development machine.
 If you can't or don't want to, you'll have to use the Travis CI build logs to debug issues that may arise with them.
