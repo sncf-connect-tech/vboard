@@ -238,7 +238,8 @@ public class ElasticSearchClient {
                     + "} ]";
         }
         if (!labels.isEmpty()) {
-            searchTagsMust = "\"must\": [ {" + labels.stream().map(label ->
+            // The request in a "OR": we get all pins having any of the labels provided
+            searchTagsMust = "\"should\": [ {" + labels.stream().map(label ->
                     "\"wildcard\" : {\"labels\": \"*" + label.toLowerCase() + "*\"}"
             ).collect(Collectors.joining(" }, {")) + "} ]";
         }
