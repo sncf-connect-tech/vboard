@@ -11,9 +11,10 @@ logging:
     com:
       vsct: DEBUG
 
-error:
-  whitelabel:
-    enabled: false
+server:
+  error:
+    whitelabel:
+      enabled: false
 endpoints: # by default disable and protect all actuator endpoints
   enabled: false
   sensitive: true
