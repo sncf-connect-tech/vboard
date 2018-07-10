@@ -4,9 +4,10 @@ spring:
 elasticsearch:
   serverUri: http://localhost:9200
 
-error:
-  whitelabel:
-    enabled: true
+server:
+  error:
+    whitelabel:
+      enabled: true
 endpoints:
   enabled: true
   sensitive: false
@@ -25,3 +26,6 @@ proxy:
   hostname:
 emails:
   hostname: dummy
+
+keycloak:
+  enabled: false

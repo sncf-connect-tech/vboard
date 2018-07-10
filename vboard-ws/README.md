@@ -14,3 +14,10 @@ If you run this app in an IDE, you will need to provide 2 properties to the JVM 
  -Duploads.imagesStorageDirectory=D:\path\to\vboard\statics
  -Duploads.blogImagesDirectory=D:\path\to\vboard\statics
 ```
+
+## FAQ
+
+### java.lang.ClassNotFoundException: javax.servlet.http.HttpSessionListener
+
+If you get this error when running `vboard-ws` with SpringBoot, try this fix:
+https://stackoverflow.com/a/32419028/636849
