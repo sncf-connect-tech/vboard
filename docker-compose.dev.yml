@@ -14,8 +14,8 @@ services:
     ports:
       - 80:80
     environment:
-      #- VBOARD_API_ENDPOINT=/vboard
-      - VBOARD_API_ENDPOINT=http://localhost:8080
+      - VBOARD_API_ENDPOINT=/vboard
+      #- VBOARD_API_ENDPOINT=http://localhost:8080
     volumes:
       - ./statics:/var/vboard/statics
       # Mouting the following directory "overrides" the one in the built container.

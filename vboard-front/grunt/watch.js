@@ -28,7 +28,7 @@ module.exports = {
         }
     },
     mainStatics: {
-        files: ['src/main/constants.js', 'src/main/favicon.ico', 'src/main/deprecated_browser.html'],
+        files: ['src/main/favicon.ico', 'src/main/deprecated_browser.html'],
         tasks: ['copy:mainStatics'],
         options: {
             spawn: true,

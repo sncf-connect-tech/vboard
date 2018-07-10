@@ -87,11 +87,15 @@ That's it !
 V.Board maintainers currently use [JetBrains IntelliJ](https://www.jetbrains.com/idea/) as their IDE, but this is not a requirement.
 
 However you will need:
-- Java 7 and Maven
-- NodeJS and npm
+- Java 7 and `maven`
+- NodeJS and `npm`
 
 Moreover, we use Docker to have a convenient way to deploy the full app or launch it locally.
 It may suffice if you don't want to install NodeJS for example, but will not be very handy to use to develop the Java backend iteratively.
+
+Please check the `README.md` of each component for more information:
+- [vboard-ws](https://github.com/voyages-sncf-technologies/vboard/tree/master/vboard-ws)
+- [vboard-front](https://github.com/voyages-sncf-technologies/vboard/tree/master/vboard-front)
 
 ## pre-commit hooks
 
