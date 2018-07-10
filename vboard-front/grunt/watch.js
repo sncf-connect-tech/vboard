@@ -27,16 +27,6 @@ module.exports = {
             debounceDelay: 500
         }
     },
-    config: {
-        files: ['src/main/common/app/scripts/config'],
-        tasks: ['copy:config'],
-        options: {
-            spawn: true,
-            atBegin: true,
-            interrupt: true,
-            debounceDelay: 500
-        }
-    },
     mainStatics: {
         files: ['src/main/constants.js', 'src/main/favicon.ico', 'src/main/deprecated_browser.html'],
         tasks: ['copy:mainStatics'],
