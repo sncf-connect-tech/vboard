@@ -1,3 +1,8 @@
+application:
+  name: vboard-ws
+  version: DEV
+  buildDate: 2018-06-06
+
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vboard_pins
