@@ -29,23 +29,14 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     var getByPopularity = false;
     var isUseLookingAtFavoritePins = false;
 
-    /**
-     * The backend is waiting for an array of labels, split by ', *', without '#', or null.
-     * But the front only manages one label at a time(?).
-     */
-    var backifyLabels = function (labels) {
-        return labels ? labels.substring(1) : null;
-    }
-
     /* Get Elasticsearch Pins */
-    var fetchPins = function (text, labels, from, offset) {
+    var fetchPins = function (text, from, offset) {
         isUseLookingAtFavoritePins = false;
         var search = getByPopularity ? '/popular' : '';
         // API call
         return $http.get(CONFIG.apiEndpoint + '/pins' + search, {
             params: {
                 text: text,
-                labels: backifyLabels(labels),
                 from: from,
                 offset: offset
             }
@@ -137,17 +128,23 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
                 $rootScope.$broadcast('vboardPinsCollectionUpdated');
             });
         } else {
-            if (ctrlParams.text !== self.lastSearch.text || ctrlParams.label !== self.lastSearch.label || ctrlParams.from !== self.lastSearch.from) {
+            if (ctrlParams.text !== self.lastSearch.text || ctrlParams.from !== self.lastSearch.from) {
                 // update last search
                 self.lastSearch = ctrlParams;
                 // Elasticsearch Call
-                fetchPins(ctrlParams.text, ctrlParams.label, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
+                fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
                     if (scrollFrom === 0) {
                         self.allPins = fetchedPins;
                         self.replacePinsAndLabels();
                         $rootScope.$broadcast('vboardPinsCollectionUpdated');
                     }
                 });
+            } else if (ctrlParams.label !== self.lastSearch.label) {
+                // update last search
+                self.lastSearch = ctrlParams;
+                // Filter all pins by label
+                self.filterPinsByLabel();
+                $rootScope.$broadcast('vboardPinsCollectionUpdated');
             }
         }
     };
@@ -158,7 +155,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         var ctrlParams = getControlParams();
         if (!author) {
             if (scrollFrom === 0 && !isUseLookingAtFavoritePins && !ctrlParams.id) {
-                fetchPins(ctrlParams.text, ctrlParams.label, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
+                fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
                     self.allPins = fetchedPins;
                     self.replacePinsAndLabels();
                     $rootScope.$broadcast('vboardPinsCollectionUpdated');
@@ -260,11 +257,11 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         scrollFrom = ctrlParams.offset;
         var self = this;
         // Will only be activated if the user was just scrolling (parameters in url are the same and the user was not looking to its saved pins
-        if ((ctrlParams.text !== self.lastSearch.text || ctrlParams.label !== self.lastSearch.label || ctrlParams.from !== self.lastSearch.from || ctrlParams.offset !== self.lastSearch.offset) && !isUseLookingAtFavoritePins) {
+        if ((ctrlParams.text !== self.lastSearch.text || ctrlParams.from !== self.lastSearch.from || ctrlParams.offset !== self.lastSearch.offset) && !isUseLookingAtFavoritePins) {
             // update last search
             self.lastSearch = ctrlParams;
             // ELS call
-            fetchPins(ctrlParams.text, ctrlParams.label, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
+            fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
                 if (fetchedPins.length !== 0) {
                     self.allPins = self.allPins.concat(fetchedPins);
                     self.replacePinsAndLabels();
