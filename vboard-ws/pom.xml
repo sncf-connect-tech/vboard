@@ -26,7 +26,7 @@
         <mockito.version>1.10.19</mockito.version>
         <restassured.version>2.4.1</restassured.version>
         <jest.version>5.3.3</jest.version>
-        <keycloak.version>3.3.0.Final</keycloak.version>
+        <keycloak.version>3.4.2.Final</keycloak.version>
     </properties>
 
     <!-- ================= -->
