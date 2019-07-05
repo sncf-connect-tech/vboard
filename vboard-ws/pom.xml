@@ -21,7 +21,7 @@
         <buildDate>${maven.build.timestamp}</buildDate>
 
         <java.version>1.8</java.version>
-        <springboot.version>1.5.9.RELEASE</springboot.version>
+        <springboot.version>1.5.16.RELEASE</springboot.version>
         <commons-io.version>2.4</commons-io.version>
         <mockito.version>1.10.19</mockito.version>
         <restassured.version>2.4.1</restassured.version>
