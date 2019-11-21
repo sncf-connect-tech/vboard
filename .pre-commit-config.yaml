@@ -1,5 +1,6 @@
+repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    sha: v0.9.2
+    rev: v2.4.0
     hooks:
     -   id: check-merge-conflict
     -   id: trailing-whitespace
@@ -8,7 +9,7 @@
     -   id: check-json
     -   id: check-yaml
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
-    sha: v1.1.4
+    rev: v1.1.7
     hooks:
     -   id: remove-crlf
     -   id: remove-tabs
@@ -28,7 +29,7 @@
         - --comment-style
         - <!--|  ~|  -->
 -   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    sha: v1.0.1
+    rev: v1.1.0
     hooks:
     -   id: markdown-toc
         files: ^README\.md$
