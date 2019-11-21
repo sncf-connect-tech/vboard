@@ -12,6 +12,9 @@ jobs:
         - docker
       script:
         # The front image includes a call to "grunt validate":
+        - env
+        - service docker status
+        - docker ps
         - docker-compose -f docker-compose.yml build
     - stage: test
       env: Pre-commit checks
