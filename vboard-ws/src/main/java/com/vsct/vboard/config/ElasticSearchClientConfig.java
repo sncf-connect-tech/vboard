@@ -20,14 +20,14 @@ package com.vsct.vboard.config;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.Min;
 
 @Configuration
-@EnableConfigurationProperties
-@ConfigurationProperties(prefix = "elasticsearch")
+@ConfigurationProperties("elasticsearch")
+@Validated
 public class ElasticSearchClientConfig {
     @NotBlank
     private String serverUri;

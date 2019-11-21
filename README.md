@@ -45,14 +45,12 @@ with comments and a search bar
 The following command starts V.Board locally from the published images:
 
     export TAG=latest
-    docker-compose -f docker-compose.yml pull
-    docker-compose -f docker-compose.yml up -d --no-build
+    docker-compose pull
+    docker-compose up -d --no-build
 
 You can also rebuild the images locally:
 
-    mvn clean install
-    vboard-front/install-build.sh # requires npm
-    docker-compose -f docker-compose.yml build
+    docker-compose build
     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-build
 
 You can then access the website through http://localhost
@@ -71,6 +69,15 @@ V.Board is made of the folling modules, launched as `docker-compose` services:
 - `ws`: [SpringBoot](https://projects.spring.io/spring-boot/) REST web service (backend)
 - `front`: [AngularJS](https://angularjs.org) 1.5 web app served by Apache (front)
 - `batchs`: Java batch job to update the ElasticSearch index
+
+## Authentication
+There are 3 supported mode of authentication, that are activated in this order:
+
+- through a [Keycloak instance](https://www.keycloak.org), if the environment variables `$KCK_PUBLIC_HOST` & `$KCK_REALM_KEY` are defined,
+_cf_. [KeycloakEnabledInEnv.java](https://github.com/voyages-sncf-technologies/vboard/blob/master/vboard-ws/src/main/java/com/vsct/vboard/config/KeycloakEnabledInEnv.java)
+- through [AWS Cognito](https://aws.amazon.com/fr/cognito/), with a `X-AMZN-OIDC-DATA` HTTP header containing a JWT token,
+if the environment variable `$AWS_COGNITO_ENABLED` is defined
+- anonymous mode
 
 ## Docker services
 Some extra `docker-compose` services are used:

@@ -51,7 +51,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -120,7 +123,11 @@ public class MessagesController {
     @ResponseBody
     @Valid
     public Message getCurrentMessage() {
-        return this.messageDAO.findByActive(true); // Only one message is active at the time
+        Message msg = this.messageDAO.findByActive(true); // Only one message is active at the time
+        if (msg == null) {
+            msg = new Message(); // Empty message
+        }
+        return msg;
     }
 
     // Add a new displayable message

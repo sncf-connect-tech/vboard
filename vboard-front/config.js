@@ -23,12 +23,13 @@ var apiEndpoint = '$VBOARD_API_ENDPOINT',
     localisations = '$VBOARD_LOCALISATIONS',
     displayPinsFromLastMonthsCount = '$VBOARD_PINS_MONTHS_COUNT';
 
-var startsWithDollar = function (str) { return str.indexOf('$') === 0; };
+var isDefined = function (str) { return str && str.indexOf('$') !== 0; };
+var localisationParser = function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; };
 
 angular.module('vboard').constant('CONFIG', {
-    apiEndpoint: startsWithDollar(apiEndpoint) ? '/vboard' : apiEndpoint,
-    blogUrl: startsWithDollar(blogUrl) ? null : blogUrl,
+    apiEndpoint: isDefined(apiEndpoint)                                       ? apiEndpoint                                      : '/vboard',
+    blogUrl: isDefined(blogUrl)                                               ? blogUrl                                          : null,
     // By default, display only pins from the last 3 years:
-    localisations: startsWithDollar(localisations) ? [] : localisations.split(';').map(function (loc) { return {id: loc.split(':')[0], name: loc.split(':')[1]}; }),
-    displayPinsFromLastMonthsCount: startsWithDollar(displayPinsFromLastMonthsCount) ? 36 : displayPinsFromLastMonthsCount,
+    localisations: isDefined(localisations)                                   ? localisations.split(';').map(localisationParser) : [],
+    displayPinsFromLastMonthsCount: isDefined(displayPinsFromLastMonthsCount) ? displayPinsFromLastMonthsCount                   : 36,
 });

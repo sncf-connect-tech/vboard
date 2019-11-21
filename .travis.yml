@@ -8,8 +8,7 @@ jobs:
   include:
     - stage: build
       script:
-        - mvn clean install -Dmaven.test.skip=true
-        - vboard-front/install-build.sh
+        - docker-compose -f docker-compose.yml build
     - stage: test
       script:
         - mvn test

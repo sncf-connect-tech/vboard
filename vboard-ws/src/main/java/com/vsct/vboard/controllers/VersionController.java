@@ -49,7 +49,7 @@ public class VersionController {
         public String version;
         public String buildDate;
 
-        public Version(String name, String version, String buildDate) {
+        Version(String name, String version, String buildDate) {
             this.name = name;
             this.version = version;
             this.buildDate = buildDate;

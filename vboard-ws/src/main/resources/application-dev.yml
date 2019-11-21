@@ -1,11 +1,23 @@
 application:
   name: vboard-ws
   version: DEV
-  buildDate: 2018-06-06
+  buildDate: 2019-10-29
+
+aws-cognito:
+  enabled: true
+  jwt-http-header-name: X-AMZN-OIDC-DATA
+  region: eu-west-1
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.vsct.vboard: DEBUG
 
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/vboard_pins
+    username: root
+    password: root
 elasticsearch:
   serverUri: http://localhost:9200
 
@@ -31,6 +43,3 @@ proxy:
   hostname:
 emails:
   hostname: dummy
-
-keycloak:
-  enabled: false

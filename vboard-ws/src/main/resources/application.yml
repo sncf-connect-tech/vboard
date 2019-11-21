@@ -5,11 +5,16 @@ application:
 
 logging:
   level:
-    org:
-      springframework:
-        web: DEBUG
-    com:
-      vsct: DEBUG
+    root: ${ROOT_LOG_LEVEL:INFO}
+    org.springframework.web: ${SPRING_LOG_LEVEL:INFO}
+    com.vsct.vboard:
+      config.cognito.*: ${AWS_COGNITO_AUTH_LOG_LEVEL:INFO}
+
+aws-cognito:
+  enabled: ${AWS_COGNITO_ENABLED}
+  jwt-http-header-name: ${AWS_COGNITO_JWT_HTTP_HEADER_NAME:X-AMZN-OIDC-DATA}
+  region: ${AWS_COGNITO_REGION:eu-west-1}
+  roles-field-name: ${AWS_COGNITO_ROLES_FIELDNAME:custom:roles}
 
 server:
   error:
@@ -33,13 +38,13 @@ spring:
       # - create: creates the DB schema, destroying previous data
       # - create-drop: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped
   datasource:
-    url: jdbc:mysql://${VBOARD_DB_HOST}/vboard_pins
-    username: root
-    password: root
+    url: jdbc:mysql://${VBOARD_DB_HOST}/${MYSQL_DATABASE}
+    username: ${MYSQL_USER}
+    password: ${MYSQL_ROOT_PASSWORD}
     testOnBorrow: true
     validationQuery: SELECT 1
 elasticsearch:
-  serverUri: http://${VBOARD_ELASTICSEARCH_HOST}:9200
+  serverUri: ${VBOARD_ELASTICSEARCH}
   pinsIndex: jdbc_pins_index
   querySize: 50
 
@@ -50,9 +55,6 @@ com:
 uploads:
   imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY}
   blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
-proxy:
-  hostname: ${PROXY_HOST}
-  port: 3128
 emails:
   hostname: ${MAIL_HOST}
   port: 25

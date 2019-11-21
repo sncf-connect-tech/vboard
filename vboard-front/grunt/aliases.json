@@ -27,7 +27,6 @@
     "compileAll": [
         "ngtemplates",
         "shell:pleeease",
-        "csslint",
         "eslint",
         "concat:scripts",
         "copy:index",
