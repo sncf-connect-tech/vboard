@@ -39,5 +39,4 @@ jobs:
 cache:
   pip: true
   directories:
-  - node_modules # npm packages
   - $HOME/.m2    # Maven packages
