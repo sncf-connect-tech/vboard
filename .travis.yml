@@ -7,14 +7,20 @@ front:
 jobs:
   include:
     - stage: build
-      env: Docker images build
+      env: Docker frontend image build
       services:
         - docker
       script:
+        - cd vboard-front
         # The front image includes a call to "grunt validate":
-        - env
-        - ls -la /var/run/docker.sock
-        - DOCKER_HOST=unix:///var/run/docker.sock docker-compose -f docker-compose.yml build
+        - docker build .
+    - stage: build
+      env: Docker backend image build
+      services:
+        - docker
+      script:
+        - cd vboard-ws
+        - docker build .
     - stage: test
       env: Pre-commit checks
       script:
