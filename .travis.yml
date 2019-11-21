@@ -34,6 +34,7 @@ jobs:
       env: Backend unit tests
       script:
         - cd vboard-ws
+        - java --version && mvn --version
         - mvn test
 
 cache:
