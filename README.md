@@ -69,7 +69,7 @@ V.Board is made of the folling modules, launched as `docker-compose` services:
 
 - `ws`: [SpringBoot](https://projects.spring.io/spring-boot/) REST web service (backend)
 - `front`: [AngularJS](https://angularjs.org) 1.5 web app served by Apache (front)
-- `batchs`: Java batch job to update the ElasticSearch index
+- `batchs`: [logstash](https://www.elastic.co/fr/products/logstash) cron to update the ElasticSearch index from the database
 
 ## Authentication
 There are 3 supported mode of authentication, that are activated in this order:

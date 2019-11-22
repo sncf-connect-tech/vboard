@@ -13,6 +13,7 @@
   * [Style guide](#style-guide)
   * [Continuous integration](#continuous-integration)
   * [Code reviews](#code-reviews)
+- [Publishing new releases](#publishing-new-releases)
 - [Credits](#credits)
 
 <!-- tocstop -->
@@ -138,6 +139,12 @@ Code reviewers should follow those guidelines:
 - [yelp guidelines](https://engineeringblog.yelp.com/2017/11/code-review-guidelines.html)
 - [Sebastien Charrier advices](https://www.youtube.com/watch?v=6aQK6GoTbxM)
 
+
+# Publishing new releases
+
+1. Update version in `vboard-ws/pom.xml`, `vboard-front/package.json` & `vboard-front/bower.json`
+2. Update `CHANGELOG.md`
+3. Create a new release & tag on [GitHub](https://github.com/voyages-sncf-technologies/vboard/releases)
 
 # Credits
 
