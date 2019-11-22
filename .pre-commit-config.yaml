@@ -28,13 +28,15 @@ repos:
         - LICENSE-short.txt
         - --comment-style
         - <!--|  ~|  -->
--   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: v1.1.0
-    hooks:
-    -   id: markdown-toc
-        files: ^README\.md$
-    -   id: markdown-toc
-        files: ^CONTRIBUTING\.md$
+# The following hook installation always end up failing due to connection issues,
+# so I (Lucas) am disabling it for now.
+# -   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    # rev: v1.1.0
+    # hooks:
+    # -   id: markdown-toc
+        # files: ^README\.md$
+    # -   id: markdown-toc
+        # files: ^CONTRIBUTING\.md$
 # vboard-front
 -   repo: local
     hooks:
