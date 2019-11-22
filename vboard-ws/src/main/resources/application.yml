@@ -11,7 +11,7 @@ logging:
       config.cognito.*: ${AWS_COGNITO_AUTH_LOG_LEVEL:INFO}
 
 aws-cognito:
-  enabled: ${AWS_COGNITO_ENABLED}
+  enabled: ${AWS_COGNITO_ENABLED:false}
   jwt-http-header-name: ${AWS_COGNITO_JWT_HTTP_HEADER_NAME:X-AMZN-OIDC-DATA}
   region: ${AWS_COGNITO_REGION:eu-west-1}
   roles-field-name: ${AWS_COGNITO_ROLES_FIELDNAME:custom:roles}
