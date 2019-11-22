@@ -12,20 +12,9 @@ fi
 echo 'Inserting $VBOARD_API_ENDPOINT in index.html'
 sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/index.html
 
-echo 'Inserting $VBOARD_API_ENDPOINT in config.js'
-sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" /var/www/vboard/compile/scripts/config.js
-if [ -n "${VBOARD_WP_PUBLIC_HOST:-}" ]; then
-    echo 'Inserting $VBOARD_WP_PUBLIC_HOST in config.js'
-    sed -i "s~\$VBOARD_WP_PUBLIC_HOST~${VBOARD_WP_PUBLIC_HOST:-}~" /var/www/vboard/compile/scripts/config.js
-fi
-if [ -n "${VBOARD_LOCALISATIONS:-}" ]; then
-    echo 'Inserting $VBOARD_LOCALISATIONS in config.js'
-    sed -i "s~\$VBOARD_LOCALISATIONS~${VBOARD_LOCALISATIONS:-}~" /var/www/vboard/compile/scripts/config.js
-fi
-if [ -n "${VBOARD_PINS_MONTHS_COUNT:-}" ]; then
-    echo 'Inserting $VBOARD_PINS_MONTHS_COUNT in config.js'
-    sed -i "s~\$VBOARD_PINS_MONTHS_COUNT~${VBOARD_PINS_MONTHS_COUNT:-}~" /var/www/vboard/compile/scripts/config.js
-fi
+echo 'Injecting env variables in config.js:'
+cp /var/www/vboard/compile/scripts/config.js{,.tmpl}
+envsubst < /var/www/vboard/compile/scripts/config.js.tmpl > /var/www/vboard/compile/scripts/config.js
 
 if [ -n "${KCK_REALM:-}" ] || [ -n "${KCK_PUBLIC_HOST:-}" ] || [ -n "${KEYCLOAK_JS_URL:-}" ]; then
     echo 'Keycloak enabled'
@@ -40,12 +29,15 @@ if [ -n "${KCK_REALM:-}" ] || [ -n "${KCK_PUBLIC_HOST:-}" ] || [ -n "${KEYCLOAK_
     sed -i "s~\$KCK_PUBLIC_HOST~$KCK_PUBLIC_HOST~" /var/www/vboard/compile/scripts/keycloak.json
 
     echo 'Inserting $KEYCLOAK_JS_URL in index.html'
-    sed -i "s~>window.Keycloak = 'DISABLED'~ src=\"$KEYCLOAK_JS_URL\">~" /var/www/vboard/index.html
+    sed -i "s~>window.Keycloak = 'DISABLED'~ src=\"/auth/js/keycloak.js\">~" /var/www/vboard/index.html
 fi
 
-if [ -n "${EXTRA_JS_URL:-}" ]; then
-    echo 'Inserting $EXTRA_JS_URL in index.html'
-    sed -i "s~<!-- OPTIONAL EXTRA_JS_URL PLACEHOLDER -->~<script type=\"text/javascript\" src=\"$EXTRA_JS_URL\"></script>~" /var/www/vboard/index.html
+HTTPD_ARGS=
+echo "Launching Apache httpd in foreground: HTTP_PROXY=${HTTP_PROXY:-} KCK_PUBLIC_HOST=${KCK_PUBLIC_HOST:-}"
+if [ -n "${HTTP_PROXY:-}" ]; then
+    HTTPD_ARGS="${HTTPD_ARGS} -DHTTP_PROXY"
 fi
-
-httpd-foreground
+if [ -n "${KCK_PUBLIC_HOST:-}" ]; then
+    HTTPD_ARGS="${HTTPD_ARGS} -DKCK_PUBLIC_HOST"
+fi
+exec httpd -DFOREGROUND ${HTTPD_ARGS}

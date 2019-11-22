@@ -22,10 +22,12 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 
 @Configuration
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "emails")
+@Validated
 public class EmailsConfig {
     @NotBlank
     private String hostname;

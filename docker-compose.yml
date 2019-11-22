@@ -9,12 +9,15 @@ services:
       - SERVICE_8080_VERSION=${TAG}
     environment:
       - VBOARD_DB_HOST=wsdb
-      - VBOARD_ELASTICSEARCH_HOST=elasticsearch
+      - VBOARD_ELASTICSEARCH=http://elasticsearch:9200
       - VBOARD_HOSTNAME=localhost
       - VBOARD_IMAGES_DIRECTORY=/usr/local/tomcat/data/
-      - affinity:container==~*${PROJECT_NAME}_front*
+      - VBOARD_WORDPRESS_IMAGES_DIRECTORY=/usr/local/tomcat/data/blog/
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vboard_pins
     ports:
-      - 8080
+      - 8080:8080
     networks:
       - back
     volumes:
@@ -31,10 +34,12 @@ services:
       - SERVICE_80_NAME=${PROJECT_NAME}-front
       - SERVICE_80_VERSION=${TAG}
     environment:
+      - VBOARD_API_ENDPOINT=/api/v1
       - VBOARD_HOSTNAME=localhost
-      - VBOARD_WS_HOST=ws:8080
+      - VBOARD_WS_HOST=http://ws:8080
+      - VBOARD_WP_PUBLIC_HOST=
     ports:
-      - 80
+      - 80:80
     networks:
       - back
     volumes:
@@ -45,9 +50,11 @@ services:
     restart: always
     image: vboard/vboard-batchs:${TAG}
     environment:
-     - JAVA_OPTS=-Xms512m -Xmx512m
-     - VBOARD_DB_HOST=wsdb:3306
-     - VBOARD_ELASTICSEARCH_HOST=elasticsearch
+      - VBOARD_DB_HOST=wsdb:3306
+      - VBOARD_ELASTICSEARCH=http://elasticsearch:9200
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=vboard_pins
     networks:
      - back
 
@@ -60,7 +67,7 @@ services:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=vboard_pins
     ports:
-       - 3306
+      - 3306:3306
     networks:
       - back
     volumes:
@@ -68,16 +75,14 @@ services:
 
   elasticsearch:
     restart: always
-    image: elasticsearch:1.5.2
+    image: elasticsearch:6.4.3
     labels:
       - SERVICE_9200_NAME=${PROJECT_NAME}-elasticsearch
       - SERVICE_9200_VERSION=${TAG}
     ports:
-      - 9200
+      - 9200:9200
     networks:
       - back
-    volumes:
-      - ./vboard-es-conf:/usr/share/elasticsearch/config
 
 networks:
   back:

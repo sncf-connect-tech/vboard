@@ -18,6 +18,9 @@
 
 package com.vsct.vboard.config;
 
+import com.vsct.vboard.config.cognito.AwsCognitoAuthenticationProvider;
+import com.vsct.vboard.config.cognito.AwsCognitoConfig;
+import com.vsct.vboard.config.cognito.AwsCognitoSecurityContextRepository;
 import org.keycloak.adapters.AdapterDeploymentContext;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.AdapterDeploymentContextFactoryBean;
@@ -29,10 +32,11 @@ import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcess
 import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
 import org.keycloak.adapters.springsecurity.management.HttpSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -53,35 +57,35 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     private static final SessionAuthenticationStrategy SESSION_AUTH_STRATEGY = new NullAuthenticatedSessionStrategy();
     private ApplicationContext applicationContext;
+    private AwsCognitoConfig awsCognitoConfig;
 
     @Autowired
-    public WebSecurityConfig(ApplicationContext applicationContext) {
+    public WebSecurityConfig(ApplicationContext applicationContext, AwsCognitoConfig awsCognitoConfig) {
         this.applicationContext = applicationContext;
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) {
-        if (KeycloakEnabledInEnv.evaluate()) {
-            auth.authenticationProvider(new KeycloakAuthenticationProvider());
-        }
+        this.awsCognitoConfig = awsCognitoConfig;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement()
-            .sessionAuthenticationStrategy(SESSION_AUTH_STRATEGY)
-            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+                .sessionAuthenticationStrategy(SESSION_AUTH_STRATEGY)
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
         http.csrf().disable();
         http.authorizeRequests().antMatchers("/pins/vblog").permitAll();
 
         if (KeycloakEnabledInEnv.evaluate()) {
+            http.authenticationProvider(new KeycloakAuthenticationProvider());
             configureKeycloakSecurity(http);
-            // Keycloak is configured => we require auth
+        } else if (awsCognitoConfig.isEnabled()) {
+            http.authenticationProvider(new AwsCognitoAuthenticationProvider(awsCognitoConfig))
+                    .securityContext().securityContextRepository(new AwsCognitoSecurityContextRepository(awsCognitoConfig));
+        }
+        if (KeycloakEnabledInEnv.evaluate() || awsCognitoConfig.isEnabled()) {
             http.authorizeRequests()
-                .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/**", "GET")).permitAll()
-                .requestMatchers(new AntPathRequestMatcher("/pins/url", "POST")).permitAll()
-                .antMatchers("/**").authenticated();
+                    .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/**", "GET")).permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/pins/url", "POST")).permitAll()
+                    .antMatchers("/**").authenticated();
         } else {
             http.authorizeRequests().antMatchers("/**").permitAll();
         }
@@ -92,18 +96,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         final AdapterDeploymentContext adc = applicationContext.getBean(AdapterDeploymentContext.class);
         final KeycloakPreAuthActionsFilter keycloakPreAuthActionsFilter = applicationContext.getBean(KeycloakPreAuthActionsFilter.class);
         http.addFilterBefore(keycloakPreAuthActionsFilter, LogoutFilter.class)
-            .addFilterBefore(keycloakAuthenticationProcessingFilter(), BasicAuthenticationFilter.class)
-            .exceptionHandling().authenticationEntryPoint(new KeycloakAuthenticationEntryPoint(adc));
+                .addFilterBefore(keycloakAuthenticationProcessingFilter(), BasicAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(new KeycloakAuthenticationEntryPoint(adc));
         http.logout()
-            .addLogoutHandler(new KeycloakLogoutHandler(adc))
-            .logoutUrl("/sso/logout").permitAll()
-            .logoutSuccessUrl("/");
+                .addLogoutHandler(new KeycloakLogoutHandler(adc))
+                .logoutUrl("/sso/logout").permitAll()
+                .logoutSuccessUrl("/");
     }
 
     // Must be injected so that GenericFilterBean.initFilterBean will be called via InitializingBean.afterPropertiesSet
     @Bean
     @Conditional(KeycloakEnabledInEnv.class)
-    @Autowired
     public static KeycloakPreAuthActionsFilter keycloakPreAuthActionsFilter(HttpSessionManager sessionManager) {
         return new KeycloakPreAuthActionsFilter(sessionManager);
     }

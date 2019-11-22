@@ -20,6 +20,7 @@ package com.vsct.vboard.controllers;
 
 import com.vsct.vboard.DAO.UserDAO;
 import com.vsct.vboard.config.AdministratorsConfig;
+import com.vsct.vboard.config.cognito.JsonWebTokenAuthentication;
 import com.vsct.vboard.models.Role;
 import com.vsct.vboard.models.User;
 import com.vsct.vboard.models.VBoardException;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,21 +72,46 @@ public class AuthenticationController {
             }
             return ANONYMOUS_USER.toString();
         }
+        String userEmail = getUserEmailFromAuth(auth);
+        User user = this.userDAO.findByEmail(userEmail);
+        if (user == null) {
+            user = createUserFromAuth(auth);
+            user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
+            this.userDAO.save(user);
+        } else {
+            // in case the config has changed:
+            user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
+        }
+        this.session.setAttribute("User", user);
+        return user.toString();
+    }
+
+    private static String getUserEmailFromAuth(Authentication auth) {
+        if (auth instanceof JsonWebTokenAuthentication) {
+            return ((JsonWebTokenAuthentication)auth).getEmail();
+        }
         final KeycloakPrincipal userDetails = (KeycloakPrincipal) auth.getPrincipal();
         final IDToken idToken = userDetails.getKeycloakSecurityContext().getToken();
-        final boolean isAdmin = this.administratorsConfig.getEmails().contains(idToken.getEmail());
-        final User user = this.userDAO.findByEmail(idToken.getEmail());
-        if (user != null) { // User exists in DB, moving on!
-            user.setIsAdmin(isAdmin);
-            this.session.setAttribute("User", user);
-            return user.toString();
+        return idToken.getEmail();
+    }
+
+    @NotNull
+    private static User createUserFromAuth(Authentication auth) {
+        if (auth instanceof JsonWebTokenAuthentication) {
+            JsonWebTokenAuthentication jwtAuth = ((JsonWebTokenAuthentication)auth);
+            String username = jwtAuth.getName();
+            if (username.contains("\\")) {
+                username = StringUtils.split(username, "\\")[1];
+            }
+            if (!username.contains("_")) {
+                throw new IllegalArgumentException("The username in the JWT token provided does not contain a '_'");
+            }
+            String[] parts = StringUtils.split(username, "_");
+            return new User(jwtAuth.getEmail(), StringUtils.capitalize(parts[0]), StringUtils.capitalize(parts[1]));
         }
-        // We don't know this user, so we fetch information from Keycloak tokens
-        final User kcUser = new User(idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
-        kcUser.setIsAdmin(isAdmin);
-        this.userDAO.save(kcUser);
-        this.session.setAttribute("User", kcUser);
-        return kcUser.toString();
+        final KeycloakPrincipal userDetails = (KeycloakPrincipal) auth.getPrincipal();
+        final IDToken idToken = userDetails.getKeycloakSecurityContext().getToken();
+        return new User(idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)

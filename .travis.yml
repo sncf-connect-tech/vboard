@@ -1,4 +1,5 @@
 language: java
+jdk: openjdk8
 
 front:
   - build
@@ -7,21 +8,37 @@ front:
 jobs:
   include:
     - stage: build
+      env: Docker frontend image build
+      services:
+        - docker
       script:
-        - mvn clean install -Dmaven.test.skip=true
-        - vboard-front/install-build.sh
+        - cd vboard-front
+        # The front image includes a call to "grunt validate":
+        - docker build .
+    - stage: build
+      env: Docker backend image build
+      services:
+        - docker
+      script:
+        - cd vboard-ws
+        - docker build .
     - stage: test
+      env: Pre-commit checks
       script:
-        - mvn test
         # Installing pre-commit globally fails with:
         # Installing collected packages: aspy.yaml, cached-property, identify, nodeenv, pre-commit
         #   File "/usr/lib/python2.7/shutil.py", line 83, in copyfile
         #     with open(dst, 'wb') as fdst:
         # IOError: [Errno 13] Permission denied: '/usr/local/lib/python2.7/dist-packages/aspy.yaml-1.0.0-nspkg.pth'
         - pip install --user pre-commit && pre-commit run --all-files
+    - stage: test
+      env: Backend unit tests
+      script:
+        - cd vboard-ws
+        - mvn --version
+        - mvn test
 
 cache:
   pip: true
   directories:
-  - node_modules # npm packages
   - $HOME/.m2    # Maven packages

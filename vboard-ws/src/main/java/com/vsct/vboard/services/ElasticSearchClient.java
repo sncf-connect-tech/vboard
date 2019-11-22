@@ -94,7 +94,6 @@ public class ElasticSearchClient {
      */
     public List<Pin> searchPins(String text, String labels, String fromDate, int offset) {
         Sort sort = new Sort("post_date_utc", Sort.Sorting.DESC);
-        sort.setIgnoreUnmapped();
         return this.searchAndSortPins(text == null ? "" : text,
                 labels == null ? Collections.emptyList() : Arrays.asList(labels.split(", *")),
                 fromDate, offset, sort);
@@ -111,7 +110,6 @@ public class ElasticSearchClient {
      */
     public List<Pin> searchPinsByLikes(String text, String fromDate, int offset) {
         Sort sort = new Sort("likes", Sort.Sorting.DESC);
-        sort.setIgnoreUnmapped();
         return this.searchAndSortPins(text == null ? "" : text,
                 Collections.emptyList(),
                 fromDate, offset, sort);
@@ -128,7 +126,6 @@ public class ElasticSearchClient {
         String query = getSearchPinsQuerybyAuthor(author, from);
         List<Sort> sortList = new LinkedList<>();
         Sort sort = new Sort("post_date_utc", Sort.Sorting.DESC);
-        sort.setIgnoreUnmapped();
         sortList.add(sort);
         List<HashMap> items = this.search(query, this.elsConfig.getPinsIndex(), sortList, 0);
         return items.stream().map(this::jsonMapToPin).collect(Collectors.toList());
@@ -231,38 +228,39 @@ public class ElasticSearchClient {
         if (!text.isEmpty()) {
             searchTextMultiFieldsShould = "\"should\": [ {"
                     + "\"wildcard\": { \"indexable_text_content\": \"*" + text + "*\" }"
-                    + " }, {"
+                + " }, {"
                     + "\"wildcard\": { \"author\": \"*" + text + "*\" }"
-                    + " }, {"
+                + " }, {"
                     + "\"wildcard\": { \"pin_title\": \"*" + text + "*\" }"
-                    + "} ]";
+                + "} ]";
         }
         if (!labels.isEmpty()) {
+            if (!searchTextMultiFieldsShould.isEmpty()) {
+                searchTagsMust = ", ";
+            }
             // The request in a "OR": we get all pins having any of the labels provided
-            searchTagsMust = "\"should\": [ {" + labels.stream().map(label ->
+            searchTagsMust += "\"should\": [ {" + labels.stream().map(label ->
                     "\"wildcard\" : {\"labels\": \"*" + label.toLowerCase() + "*\"}"
             ).collect(Collectors.joining(" }, {")) + "} ]";
         }
         if (from != null && !from.isEmpty()) {
-            searchFrom = ", \"filter\": { \"range\": { \"post_date_utc\": { \"from\":\"" + from + "\" } }}";
+            if (!searchTextMultiFieldsShould.isEmpty() || !searchTagsMust.isEmpty()) {
+                searchFrom = ", ";
+            }
+            searchFrom += "\"filter\": { \"range\": { \"post_date_utc\": { \"from\":\"" + from + "\" } }}";
         }
         return "{" +
-                "\"query\": {" +
-                "\"filtered\": {" +
-                "\"query\":  { " +
-                "\"bool\": { " +
-                searchTextMultiFieldsShould +
-                (!searchTextMultiFieldsShould.isEmpty() && !searchTagsMust.isEmpty() ? "," : "") +
-                searchTagsMust +
-                "}" +
-                "}" +
-                searchFrom +
-                "}" +
-                "}" +
+                    "\"query\": {" +
+                        "\"bool\": {" +
+                            searchTextMultiFieldsShould +
+                            searchTagsMust +
+                            searchFrom +
+                        "}" +
+                    "}" +
                 "}";
         // For CURL tests, the curl to post has the following format:
-        //$ curl -XPOST 'http://localhost:9200/jdbc_pins_index/_search?pretty' -d '{"query": {"filtered": {"query":  { "bool": { "should": [ {"match_all" : { } }, {"match_all" : { } }]}}, "filter": { "range": { "post_date_utc": { "from":"2014-03-21" } }}}}}'
-        //$ curl -XPOST 'http://localhost:9200/jdbc_pins_index/_search?pretty' -d '{"query": {"filtered": {"query":  { "bool": { "should": [ {"wildcard": { "indexable_text_content": "*text*" } }, {"wildcard": { "author": "*text*" } }]}}, "filter": { "range": { "post_date_utc": { "from":"2014-03-21" } }}}}}'
+        //$ curl -XPOST 'http://localhost:9200/jdbc_pins_index/_search?pretty' -d '{"query": { "bool": { "should": [ {"match_all" : { } }, {"match_all" : { } }]}}, "filter": { "range": { "post_date_utc": { "from":"2014-03-21" } }}}'
+        //$ curl -XPOST 'http://localhost:9200/jdbc_pins_index/_search?pretty' -d '{"query": { "bool": { "should": [ {"wildcard": { "indexable_text_content": "*text*" } }, {"wildcard": { "author": "*text*" } }]}}, "filter": { "range": { "post_date_utc": { "from":"2014-03-21" } }}}'
     }
 
     /**
@@ -284,12 +282,12 @@ public class ElasticSearchClient {
             searchFrom = ", \"filter\": { \"range\": { \"post_date_utc\": { \"from\":\"" + from + "\" } }}";
         }
         return "{" +
-                "\"query\": {" +
-                "\"filtered\": {" +
-                "\"query\":  { " + searchAuth + " }" +
-                searchFrom +
-                "}" +
-                "}" +
+                    "\"query\": {" +
+                        "\"bool\": {" +
+                            "\"must\":  { " + searchAuth + " }" +
+                            searchFrom +
+                        "}" +
+                    "}" +
                 "}";
     }
 
@@ -306,8 +304,8 @@ public class ElasticSearchClient {
         }
         return "{" +
             "\"query\": {" +
-                "\"filtered\": {" +
-                    "\"query\":  { " + searchId + " }" +
+                "\"bool\": {" +
+                    "\"must\":  { " + searchId + " }" +
                 "}" +
             "}" +
         "}";
