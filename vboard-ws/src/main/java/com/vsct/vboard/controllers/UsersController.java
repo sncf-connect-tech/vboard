@@ -19,6 +19,7 @@
 package com.vsct.vboard.controllers;
 
 import com.vsct.vboard.DAO.UserDAO;
+import com.vsct.vboard.exceptions.NotFoundException;
 import com.vsct.vboard.models.Role;
 import com.vsct.vboard.models.User;
 import com.vsct.vboard.models.VBoardException;
@@ -70,15 +71,17 @@ public class UsersController {
         this.jdbcTemplate.execute("TRUNCATE TABLE users;");
     }
 
+    // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
+    // The string is well passed to angular and is understood as a json object.
     @RequestMapping(value = "/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
     public String getUserFromEmail(@PathVariable("email") String email) {
-        User u = this.userDAO.findByEmail(email);
-        if (u != null) { return u.toString(); }
-        else { return null; }
-        // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
-        // The string is well passed to angular and is understood as a json object.
+        User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
+        return user.toString();
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)
@@ -126,6 +129,9 @@ public class UsersController {
         final String email = params.getEmail();
         final String team = params.getTeam();
         final User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
 
         List<String> previousList = Arrays.asList(user.getTeam().split(","));
         List<String> newList = Arrays.asList(team.split(","));
@@ -218,6 +224,9 @@ public class UsersController {
         permission.ensureCurrentUserIsAdmin();
         email = JavaUtils.extractJSONObject(email, "email");
         User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         user.setRoles(role);
         this.userDAO.save(user);
         this.notificationsController.addNotificationsFromRole(user, role, "mettre");
@@ -232,6 +241,9 @@ public class UsersController {
         permission.ensureCurrentUserIsAdmin();
         email = JavaUtils.extractJSONObject(email, "email");
         final User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         if (user.getRoles().equals(Role.Utilisateur.toString())){
             user.removeRole(Role.Utilisateur);
         }
@@ -249,6 +261,9 @@ public class UsersController {
         permission.ensureCurrentUserIsAdmin();
         email = JavaUtils.extractJSONObject(email, "email");
         final User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         user.removeRole(Role.valueOf(role));
         if (user.getRoles().equals(Role.valueOf(role).toString())){
             user.addRole(Role.Utilisateur);

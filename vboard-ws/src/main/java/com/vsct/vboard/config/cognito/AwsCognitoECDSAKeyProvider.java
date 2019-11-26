@@ -25,11 +25,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.security.interfaces.ECPrivateKey;
 import java.security.interfaces.ECPublicKey;
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class AwsCognitoECDSAKeyProvider implements ECDSAKeyProvider {
             HttpGet request = new HttpGet(String.format("https://public-keys.auth.elb.%s.amazonaws.com/%s", region, kid));
             try (CloseableHttpResponse response = httpClient.execute(request)) {
                 InputStream content = response.getEntity().getContent();
-                try (InputStreamReader textReader = new InputStreamReader(content)) {
+                try (InputStreamReader textReader = new InputStreamReader(content, StandardCharsets.UTF_8)) {
                     publicKey = (ECPublicKey) getPublicKey(parsePEM(textReader), "EC");
                     cache.put(kid, publicKey);
                     LOGGER.debug("New cache entry set for kid={} from https://public-keys.auth.elb.{}.amazonaws.com", kid, region);
@@ -75,11 +75,11 @@ public class AwsCognitoECDSAKeyProvider implements ECDSAKeyProvider {
 
     @Override
     public ECPrivateKey getPrivateKey() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public String getPrivateKeyId() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 }

@@ -60,12 +60,10 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, vboar
     /** Get User */
     this.getUserByEmail = function (email) {
         return $http.get(CONFIG.apiEndpoint + '/users/' + email).then(function (response) {
-            if (response.status !== 200 || response.statusText !== "OK") {
+            if (response.status !== 200) {
                 throw new Error('User search failed:' + JSON.stringify(response));
             }
             return response.data;
-        }, function(error) {
-            console.log('error: ', error );
         });
     };
 

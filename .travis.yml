@@ -32,11 +32,11 @@ jobs:
         # IOError: [Errno 13] Permission denied: '/usr/local/lib/python2.7/dist-packages/aspy.yaml-1.0.0-nspkg.pth'
         - pip install --user pre-commit && pre-commit run --all-files
     - stage: test
-      env: Backend unit tests
+      env: Backend unit tests & linter
       script:
         - cd vboard-ws
         - mvn --version
-        - mvn test
+        - mvn verify
 
 cache:
   pip: true

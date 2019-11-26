@@ -18,7 +18,6 @@
 
 package com.vsct.vboard.config.cognito;
 
-import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemReader;
 
 import java.io.IOException;

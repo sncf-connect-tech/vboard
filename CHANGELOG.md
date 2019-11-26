@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [?] - 20YY-MM-DD
+### Fixed
+- When visiting the profile URL of a non-existing user, UI loaded forever (#44)
+
 ## [1.2.0] - 2019-11-22
 ### Added
 - **vboard-ws**: support for AWS Cognito auth (#75)

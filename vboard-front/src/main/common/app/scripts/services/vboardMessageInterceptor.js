@@ -48,16 +48,22 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
         this.showMessage(new SuccessMessage(message))
     };
 
-    this.showErrorMessage = function (message) {
-        this.showMessage(new ErrorMessage(message))
-    };
-
     this.showWarningMessage = function (message) {
         this.showMessage(new WarningMessage(message))
     };
 
-    this.showErrorMessage = function (message) {
+    this.showErrorMessage = function (message, ) {
         this.showMessage(new ErrorMessage(message))
+    };
+
+    this.showError = function (error, callContext) {
+        // the call to parseInt handle the case of the zero string: '0'
+        var message = parseInt(error.status) ? `HTTP ${error.status} ${error.data}` : `${error}`;
+        if (callContext) {
+            message += ' in ' + callContext;
+        }
+        this.showErrorMessage(message)
+        console.error(error);
     };
 
     this.showInfoMessage = function (message) {

@@ -24,7 +24,6 @@ The public, open-source version of this project was publish in January 2018. It'
 - [Architecture](#architecture)
   * [Authentication](#authentication)
   * [Docker services](#docker-services)
-  * [Release on Docker hub](#release-on-docker-hub)
 
 <!-- tocstop -->
 
@@ -37,7 +36,7 @@ with comments and a search bar
 - simple gamification, badges & leaderboard
 - fully dockerized
 - optional email notifications
-- integrate with [KeyCloack](http://www.keycloak.org) for identity & access management
+- integrate with [KeyCloack](http://www.keycloak.org) or [AWS Cognito](https://aws.amazon.com/cognito/) for identity & access management
 - a REST API
 - a RSS feed
 
@@ -71,15 +70,6 @@ V.Board is made of the folling modules, launched as `docker-compose` services:
 - `front`: [AngularJS](https://angularjs.org) 1.5 web app served by Apache (front)
 - `batchs`: [logstash](https://www.elastic.co/fr/products/logstash) cron to update the ElasticSearch index from the database
 
-## Authentication
-There are 3 supported mode of authentication, that are activated in this order:
-
-- through a [Keycloak instance](https://www.keycloak.org), if the environment variables `$KCK_PUBLIC_HOST` & `$KCK_REALM_KEY` are defined,
-_cf_. [KeycloakEnabledInEnv.java](https://github.com/voyages-sncf-technologies/vboard/blob/master/vboard-ws/src/main/java/com/vsct/vboard/config/KeycloakEnabledInEnv.java)
-- through [AWS Cognito](https://aws.amazon.com/fr/cognito/), with a `X-AMZN-OIDC-DATA` HTTP header containing a JWT token,
-if the environment variable `$AWS_COGNITO_ENABLED` is defined
-- anonymous mode
-
 ## Docker services
 Some extra `docker-compose` services are used:
 
@@ -92,9 +82,11 @@ There are also some volumes used by the stack:
 It is shared between the `ws` and `front` services: `ws` writes in it and `front` reads from it.
 - `wsdb-data`: contains the backend database
 
-## Release on Docker hub
-```
-docker login
-docker-compose build vboard/vboard-batchs vboard/vboard-front vboard/vboard-ws
-docker-compose push
-```
+## Authentication
+There are 3 supported mode of authentication, that are activated in this order:
+
+- through a [Keycloak instance](https://www.keycloak.org), if the environment variables `$KCK_ENABLED`, `$KCK_PUBLIC_HOST` & `$KCK_REALM_KEY` are defined,
+_cf_. [KeycloakEnabledInEnv.java](https://github.com/voyages-sncf-technologies/vboard/blob/master/vboard-ws/src/main/java/com/vsct/vboard/config/KeycloakEnabledInEnv.java)
+- through [AWS Cognito](https://aws.amazon.com/fr/cognito/), with a `X-AMZN-OIDC-DATA` HTTP header containing a JWT token,
+if the environment variable `$AWS_COGNITO_ENABLED` is defined
+- anonymous mode

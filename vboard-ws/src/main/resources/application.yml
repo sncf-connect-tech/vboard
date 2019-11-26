@@ -63,6 +63,9 @@ administrators:
   emails: ${ADMINS}
 
 keycloak:
+  # The very next property is important to avoid Keycloak auto-configuration to kick-in:
+  # cf. https://github.com/keycloak/keycloak/blob/master/adapters/oidc/spring-boot2/src/main/java/org/keycloak/adapters/springboot/KeycloakAutoConfiguration.java#L46
+  enabled: ${KCK_ENABLED:false}
   realm: ${KCK_REALM}
   realm-key: ${KCK_REALM_KEY}
   ssl-required: none

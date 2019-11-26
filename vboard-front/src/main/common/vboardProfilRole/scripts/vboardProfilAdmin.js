@@ -55,12 +55,11 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
                     }
                 }
             }, function(error) {
-                vboardMessageInterceptor.showErrorMessage("La récupération des utilisateurs a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-                console.error('error: ', error );
+                vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
             });
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des modérateurs Newsletter a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-            console.error('error: ', error );
+            vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
+            console.error(error);
         });
 
         // Get the list of all newsletters moderators
@@ -81,12 +80,10 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
                     }
                 }
             }, function(error) {
-                vboardMessageInterceptor.showErrorMessage("La récupération des utilisateurs a échouée. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-                console.error('error: ', error );
+                vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
             });
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des modérateurs a échouée. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-            console.error('error: ', error );
+            vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
         });
 
     };

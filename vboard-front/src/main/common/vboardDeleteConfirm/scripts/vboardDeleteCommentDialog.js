@@ -39,7 +39,7 @@ angular.module('vboard').controller('VboardDeleteCommentDialogController', funct
             vboardMessageInterceptor.showInfoMessage("La suppression du commentaire a été effectuée.");
             $scope.closeThisDialog('OK'); // Close the popin
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La suppression du commentaire a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'submit');
         });
     };
 

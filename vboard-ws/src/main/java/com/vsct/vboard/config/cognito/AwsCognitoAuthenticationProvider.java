@@ -21,6 +21,7 @@ package com.vsct.vboard.config.cognito;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -39,6 +40,7 @@ public class AwsCognitoAuthenticationProvider implements AuthenticationProvider 
     }
 
     @Override
+    @SuppressFBWarnings("CFS_CONFUSING_FUNCTION_SEMANTICS")
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!supports(authentication.getClass())) {
             return null;

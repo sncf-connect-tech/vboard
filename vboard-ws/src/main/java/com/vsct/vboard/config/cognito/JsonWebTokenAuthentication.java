@@ -18,7 +18,6 @@
 
 package com.vsct.vboard.config.cognito;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -28,7 +27,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -97,12 +95,12 @@ public class JsonWebTokenAuthentication implements Authentication {
 
     @Override
     public Object getCredentials() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Object getDetails() {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     @Override

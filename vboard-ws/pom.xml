@@ -24,7 +24,7 @@
         <buildDate>${maven.build.timestamp}</buildDate>
 
         <java.version>1.8</java.version>
-        <springboot.version>1.5.21.RELEASE</springboot.version>
+        <springboot.version>1.5.22.RELEASE</springboot.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-io.version>2.6</commons-io.version>
         <commons-lang3.version>3.9</commons-lang3.version>
@@ -79,7 +79,7 @@
                     <failOnError>true</failOnError>
                     <threshold>Default</threshold>
                     <effort>Max</effort>
-                    <omitVisitors>ExceptionSoftening,FieldCouldBeLocal,OverlyConcreteParameter,OverridingEqualsNotSymmetrical,PossiblyRedundantMethodCalls,SuspiciousJDKVersionUse,UnnecessaryStoreBeforeReturn</omitVisitors>
+                    <omitVisitors>ExceptionSoftening,FieldCouldBeLocal,OverlyConcreteParameter,OverridingEqualsNotSymmetrical,PossiblyRedundantMethodCalls,StringifiedTypes,SuspiciousJDKVersionUse,UnnecessaryStoreBeforeReturn</omitVisitors>
                     <plugins>
                         <plugin>
                             <groupId>com.mebigfatguy.fb-contrib</groupId>

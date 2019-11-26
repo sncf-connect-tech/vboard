@@ -251,8 +251,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
                     throw new Error('Favorite Labels save failed:' + JSON.stringify(response));
                 }
             }, function (error) {
-                vboardMessageInterceptor.showErrorMessage("Le changement de labels favoris n'a pas été correctement pris en compte. (Status Code: " + error.status + ')');
-                console.error('error: ', error);
+                vboardMessageInterceptor.showError(error, 'saveFavoriteLabels');
             });
         }
     };
@@ -265,8 +264,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             }
             $scope.badges = response.data;
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des badges a échoué. (Status Code: " + error.status + ')');
-            console.error('error: ', error);
+            vboardMessageInterceptor.showError(error, 'gamification');
         });
 
         $http.get(CONFIG.apiEndpoint + '/gamification/getStats').then(function (response) {
@@ -275,8 +273,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             }
             $scope.stats = response.data;
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des stats a échoué. (Status Code: " + error.status + ')');
-            console.error('error: ', error);
+            vboardMessageInterceptor.showError(error, 'gamification');
         });
 
         $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage').then(function (response) {
@@ -285,8 +282,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             }
             $scope.statsPercentage = response.data;
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des barres de progression a échoué. (Status Code: " + error.status + ')');
-            console.error('error: ', error);
+            vboardMessageInterceptor.showError(error, 'gamification');
         });
     };
 

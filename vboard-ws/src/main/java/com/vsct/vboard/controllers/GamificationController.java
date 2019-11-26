@@ -19,8 +19,10 @@
 package com.vsct.vboard.controllers;
 
 import com.vsct.vboard.DAO.*;
+import com.vsct.vboard.exceptions.NotFoundException;
 import com.vsct.vboard.models.*;
-import com.vsct.vboard.services.*;
+import com.vsct.vboard.services.GamificationService;
+import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +32,6 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
-import org.joda.time.DateTime;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -109,6 +108,9 @@ public class GamificationController {
     @Valid
     public String getProfilStats(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         return this.getStats(user).toString();
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
@@ -129,6 +131,9 @@ public class GamificationController {
     @Valid
     public String getProfilStatsPercentage(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         return this.getStatsPercentage(user).toString();
     }
 
@@ -168,7 +173,6 @@ public class GamificationController {
     public Badges getUserBadges() {
         User user = permission.getSessionUserWithSyncFromDB();
         return this.getBadges(user);
-
     }
 
     // Return the badges for a given user
@@ -177,6 +181,9 @@ public class GamificationController {
     @Valid
     public String getProfilBadges(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
+        if (user == null) {
+            throw new NotFoundException("User not found");
+        }
         return this.getBadges(user).toString();
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
