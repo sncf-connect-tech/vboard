@@ -147,7 +147,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             $scope.newComment = false;
             $scope.showAllComments = null;
             $scope.createAllComments = false;
-            $scope.pin.commentsNumber ++; // Show the number of comments
+            $scope.pin.commentsNumber++; // Show the number of comments
             vboardPinsCollection.sendBroadcastUpdate();
         });
         vboardPinsCollection.sendBroadcastUpdate();

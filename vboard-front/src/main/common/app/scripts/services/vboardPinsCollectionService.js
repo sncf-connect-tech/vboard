@@ -320,11 +320,11 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         // Replace labels
         var labelsImploded = _.pluck(this.pins, 'labels');
         var labelsExploded = _.chain(labelsImploded)
-                .map(function (labels) {
-                    return labels.split(',');
-                }).flatten().filter(function(label) {
-                    return label.indexOf('#') === 0;
-                }).value();
+            .map(function (labels) {
+                return labels.split(',');
+            }).flatten().filter(function(label) {
+                return label.indexOf('#') === 0;
+            }).value();
 
         // To adapt in different screen size and prevent the label line to be displayed on two lines
         var labelNumber = 12;
@@ -439,7 +439,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         // API call
         return $http.get(CONFIG.apiEndpoint + '/likes/by_pin/' + pinId).then(function (response) {
             return response;
-        }, function errorCallBack(response) {
+        }, function errorCallBack(error) {
             vboardMessageInterceptor.showError(error, 'seeLikes');
         });
     };

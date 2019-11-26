@@ -30,7 +30,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
 
     vboardAuth.getUserByEmail($scope.email).then(function (user) {
         if (!user) {
-            throw new Error(`Unknown user`);
+            throw new Error('Unknown user');
         }
         $scope.user = user;
         $scope.getAvatar();

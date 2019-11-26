@@ -67,7 +67,7 @@ angular.module('vboard').controller('VboardCommentController', function ($scope,
         });
         popin.closePromise.then(function () {
             $scope.comment = null;
-            $scope.$parent.pin.commentsNumber --; // Reduce the number of comments written on the pin
+            $scope.$parent.pin.commentsNumber--; // Reduce the number of comments written on the pin
             if ($scope.$parent.pin.commentsNumber === 1) {
                 $scope.$parent.showComments();
             }

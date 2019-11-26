@@ -27,26 +27,26 @@ angular.module('vboard').controller('VboardKonami', function ($scope, vboardMess
 
     var messageDisplay = function () {
         switch (nbexecution) {
-            case 2:
-                vboardMessageInterceptor.showSuccessMessage("Quoi ? Encore ? Non ! Du moins pas maintenant !");
-                break;
-            case 3:
-                vboardMessageInterceptor.showSuccessMessage("Curieux et persistant en plus. Toujours pas.");
-                break;
-            case 4:
-                vboardMessageInterceptor.showSuccessMessage("Le but c'est de voir quand je serais à court de phrases, c'est cela ?");
-                break;
-            case 5:
-                vboardMessageInterceptor.showSuccessMessage("Bon, ok, c'est ma limite, rechargez la page, vous pourrez recommencer le Konami Code");
-                break;
-            case 6:
-                vboardMessageInterceptor.showSuccessMessage("C'est pas vrai, vous ne l'avez même pas rechargé !");
-                break;
-            default:
-                vboardMessageInterceptor.showSuccessMessage("Bon, ok, je réinitialise tout. La prochaine fois, le Konami Code sera accessible !");
-                executed = false;
-                nbexecution = 0;
-                break;
+        case 2:
+            vboardMessageInterceptor.showSuccessMessage("Quoi ? Encore ? Non ! Du moins pas maintenant !");
+            break;
+        case 3:
+            vboardMessageInterceptor.showSuccessMessage("Curieux et persistant en plus. Toujours pas.");
+            break;
+        case 4:
+            vboardMessageInterceptor.showSuccessMessage("Le but c'est de voir quand je serais à court de phrases, c'est cela ?");
+            break;
+        case 5:
+            vboardMessageInterceptor.showSuccessMessage("Bon, ok, c'est ma limite, rechargez la page, vous pourrez recommencer le Konami Code");
+            break;
+        case 6:
+            vboardMessageInterceptor.showSuccessMessage("C'est pas vrai, vous ne l'avez même pas rechargé !");
+            break;
+        default:
+            vboardMessageInterceptor.showSuccessMessage("Bon, ok, je réinitialise tout. La prochaine fois, le Konami Code sera accessible !");
+            executed = false;
+            nbexecution = 0;
+            break;
         }
     };
 

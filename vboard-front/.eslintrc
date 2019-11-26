@@ -2,9 +2,12 @@
     "env": {
         "browser": true
     },
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
     "rules": {
         // Possible Errors
-        "no-comma-dangle": 2,
+        "comma-dangle": 0,
         "no-cond-assign": [2, "always"],
         "no-console": 0,
         "no-constant-condition": 2,
@@ -12,7 +15,7 @@
         "no-debugger": 2,
         "no-dupe-keys": 2,
         "no-empty": 2,
-        "no-empty-class": 2,
+        "no-empty-character-class": 2,
         "no-ex-assign": 2,
         "no-extra-boolean-cast": 2,
         "no-extra-parens": 0,
@@ -33,7 +36,7 @@
 
         // Best Practices
         "block-scoped-var": 0,
-        "complexity": [2, 6],
+        "complexity": [2, 8],
         "consistent-return": 2,
         "curly": [2, "all"],
         "default-case": 0,
@@ -44,7 +47,7 @@
         "no-caller": 0,
         "no-div-regex": 2,
         "no-else-return": 2,
-        "no-empty-label": 2,
+        "no-labels": 2,
         "no-eq-null": 2,
         "no-eval": 2,
         "no-extend-native": 2,
@@ -53,7 +56,6 @@
         "no-floating-decimal": 2,
         "no-implied-eval": 2,
         "no-iterator": 2,
-        "no-labels": 2,
         "no-lone-blocks": 2,
         "no-loop-func": 2,
         "no-multi-spaces": 0,
@@ -118,7 +120,7 @@
         "no-multiple-empty-lines": [2, {"max": 2}],
         "no-nested-ternary": 2,
         "no-new-object": 2,
-        "no-space-before-semi": 2,
+        "semi-spacing": 2,
         "no-spaced-func": 2,
         "no-ternary": 0,
         "no-trailing-spaces": 0,
@@ -131,13 +133,12 @@
         "semi": 0,
         "sort-vars": 0,
         "space-after-function-name": 0,
-        "space-after-keywords": [2, "always"],
+        "keyword-spacing": 2,
         "space-before-blocks": [2, "always"],
         "space-before-function-parentheses": 0,
         "space-in-brackets": 0,
         "space-in-parens": 0,
         "space-infix-ops": 0,
-        "space-return-throw-case": 2,
         "space-unary-ops": 2,
         "spaced-line-comment": 0,
         "wrap-regex": 2,
