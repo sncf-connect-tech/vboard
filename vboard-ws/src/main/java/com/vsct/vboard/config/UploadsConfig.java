@@ -32,6 +32,7 @@ import java.nio.file.Path;
 public class UploadsConfig {
     private Path imagesStorageDirectory;
     private Path blogImagesDirectory;
+    private boolean multiplePinsPerUrlAllowed = false;
 
     public UploadsConfig() {
     }
@@ -56,6 +57,14 @@ public class UploadsConfig {
 
     public Path getBlogImagesDirectory() {
         return blogImagesDirectory;
+    }
+
+    public boolean isMultiplePinsPerUrlAllowed() {
+        return multiplePinsPerUrlAllowed;
+    }
+
+    public void setMultiplePinsPerUrlAllowed(boolean multiplePinsPerUrlAllowed) {
+        this.multiplePinsPerUrlAllowed = multiplePinsPerUrlAllowed;
     }
 
 }

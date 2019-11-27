@@ -24,9 +24,11 @@
     <span class="t-color-darkgray--text">Cette action est irreversible.</span>
     <br>
     <br>
-    <button type="button" data-ng-click="submit()"
-            class="btn btn-danger">
+    <button type="button" data-ng-click="submit()" class="btn btn-danger">
         <span class="fi-x"></span>
         <span>Supprimer</span>
     </button>
+    <div class="alert alert-danger" data-ng-show="error">
+        <pre>{{error.status}} {{error.data.message}}</pre>
+    </div>
 </div>

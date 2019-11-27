@@ -51,7 +51,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         // If the label does not start with #, one is added
         label = (label.indexOf('#')===0 ? '' : '#') + label;
         $scope.editablePin.labels.push(label);
-        $scope.displayLabels = $scope.editablePin.labels ? $scope.$scope.editablePin.join(' ')  : '';
+        $scope.displayLabels = $scope.editablePin.labels ? $scope.editablePin.labels.join(' ')  : '';
         $scope.editablePin.newLabel = '';
     };
 
@@ -215,9 +215,8 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
 
     /** Scrapping */
-
     $scope.getInfoFromURL = function(url) {
-        if (url && url.indexOf("http") === 0 && url.indexOf("https") !== 0) { // https pages cannot be scrapped by the current scrapper
+        if (url && url.indexOf("http") === 0) {
             $http.post(CONFIG.apiEndpoint + '/pins/url/', {
                 urlinfo: url
             }).then(function (response) {

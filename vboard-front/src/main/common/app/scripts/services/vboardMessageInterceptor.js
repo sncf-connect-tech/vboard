@@ -58,7 +58,7 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
 
     this.showError = function (error, callContext) {
         // the call to parseInt handle the case of the zero string: '0'
-        var message = parseInt(error.status, 10) ? `HTTP ${error.status} ${error.data}` : `${error}`;
+        var message = parseInt(error.status, 10) ? `HTTP ${error.status} ${error.data.message}` : `${error}`;
         if (callContext) {
             message += ' in ' + callContext;
         }

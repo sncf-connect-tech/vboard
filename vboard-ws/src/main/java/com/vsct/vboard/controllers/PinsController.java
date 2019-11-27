@@ -20,6 +20,7 @@ package com.vsct.vboard.controllers;
 
 import com.vsct.vboard.DAO.*;
 import com.vsct.vboard.config.ProxyConfig;
+import com.vsct.vboard.exceptions.DuplicateContentException;
 import com.vsct.vboard.models.*;
 import com.vsct.vboard.parameterFormat.AddNewPinParams;
 import com.vsct.vboard.services.*;
@@ -36,12 +37,18 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.validation.Valid;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,6 +94,30 @@ public class PinsController {
         this.gamification = gamification;
         this.notifications = notifications;
         this.proxyConfig = proxyConfig;
+        disableCertificateValidation(); // Needed for fetchWebPageContent to retrieve web page content for arbitrary HTTPS URLs
+    }
+
+    private void disableCertificateValidation() {
+        TrustManager[] trustAllCerts = new TrustManager[]{
+            new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+                public void checkClientTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+                public void checkServerTrusted(
+                        java.security.cert.X509Certificate[] certs, String authType) {
+                }
+            }
+        };
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (NoSuchAlgorithmException | KeyManagementException exception) {
+            this.logger.error("Failed to disable certificate validation", exception);
+        }
     }
 
     public void deleteAllPins() {
@@ -113,7 +144,8 @@ public class PinsController {
         permission.ensureUserHasRightsToAlterPin(pin.getAuthor());
         try {
             this.elsClient.deletePin(pinId);
-        } catch (VBoardException e) {} // NOPMD
+        } catch (VBoardException e) {
+        } // NOPMD
         int result = pinDAO.removeByPinId(pinId);
 
         // Delete all likes on that pin
@@ -178,6 +210,15 @@ public class PinsController {
         String title = params.getTitle();
         String url = params.getUrl();
         String imgType = params.getImgType();
+
+        if (!uploadsManager.isMultiplePinsPerUrlAllowed()) {
+            Pin existingPin = this.pinDAO.findByHrefUrl(url);
+            if (existingPin != null) {
+                throw new DuplicateContentException("An existing pin already exists for this URL,"
+                        + " created on " + existingPin.getPostDateUTC()
+                        + " and with ID: " + existingPin.getPinId());
+            }
+        }
 
         String description = params.getDescription();
         String[] labels = params.getLabels();
@@ -465,7 +506,7 @@ public class PinsController {
                 return info.toString();
             }
 
-            /* Retrieve the html code between the titel tags */
+            /* Retrieve the html code between the title tags */
             final Pattern patternTitle = Pattern.compile("<title>(.*?)</title>");
             final Matcher matcherTitle = patternTitle.matcher(html);
             if (matcherTitle.find()) {

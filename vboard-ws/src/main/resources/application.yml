@@ -55,6 +55,7 @@ com:
 uploads:
   imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY}
   blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
+  multiplePinsPerUrlAllowed: ${VBOARD_ALLOW_MULTIPLE_PINS_PER_URL:false}
 emails:
   hostname: ${MAIL_HOST}
   port: 25

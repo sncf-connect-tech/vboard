@@ -27,7 +27,7 @@ angular.module('vboard').directive('vboardDeletePin', function () {
     }
 });
 
-angular.module('vboard').controller('VboardDeletePinDialogController', function (vboardPinsCollection, $scope, ngDialog) {
+angular.module('vboard').controller('VboardDeletePinDialogController', function (vboardPinsCollection, $scope, $timeout, ngDialog) {
 
     // Pin Deletion validation
     $scope.submit = function () {
@@ -37,6 +37,7 @@ angular.module('vboard').controller('VboardDeletePinDialogController', function 
             }, function (error) {
                 $scope.error = error;
                 console.error('deletePin ERROR', error);
+                $timeout(() => $scope.closeThisDialog('KO'), 5000);
             });
     };
 

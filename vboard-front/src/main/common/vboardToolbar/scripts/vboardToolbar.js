@@ -38,6 +38,7 @@ angular.module('vboard').directive('vboardToolbar', function () {
 
 angular.module('vboard').controller('VboardToolbarController', function ($scope, $rootScope, $window, ngDialog, $location, $http, $timeout, $interval, vboardPinsCollection, vboardMessageInterceptor, CONFIG, vboardAuth, vboardKeycloakAuth) {
 
+    $scope.apiEndpoint = CONFIG.apiEndpoint;
     $scope.blogUrl = CONFIG.blogUrl;
     $scope.search = {
         text: '',

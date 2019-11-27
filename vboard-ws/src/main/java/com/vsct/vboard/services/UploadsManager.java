@@ -173,4 +173,7 @@ public class UploadsManager {
         return this.uploadsConfig.getBlogImagesDirectory();
     }
 
+    final public boolean isMultiplePinsPerUrlAllowed() {
+        return this.uploadsConfig.isMultiplePinsPerUrlAllowed();
+    }
 }

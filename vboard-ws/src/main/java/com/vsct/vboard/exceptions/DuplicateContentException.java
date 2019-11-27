@@ -16,22 +16,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.vsct.vboard.DAO;
+package com.vsct.vboard.exceptions;
 
-import com.vsct.vboard.models.Pin;
-import org.springframework.data.repository.CrudRepository;
-
-import javax.transaction.Transactional;
-import java.util.List;
-
-@Transactional
-public interface PinDAO extends CrudRepository<Pin, String> {
-    // No implementation needed
-    Pin findByPinId(String pin_id); // Spring will generate an implementation based on the method name: findBy+attributeName
-
-    List<Pin> findByAuthor(String author); // Spring will generate an implementation based on the method name: findBy+attributeName
-
-    Integer removeByPinId(String pin_id); // Spring will generate an implementation based on the method name: removeBy+attributeName
-
-    Pin findByHrefUrl(String url);
+public class DuplicateContentException extends RuntimeException {
+    public DuplicateContentException(String message) {
+        super(message);
+    }
 }

@@ -51,7 +51,7 @@
 
     <!-- Pin Form -->
     <div class="vboardAddPinDialog t-font-main">
-        <span data-ng-if="error" class="t-color-main1--text text-bold">Une erreur est survenue ({{ error.data.status }})</span>
+        <span data-ng-if="error" class="t-color-main1--text text-bold">Une erreur est survenue ({{ error.status }} {{ error.data.message }})</span>
         <form name="addLink">
             <fieldset class="vboardAddPinDialog--linkgroup t-color-black--border">
                 <legend class="vboardAddPinDialog--linkgrouptitle t-color-black--text">{{ popupTitle }}</legend>

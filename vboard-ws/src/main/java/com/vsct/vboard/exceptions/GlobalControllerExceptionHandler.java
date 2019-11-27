@@ -51,6 +51,17 @@ public class GlobalControllerExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler({DuplicateContentException.class})
+    public ResponseEntity handleDuplicateContent(Exception exception, WebRequest request) {
+        // Next line is workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
+        request.removeAttribute(PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, SCOPE_REQUEST);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .headers(headers)
+                .body(exception.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)  // Catch any exception. ie : NPE
     public ResponseEntity handleException(Exception exception, WebRequest request) {
         logger.error("Error 500", exception);

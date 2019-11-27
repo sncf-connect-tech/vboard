@@ -4,7 +4,7 @@ application:
   buildDate: 2019-10-29
 
 aws-cognito:
-  enabled: true
+  enabled: false
   jwt-http-header-name: X-AMZN-OIDC-DATA
   region: eu-west-1
 
@@ -39,6 +39,7 @@ com:
 uploads:
   imagesStorageDirectory: imagesStorageDir
   blogImagesDirectory: blogImagesDir
+  multiplePinsPerUrlAllowed: false
 proxy:
   hostname:
 emails:
