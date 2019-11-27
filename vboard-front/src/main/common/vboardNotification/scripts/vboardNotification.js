@@ -45,11 +45,11 @@ angular.module('vboard').controller('VboardNotificationController', function ($s
     /** Notification icon */
     $scope.icon = function () {
         switch ($scope.notification.type) {
-            case 'pin': return 'fi-book-bookmark t-color-black--text';
-            case 'comment': return 'fi-comment t-color-black--text';
-            case 'badge': return 'fi-unlock t-color-black--text';
-            case 'role': return 'fi-torso-business t-color-black--text';
-            default: return 'fi-flag t-color-black--text';
+        case 'pin': return 'fi-book-bookmark t-color-black--text';
+        case 'comment': return 'fi-comment t-color-black--text';
+        case 'badge': return 'fi-unlock t-color-black--text';
+        case 'role': return 'fi-torso-business t-color-black--text';
+        default: return 'fi-flag t-color-black--text';
         }
     };
 

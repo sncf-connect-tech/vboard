@@ -48,16 +48,22 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
         this.showMessage(new SuccessMessage(message))
     };
 
-    this.showErrorMessage = function (message) {
-        this.showMessage(new ErrorMessage(message))
-    };
-
     this.showWarningMessage = function (message) {
         this.showMessage(new WarningMessage(message))
     };
 
     this.showErrorMessage = function (message) {
         this.showMessage(new ErrorMessage(message))
+    };
+
+    this.showError = function (error, callContext) {
+        // the call to parseInt handle the case of the zero string: '0'
+        var message = parseInt(error.status, 10) ? `HTTP ${error.status} ${error.data}` : `${error}`;
+        if (callContext) {
+            message += ' in ' + callContext;
+        }
+        this.showErrorMessage(message)
+        console.error(error);
     };
 
     this.showInfoMessage = function (message) {
@@ -78,21 +84,21 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     /* eslint-disable complexity */
     this.setMessageClass = function (message) {
         switch (message.constructor) {
-            case SuccessMessage:
-                $rootScope.message.class = "alert-success";
-                $rootScope.message.type = "Succès";break;
-            case InfoMessage:
-                $rootScope.message.class = "alert-info";
-                $rootScope.message.type = "Info"; break;
-            case WarningMessage:
-                $rootScope.message.class = "alert-warning";
-                $rootScope.message.type = "Warning"; break;
-            case ErrorMessage:
-                $rootScope.message.class = "alert-danger";
-                $rootScope.message.type = "Erreur"; break;
-            default:
-                $rootScope.message.class = "alert-info";
-                $rootScope.message.type = "";
+        case SuccessMessage:
+            $rootScope.message.class = "alert-success";
+            $rootScope.message.type = "Succès"; break;
+        case InfoMessage:
+            $rootScope.message.class = "alert-info";
+            $rootScope.message.type = "Info"; break;
+        case WarningMessage:
+            $rootScope.message.class = "alert-warning";
+            $rootScope.message.type = "Warning"; break;
+        case ErrorMessage:
+            $rootScope.message.class = "alert-danger";
+            $rootScope.message.type = "Erreur"; break;
+        default:
+            $rootScope.message.class = "alert-info";
+            $rootScope.message.type = "";
         }
 
     };
@@ -102,15 +108,15 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     this.getMessageDelay = function (message) {
         var delay = LONG_TIME_DISPLAY;
         switch (message.constructor) {
-            case SuccessMessage:
-            case InfoMessage:
-                delay = SHORT_TIME_DISPLAY; break;
-            case WarningMessage:
-                delay = AVERAGE_TIME_DISPLAY; break;
-            case ErrorMessage:
-                delay = LONG_TIME_DISPLAY; break;
-            default:
-                delay = SHORT_TIME_DISPLAY;
+        case SuccessMessage:
+        case InfoMessage:
+            delay = SHORT_TIME_DISPLAY; break;
+        case WarningMessage:
+            delay = AVERAGE_TIME_DISPLAY; break;
+        case ErrorMessage:
+            delay = LONG_TIME_DISPLAY; break;
+        default:
+            delay = SHORT_TIME_DISPLAY;
         }
 
         return delay;
@@ -157,11 +163,11 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
 
     this.getGeneralMessage = function () {
         var self = this;
-        return $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
+        $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
             if (success.data === null || success.data === "") {
                 messageDisplay = false;
             } else {
-                return self.showGeneralMessage(success.data.type, success.data.content);
+                self.showGeneralMessage(success.data.type, success.data.content);
             }
         });
     }

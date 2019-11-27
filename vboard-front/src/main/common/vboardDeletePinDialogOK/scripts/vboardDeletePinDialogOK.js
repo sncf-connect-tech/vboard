@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardDeletePinDialogOKController', function ($scope, $location, $timeout, vboardPinsCollection) {
+angular.module('vboard').controller('VboardDeletePinDialogOKController', function ($scope, $timeout, vboardPinsCollection) {
 
     // If the timeout is too short, the update will not be taken into account in front
     $timeout(function() {

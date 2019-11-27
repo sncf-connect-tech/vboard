@@ -54,18 +54,13 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
                 $scope.initPermission(success);
             }, 2000);
         }
-
         // When the array is empty, the server still get an array with one empty element
         if (success.members.length === 1 && success.members[0].length === 0) { $scope.team.members = []; }
         $scope.retrieveTeamAvatarBase64();
         $scope.profileResize();
-
-
     }, function (error) {
-        console.log('error: ', error );
-        vboardMessageInterceptor.showErrorMessage("La récupération des informations de l'équipe a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
+        vboardMessageInterceptor.showError(error, 'getTeam');
     });
-
 
     // Retrieve the user's avatar if he has one (so not "default").
     $scope.retrieveTeamAvatarBase64  = function () {
@@ -181,8 +176,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
                 }
             }
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des utilisateurs a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-            console.log('error: ', error );
+            vboardMessageInterceptor.showError(error, 'getUsers');
         });
     };
 
@@ -235,8 +229,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         }
         $scope.badges = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des badges a échoué. (Status Code: " + error.status + ')');
-        console.log('error: ', error);
+        vboardMessageInterceptor.showError(error, 'VboardTeamProfilController');
     });
 
     $http.get(CONFIG.apiEndpoint + '/gamification/getTeamStatsPercentage/' + $scope.name).then(function (response) {
@@ -245,8 +238,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         }
         $scope.statsPercentage = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des pourcentages de progression a échoué. (Status Code: " + error.status + ')');
-        console.log('error: ', error);
+        vboardMessageInterceptor.showError(error, 'VboardTeamProfilController');
     });
 
 });

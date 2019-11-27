@@ -320,11 +320,11 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         // Replace labels
         var labelsImploded = _.pluck(this.pins, 'labels');
         var labelsExploded = _.chain(labelsImploded)
-                .map(function (labels) {
-                    return labels.split(',');
-                }).flatten().filter(function(label) {
-                    return label.indexOf('#') === 0;
-                }).value();
+            .map(function (labels) {
+                return labels.split(',');
+            }).flatten().filter(function(label) {
+                return label.indexOf('#') === 0;
+            }).value();
 
         // To adapt in different screen size and prevent the label line to be displayed on two lines
         var labelNumber = 12;
@@ -369,7 +369,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         return $http.get(CONFIG.apiEndpoint + '/labels').then(function (response) {
             return response.data;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération de tous les labels a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'getEveryLabels');
         });
     };
 
@@ -402,7 +402,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         return $http.get(CONFIG.apiEndpoint + '/savedpins').then(function (response) {
             return response;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération de vos épingles enregistrées a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'getUserSavedPins');
         });
     };
 
@@ -412,7 +412,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         return $http.get(CONFIG.apiEndpoint + '/likes/by_user/'+$rootScope.userAuthenticated.email).then(function (response) {
             return response;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération de vos likes a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'getUserLikes');
         });
     };
 
@@ -439,8 +439,8 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         // API call
         return $http.get(CONFIG.apiEndpoint + '/likes/by_pin/' + pinId).then(function (response) {
             return response;
-        }, function errorCallBack(response) {
-            vboardMessageInterceptor.showErrorMessage("Impossible de récupérer les likes de l'épingle. (Status Code: " + response.status + ')');
+        }, function errorCallBack(error) {
+            vboardMessageInterceptor.showError(error, 'seeLikes');
         });
     };
 
@@ -452,7 +452,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         }).then(function (response) {
             return response;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("L'envoi du commentaire a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'addComment');
         });
     };
 
@@ -462,7 +462,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         }).then(function (response) {
             return response;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La mise à jour du commentaire a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'updateComment');
         });
     };
 
@@ -471,7 +471,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         return $http.get(CONFIG.apiEndpoint + '/comments/' + pinId).then(function (response) {
             return response;
         }, function(error) {
-            vboardMessageInterceptor.showErrorMessage("La récupération des commentaires a échoué. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'getComments');
         });
     };
 

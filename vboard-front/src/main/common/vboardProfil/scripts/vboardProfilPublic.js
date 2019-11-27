@@ -18,7 +18,7 @@
 
 'use strict';
 
-angular.module('vboard').controller('VboardProfilPublicController', function ($scope, $rootScope, $routeParams, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, CONFIG, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilPublicController', function ($scope, $rootScope, $routeParams, $location, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, CONFIG, vboardMessageInterceptor) {
 
     $scope.email = $routeParams.email;
     $scope.public = true;
@@ -28,15 +28,17 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
     // Hide the search toolbar
     $rootScope.hideSearchField();
 
-    vboardAuth.getUserByEmail($scope.email).then(function (success) {
-        $scope.user = success;
+    vboardAuth.getUserByEmail($scope.email).then(function (user) {
+        if (!user) {
+            throw new Error('Unknown user');
+        }
+        $scope.user = user;
         $scope.getAvatar();
         $scope.profileResize();
-        $scope.user.team = success.team.split(',');
-
+        $scope.user.team = user.team.split(',');
     }, function (error) {
-        console.log('error: ', error );
-        $scope.user.email = $scope.email;
+        vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
+        $location.path('/');
     });
 
     // Retrieve the user's avatar if he has one (so not "default").
@@ -74,8 +76,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         }
         $scope.badges = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des badges a échoué. (Status Code: " + error.status + ')');
-        console.log('error: ', error);
+        vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
     });
 
     $http.get(CONFIG.apiEndpoint + '/gamification/getStats/' + $scope.email).then(function (response) {
@@ -84,8 +85,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         }
         $scope.stats = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des stats a échoué. (Status Code: " + error.status + ')');
-        console.log('error: ', error);
+        vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
     });
 
     $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage/' + $scope.email).then(function (response) {
@@ -94,8 +94,7 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         }
         $scope.statsPercentage = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des barres de progression a échoué. (Status Code: " + error.status + ')');
-        console.log('error: ', error);
+        vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
     });
 
 });

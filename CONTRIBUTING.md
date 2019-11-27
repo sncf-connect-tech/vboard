@@ -14,6 +14,7 @@
   * [Continuous integration](#continuous-integration)
   * [Code reviews](#code-reviews)
 - [Publishing new releases](#publishing-new-releases)
+  * [Release on Docker hub](#release-on-docker-hub)
 - [Credits](#credits)
 
 <!-- tocstop -->
@@ -145,6 +146,13 @@ Code reviewers should follow those guidelines:
 1. Update version in `vboard-ws/pom.xml`, `vboard-front/package.json` & `vboard-front/bower.json`
 2. Update `CHANGELOG.md`
 3. Create a new release & tag on [GitHub](https://github.com/voyages-sncf-technologies/vboard/releases)
+
+## Release on Docker hub
+```
+docker login
+docker-compose build vboard/vboard-batchs vboard/vboard-front vboard/vboard-ws
+docker-compose push
+```
 
 # Credits
 

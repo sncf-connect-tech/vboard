@@ -27,7 +27,6 @@
     "compileAll": [
         "ngtemplates",
         "shell:pleeease",
-        "eslint",
         "concat:scripts",
         "copy:index",
         "useminPrepare",
@@ -39,7 +38,6 @@
         "usemin"
     ],
     "compileJs": [
-        "eslint",
         "concat:scripts",
         "copy:index",
         "useminPrepare",

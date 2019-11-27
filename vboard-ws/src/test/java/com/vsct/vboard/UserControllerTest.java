@@ -25,14 +25,16 @@ import com.vsct.vboard.controllers.AuthenticationController;
 import com.vsct.vboard.controllers.NotificationsController;
 import com.vsct.vboard.controllers.TeamsController;
 import com.vsct.vboard.controllers.UsersController;
+import com.vsct.vboard.exceptions.NotFoundException;
 import com.vsct.vboard.models.User;
 import com.vsct.vboard.parameterFormat.UserParams;
 import com.vsct.vboard.parameterFormat.UserParamsUpdate;
 import com.vsct.vboard.services.UploadsManager;
-import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -49,7 +51,6 @@ import javax.servlet.http.HttpSession;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.jayway.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static com.vsct.vboard.TestUtil.createTestDB;
 import static com.vsct.vboard.TestUtil.dummyUserGenerator;
 
@@ -76,6 +77,8 @@ public class UserControllerTest {
     private NotificationsController notificationsController;
     @Mock
     HttpSession session;
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -91,7 +94,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void search() throws Exception {
+    public void search() {
         Iterator<User> dummyUserIterator = dummyUserGenerator();
         this.userDAO.save(new User("test@voyages-sncf.com", "fistname", "lastname"));
         this.userDAO.save(new User("test@VOYAGES-SNCF.COM", "fistname", "lastname"));
@@ -100,39 +103,26 @@ public class UserControllerTest {
             this.userDAO.save(dummyUser);
         }
 
-        given().when().get("/users/test@voyages-sncf.com").then().statusCode(HttpStatus.SC_OK);
-        given().when().get("/users/test@VOYAGES-SNCF.COM").then().statusCode(HttpStatus.SC_OK);
-        given().when().get("/users/unknown@voyages-sncf.com").then().statusCode(HttpStatus.SC_OK);
-
-        String response = userController.getUserFromEmail("test@voyages-sncf.com");
-        Assert.assertNotNull(response);
-
-        response = userController.getUserFromEmail("test@VOYAGES-SNCF.COM");
-        Assert.assertNotNull(response);
-
-        response = userController.getUserFromEmail("unknown@voyages-sncf.com");
-        Assert.assertNull(response);
+        userController.getUserFromEmail("test@voyages-sncf.com");
+        userController.getUserFromEmail("test@VOYAGES-SNCF.COM");
+        exceptionRule.expect(NotFoundException.class);
+        userController.getUserFromEmail("unknown@voyages-sncf.com");
     }
 
     @Test
-    public void add() throws Exception {
+    public void add() {
+        exceptionRule.expect(NotFoundException.class);
+        userController.getUserFromEmail("newAddEmail@vsct");
 
-        String response = userController.getUserFromEmail("newAddEmail@vsct");
-        Assert.assertNull(response);
-
-        UserParams params = new UserParams("newAddEmail@vsct", "firstname", "lastname");
-        userController.addNewUser(params);
+        userController.addNewUser(new UserParams("newAddEmail@vsct", "firstname", "lastname"));
 
         User user = new User("newAddEmail@vsct", "firstname", "lastname");
         user.setLastConnection(this.userDAO.findByEmail("newAddEmail@vsct").getLastConnection());
-        response = userController.getUserFromEmail("newAddEmail@vsct");
-        Assert.assertNotNull(response);
-        Assert.assertEquals(response, user.toString());
-
+        Assert.assertEquals(userController.getUserFromEmail("newAddEmail@vsct"), user.toString());
     }
 
     @Test
-    public void update() throws Exception {
+    public void update() {
         Mockito.doReturn("ok").when(session).getAttribute("User");
         User user = new User("newAddEmail@vsct", "firstname", "lastname");
         this.userDAO.save(user);

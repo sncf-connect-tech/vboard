@@ -48,8 +48,7 @@ angular.module('vboard').controller('VboardProfilSearchController', function ($r
             $scope.userSuggest.push(user);
         });
     }, function(error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des utilisateurs a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
-        console.log('error: ', error );
+        vboardMessageInterceptor.showError(error, 'VboardProfilSearchController');
     });
 
     $scope.seeUserProfil = function (user) {
@@ -66,7 +65,7 @@ angular.module('vboard').controller('VboardProfilSearchController', function ($r
         }
         $scope.teamSuggest = response.data;
     }, function (error) {
-        vboardMessageInterceptor.showErrorMessage("La récupération des équipes a échoué. (Status Code: " + error.status + ") Veuillez tenter de recharger la page");
+        vboardMessageInterceptor.showError(error, 'VboardProfilSearchController');
     });
 
     $scope.seeTeamProfil = function (team) {

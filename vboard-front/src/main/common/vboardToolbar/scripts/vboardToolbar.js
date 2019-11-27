@@ -204,8 +204,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
                 $scope.notification('VBoard', 'Vous avez ' + $scope.notificationsUnseen.length > 99 ? 99 : $scope.notificationsUnseen.length + ' nouvelle' + plural + ' notification' + plural);
             }
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Vos notifications n'ont pas pu être chargées. (Status Code: " + error.status + ')');
-            console.log('error: ', error);
+            vboardMessageInterceptor.showError(error, 'getNotif');
         });
     };
 
@@ -229,8 +228,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
                 $scope.canLoadPreviousNotif = false;
             }
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Vos anciennes notifications n'ont pas pu être chargées. (Status Code: " + error.status + ')');
-            console.log('error: ', error);
+            vboardMessageInterceptor.showError(error, 'getSeenNotif');
         });
     };
 

@@ -96,7 +96,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             $scope.likes.push(pinId); // Remove the like in front (when mouse over)
             $scope.pin.likes++; // Show the number of likes
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Like non pris en compte. Tentez de recharger la page avant de recommencer. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'addLike');
         });
     };
 
@@ -110,7 +110,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             // To prevent loading likes failed at the start and display 0
             if ($scope.pin.likes <= 0 ) { $scope.pin.likes = 0; }
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Unlike non pris en compte. Tentez de recharger la page avant de recommencer. (Status Code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'unlike');
         });
     };
 
@@ -147,7 +147,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             $scope.newComment = false;
             $scope.showAllComments = null;
             $scope.createAllComments = false;
-            $scope.pin.commentsNumber ++; // Show the number of comments
+            $scope.pin.commentsNumber++; // Show the number of comments
             vboardPinsCollection.sendBroadcastUpdate();
         });
         vboardPinsCollection.sendBroadcastUpdate();
@@ -225,7 +225,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             vboardMessageInterceptor.showInfoMessage("Epingle enregistrée");
             $scope.saved.push($scope.pin.pinId);
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Enregistrement non effectué. (Status code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'savePin');
         });
     };
 
@@ -238,7 +238,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
                 $scope.saved.splice(index, 1);
             }
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Enregistrement non effectué. (Status code: " + error.status + ')');
+            vboardMessageInterceptor.showError(error, 'unSavePin');
         });
     };
 

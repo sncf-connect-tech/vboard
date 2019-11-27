@@ -8,7 +8,7 @@ front:
 jobs:
   include:
     - stage: build
-      env: Docker frontend image build
+      name: Docker frontend image build
       services:
         - docker
       script:
@@ -16,14 +16,14 @@ jobs:
         # The front image includes a call to "grunt validate":
         - docker build .
     - stage: build
-      env: Docker backend image build
+      name: Docker backend image build
       services:
         - docker
       script:
         - cd vboard-ws
         - docker build .
     - stage: test
-      env: Pre-commit checks
+      name: Pre-commit checks
       script:
         # Installing pre-commit globally fails with:
         # Installing collected packages: aspy.yaml, cached-property, identify, nodeenv, pre-commit
@@ -32,11 +32,15 @@ jobs:
         # IOError: [Errno 13] Permission denied: '/usr/local/lib/python2.7/dist-packages/aspy.yaml-1.0.0-nspkg.pth'
         - pip install --user pre-commit && pre-commit run --all-files
     - stage: test
-      env: Backend unit tests
+      name: Backend unit tests & linter
+      env:
+        global:
+          # Avoid hitting Travis CI max log size limit:
+          - MAVEN_OPTS=-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn
       script:
         - cd vboard-ws
         - mvn --version
-        - mvn test
+        - mvn verify
 
 cache:
   pip: true

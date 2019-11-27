@@ -46,8 +46,7 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
             $scope.setAllAvatarImagesAndPoints(response.data);
 
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Le chargement du LeaderBoard a échoué. (Status Code: " + error.status + ')');
-            console.error('error: ', error);
+            vboardMessageInterceptor.showError(error, 'userLeaderBoard');
         });
     };
 
@@ -62,8 +61,7 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
             // Set the avatar and points (gamification points) of the leaders
             $scope.setAllAvatarImagesAndPoints(response.data);
         }, function (error) {
-            vboardMessageInterceptor.showErrorMessage("Le chargement du LeaderBoard a échoué. (Status Code: " + error.status + ')');
-            console.error('error: ', error);
+            vboardMessageInterceptor.showError(error, 'teamLeaderBoard');
         });
     };
 
@@ -154,8 +152,7 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
                     }
                     profil.points = response.data;
                 }, function (error) {
-                    vboardMessageInterceptor.showErrorMessage("La récupération des stats a échoué. (Status Code: " + error.status + ')');
-                    console.error('error: ', error);
+                    vboardMessageInterceptor.showError(error, 'setPoints');
                 });
             } else {
                 console.warn("Le profil" + profil + " n'a ni nom ni email permettant de retrouver ses points");

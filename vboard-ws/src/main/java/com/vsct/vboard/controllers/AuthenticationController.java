@@ -24,6 +24,7 @@ import com.vsct.vboard.config.cognito.JsonWebTokenAuthentication;
 import com.vsct.vboard.models.Role;
 import com.vsct.vboard.models.User;
 import com.vsct.vboard.models.VBoardException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.representations.IDToken;
 import org.slf4j.Logger;
@@ -96,6 +97,7 @@ public class AuthenticationController {
     }
 
     @NotNull
+    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     private static User createUserFromAuth(Authentication auth) {
         if (auth instanceof JsonWebTokenAuthentication) {
             JsonWebTokenAuthentication jwtAuth = ((JsonWebTokenAuthentication)auth);
