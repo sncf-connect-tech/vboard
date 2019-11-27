@@ -28,16 +28,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.MalformedURLException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Base64;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
+import java.nio.file.Path;
+import java.util.Base64;
 
 @Service
 public class UploadsManager {
@@ -46,14 +47,8 @@ public class UploadsManager {
     private final ProxyConfig proxyConfig;
 
     @Autowired
-    UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) throws IOException {
+    public UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) {
         this.uploadsConfig = uploadsConfig;
-        if (!Files.exists(getPinsImagesDirectory())) {
-            Files.createDirectory(getPinsImagesDirectory());
-        }
-        if (!Files.exists(getAvatarImagesDirectory())) {
-            Files.createDirectory(getAvatarImagesDirectory());
-        }
         this.proxyConfig = proxyConfig;
     }
 

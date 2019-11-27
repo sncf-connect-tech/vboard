@@ -22,6 +22,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
 import com.vsct.vboard.config.ProxyConfig;
+import com.vsct.vboard.config.UploadsConfig;
 import com.vsct.vboard.controllers.*;
 import com.vsct.vboard.models.*;
 import com.vsct.vboard.parameterFormat.AddNewPinParams;
@@ -61,6 +62,8 @@ public class NotificationsControllerTest {
     @Value("${local.server.port}")
     public int webServerPort;
 
+    private ProxyConfig proxyConfig = new ProxyConfig();
+    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(), proxyConfig);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -69,10 +72,6 @@ public class NotificationsControllerTest {
     private LikeDAO likeDAO;
     @Autowired
     private PinDAO pinDAO;
-    @Mock
-    private ElasticSearchClient elsClient;
-    @Mock
-    private UploadsManager uploadsManager;
     @Autowired
     private CommentDAO commentDAO;
     @Autowired
@@ -89,17 +88,15 @@ public class NotificationsControllerTest {
     private NotificationDAO notificationDAO;
     @Autowired
     private GamificationService gamificationService;
-    private PinsController pinsController;
-    private CommentsController commentsController;
-    private GamificationController gamificationController;
     @Autowired
     private NotificationsController notificationsController;
     @Mock
     private AuthenticationController permission;
     @Mock
-    HttpSession session;
-    @Mock
-    private ProxyConfig proxyConfig;
+    private ElasticSearchClient elsClient;
+    private PinsController pinsController;
+    private CommentsController commentsController;
+    private GamificationController gamificationController;
 
     @Before
     public void setUp() {

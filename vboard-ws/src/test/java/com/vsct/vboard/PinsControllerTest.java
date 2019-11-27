@@ -22,6 +22,7 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
+import com.vsct.vboard.config.UploadsConfig;
 import com.vsct.vboard.controllers.AuthenticationController;
 import com.vsct.vboard.controllers.GamificationController;
 import com.vsct.vboard.controllers.NotificationsController;
@@ -67,7 +68,8 @@ public class PinsControllerTest {
     @Value("${local.server.port}")
     public int webServerPort;
 
-    private PinsController pinsController;
+    private ProxyConfig proxyConfig = new ProxyConfig();
+    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(), proxyConfig);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -85,15 +87,12 @@ public class PinsControllerTest {
     @Mock
     private ElasticSearchClient elsClient;
     @Mock
-    private UploadsManager uploadsManager;
-    @Mock
     private AuthenticationController permission;
     @Mock
     private GamificationController gamification;
     @Mock
     private NotificationsController notifications;
-    @Mock
-    private ProxyConfig proxyConfig;
+    private PinsController pinsController;
 
     @Before
     public void setUp() {

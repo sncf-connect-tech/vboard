@@ -38,7 +38,7 @@ public class UploadsConfig {
     }
 
     public void setImagesStorageDirectory(Path imagesStorageDirectory) throws IOException {
-        if (!Files.exists(imagesStorageDirectory)) {
+        if (imagesStorageDirectory != null && !Files.exists(imagesStorageDirectory)) {
             Files.createDirectory(imagesStorageDirectory);
         }
         this.imagesStorageDirectory = imagesStorageDirectory;
@@ -49,7 +49,7 @@ public class UploadsConfig {
     }
 
     public void setBlogImagesDirectory(Path blogImagesDirectory) throws IOException {
-        if (!Files.exists(blogImagesDirectory)) {
+        if (blogImagesDirectory != null && !Files.exists(blogImagesDirectory)) {
             Files.createDirectory(blogImagesDirectory);
         }
         this.blogImagesDirectory = blogImagesDirectory;
