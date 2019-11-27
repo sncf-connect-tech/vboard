@@ -108,7 +108,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, vboar
     /** Get the team object from its name */
     this.getTeam = function (name) {
         return $http.get(CONFIG.apiEndpoint + '/teams/' + name).then(function (response) {
-            if (response.status !== 200 || response.statusText !== "OK") {
+            if (response.status !== 200) {
                 throw new Error('Team search failed:' + JSON.stringify(response));
             }
             return response.data;

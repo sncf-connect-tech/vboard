@@ -60,7 +60,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
                 from: from
             }
         }).then(function (response) {
-            if (response.status !== 200 || response.statusText !== "OK") {
+            if (response.status !== 200) {
                 throw new Error('Pins search failed:' + JSON.stringify(response));
             }
             return _.map(response.data, function (datum) {
@@ -73,7 +73,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     var fetchPinById = function (id) {
         // API call
         return $http.get(CONFIG.apiEndpoint + '/pins/id/' + id).then(function (response) {
-            if (response.status !== 200 || response.statusText !== "OK") {
+            if (response.status !== 200) {
                 throw new Error('Pin search failed:' + JSON.stringify(response));
             }
             // Format the pins (see vboardPinService.js)
@@ -150,10 +150,10 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
     };
 
     /** Force pins and labels update */
-    this.forceUpdate = function (author) {
+    this.forceUpdate = function () {
         var self = this;
         var ctrlParams = getControlParams();
-        if (!author) {
+        if (!ctrlParams.author) {
             if (scrollFrom === 0 && !isUseLookingAtFavoritePins && !ctrlParams.id) {
                 fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
                     self.allPins = fetchedPins;
@@ -171,7 +171,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
 
         } else {
             // The @ symbol is removed because by default elasticsearch tokenize elements. It is to prevent making a static mapping of the els instance
-            fetchPinsByAuthor(author.email.substring(0, author.email.indexOf('@')), ctrlParams.from).then(function (fetchedPins) {
+            fetchPinsByAuthor(ctrlParams.author.substring(0, ctrlParams.author.indexOf('@')), ctrlParams.from).then(function (fetchedPins) {
                 self.allPins = fetchedPins;
                 self.replacePinsAndLabels();
                 $rootScope.$broadcast('vboardPinsCollectionUpdated');
@@ -186,7 +186,7 @@ angular.module('vboard').service('vboardPinsCollection', function ($rootScope, $
         var self = this;
         // Get the savedPins object
         $http.get(CONFIG.apiEndpoint + '/savedpins').then(function (response) {
-            if (response.status !== 200 || response.statusText !== "OK") {
+            if (response.status !== 200) {
                 throw new Error('Pins search failed:' + JSON.stringify(response));
             }
             var listPin = [];
