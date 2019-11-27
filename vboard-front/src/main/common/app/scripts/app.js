@@ -32,10 +32,8 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     // CORS fix
     $http.defaults.withCredentials = true;
 
-    var millisecond = 1;
-    var second = millisecond * 1000;
-    var minute = second * 60;
-    var hours = minute * 60;
+    var second = 1000;
+    var minute = 60 * second;
     var needRefresh = false;
     // Auto refresh every 2 minutes to retrieve new pins (posted by other)
     $interval(function() {
@@ -47,26 +45,13 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
         if (needRefresh) {
             vboardMessageInterceptor.showWarningMessage("Veuillez recharger votre page pour éviter l'expiration de votre token au niveau du serveur");
         }
-    }, minute*2);
-
-    // Warn the user to refresh the page prevent token expiration (causing error 500 (front still logged, but not back))
-    $interval(function() {
-        needRefresh = true;
-    }, hours*20);
-
-    // Display with packery can be sometimes tricky. Some display problems can occur at the start. Two force refresh are operated.
-    $timeout(function () {
-        vboardPinsCollection.forceUpdate();
-    }, second);
-    $timeout(function () {
-        vboardPinsCollection.forceUpdate();
-    }, second*10);
+    }, 2*minute);
 
     $timeout(function () {
         // Set last connection to set it even if the user didn't quit the app
         $cookieStore.put('lastConnection', new Date());
         $http.post(CONFIG.apiEndpoint + '/users/setLastConnection');
-    }, second*30);
+    }, 30*second);
 
 
     $rootScope.$on('$locationChangeSuccess', function () {

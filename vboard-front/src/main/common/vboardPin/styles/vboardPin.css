@@ -140,6 +140,7 @@ vboard-pin {
 .vboardPin--interaction {
     border-top: 1px solid #e0e0e0;
     display: flex;
+    align-items: center;
     padding: .3rem 1rem .3rem 1rem;
 }
 
@@ -155,8 +156,13 @@ vboard-pin {
 }
 
 .vboardPin--interaction .vboardPin--comment {
-    margin-left: auto;
+    margin-left: 2rem;
     cursor: pointer;
+    opacity: .7;
+}
+
+.vboardPin--interaction .vboardPin--permalink {
+    margin-left: auto;
     opacity: .7;
 }
 

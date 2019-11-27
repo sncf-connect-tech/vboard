@@ -53,10 +53,11 @@
 
     <div class="vboardPin--interaction">
         <span class="t-fontSize-xx-small vboardPin--likes" data-ng-mouseover="seeLikes(pin.pinId)" data-toggle="tooltip" data-delay="200" data-placement="bottom" data-original-title="{{ likesAuthors }}">{{ pin.likes }} like<span data-ng-if="pin.likes > 1">s</span></span><span class="t-fontSize-xx-small vboardPin--likes" data-ng-if="likes.indexOf(pin.pinId) >= 0"> dont vous</span>
+        <span class="t-fontSize-xx-small text-center vboardPin--permalink"><a class="t-color-lightblack--text" href="/#/?id={{pin.pinId}}">permalink</a></span>
         <span class="fi-comment t-color-lightblack--text t-fontSize-large vboardPin--comment" data-ng-click="addComment()"><div data-ng-show="pin.commentsNumber > 0" class="vboardPin--commentsNumber {{ pin.commentsNumber > 9 ? 'vboardPin--multipleCommentsNumber' : ''}} t-color-white--text t-fontSize-x-small">{{ pin.commentsNumber }}</div></span>
-        <span data-ng-if="likes.indexOf(pin.pinId) < 0" class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like" data-ng-click="addLike(pin.pinId)"></span>
+        <span data-ng-if="!likes"                        class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like"></span>
+        <span data-ng-if="likes.indexOf(pin.pinId) < 0"  class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like" data-ng-click="addLike(pin.pinId)"></span>
         <span data-ng-if="likes.indexOf(pin.pinId) >= 0" class="fi-like t-color-blue--text t-fontSize-large vboardPin--unlike" data-ng-click="unlike(pin.pinId)"></span>
-        <span data-ng-if="!likes" class="fi-like t-fontSize-large t-color-lightblack--text vboardPin--like"></span>
     </div>
     <a data-ng-href="{{ authorLink }}" class="link-notUnderlined">
         <div class="vboardPin--cred t-color-lightgray--border t-font-secondary1 t-fontSize-xx-small t-color-black--text">
