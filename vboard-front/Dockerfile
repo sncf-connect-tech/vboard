@@ -6,7 +6,7 @@ COPY grunt grunt
 COPY install-build.sh .
 COPY .bowerrc .
 COPY .csslintrc .
-COPY .eslintrc .
+COPY .eslintrc.json .
 COPY .pleeeaserc .
 COPY Gruntfile.js .
 COPY bower.json .

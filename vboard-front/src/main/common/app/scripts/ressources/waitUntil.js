@@ -16,55 +16,59 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').service('waitUntil', ['$q', '$timeout', function ($q, $timeout) {
-    this.elemCreated = function (selector, timeout) {
-        timeout = timeout || 1000;
-        var deferred = $q.defer(),
-            selected = angular.element(document.querySelector(selector));
-        if (selected.length > 1) {
-            deferred.reject(new Error('waitUntil.elemCreated("' + selector + '") : '
-                + 'Too many elements match: ' + selected));
-        } else if (selected.length) {
-            deferred.resolve(selected[0]);
-        } else {
-            document.arrive(selector, function () {
-                deferred.resolve(this);
-            });
-        }
-        $timeout(function () {
-            deferred.reject(new Error('waitUntil.elemCreated("' + selector + '") : '
-                + 'TimeOut after ' + timeout + 'ms'));
-        }, timeout);
-        return deferred.promise;
-    };
-    this.elemRemoved = function (selector, timeout) {
-        timeout = timeout || 1000;
-        if (_.contains(selector, '>') || _.contains(selector, ' ')) {
-            throw new Error('Descendent and child selectors not allowed: ' + selector);
-        }
-        var deferred = $q.defer();
-        if (!$(selector).length) {
-            deferred.resolve();
-        } else {
-            document.leave(selector, function () {
-                deferred.resolve();
-            });
-        }
-        $timeout(function () {
-            deferred.reject(new Error('waitUntil.elemRemoved("' + selector + '") :'
-                + 'TimeOut after ' + timeout + 'ms'));
-        }, timeout);
-        return deferred.promise;
-    };
-    this.allElemsRemoved = function (selector, timeout) {
-        var self = this;
-        return $q.all(_.map($(selector), function (elem) {
-            if (!elem.id) {
-                throw new Error('allElemsRemoved require selected elements to have ids');
+angular.module('vboard').factory('waitUntil', function waitUntil($q, $timeout) {
+    return {
+        elemCreated(selector, timeout) {
+            timeout = timeout || 1000;
+            const deferred = $q.defer(),
+                selected = angular.element(selector);
+            if (selected.length > 1) {
+                deferred.reject(new Error(`waitUntil.elemCreated("${  selector  }") : ` +
+                `Too many elements match: ${  selected }`));
+            } else if (selected.length) {
+                deferred.resolve(selected[0]);
+            } else {
+                /* eslint-disable-next-line angular/document-service */
+                document.arrive(selector, function () {
+                    /* eslint-disable-next-line no-invalid-this */
+                    deferred.resolve(this);
+                });
             }
-            return self.elemRemoved('#' + elem.id, timeout);
-        }));
-    };
-}]);
+            $timeout(function () {
+                deferred.reject(new Error(`waitUntil.elemCreated("${  selector  }") : ` +
+                `TimeOut after ${  timeout  }ms`));
+            }, timeout);
+            return deferred.promise;
+        },
+        elemRemoved(selector, timeout) {
+            timeout = timeout || 1000;
+            if (_.contains(selector, '>') || _.contains(selector, ' ')) {
+                throw new Error(`Descendent and child selectors not allowed: ${  selector }`);
+            }
+            const deferred = $q.defer();
+            if ($(selector).length) {
+                /* eslint-disable-next-line angular/document-service */
+                document.leave(selector, function () {
+                    deferred.resolve();
+                });
+            } else {
+                deferred.resolve();
+            }
+            $timeout(function () {
+                deferred.reject(new Error(`waitUntil.elemRemoved("${  selector  }") :` +
+                `TimeOut after ${  timeout  }ms`));
+            }, timeout);
+            return deferred.promise;
+        },
+        allElemsRemoved(selector, timeout) {
+            const self = this;
+            return $q.all(_.map($(selector), function (elem) {
+                if (!elem.id) {
+                    throw new Error('allElemsRemoved require selected elements to have ids');
+                }
+                return self.elemRemoved(`#${  elem.id }`, timeout);
+            }));
+        },
+    }
+});

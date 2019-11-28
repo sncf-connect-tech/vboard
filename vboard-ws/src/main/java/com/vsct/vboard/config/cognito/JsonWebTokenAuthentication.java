@@ -37,12 +37,10 @@ import java.util.stream.Collectors;
 
 public class JsonWebTokenAuthentication implements Authentication {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(JsonWebTokenAuthentication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsonWebTokenAuthentication.class);
     private static final ObjectMapper OBJECT_MAPPER = buildObjectMapper();
     private boolean isAuthenticated = false;
     private final String token;
-    private final Map<String, Object> header;
-    private final Map<String, Object> payload;
     private final String keyId;
     private final String email;
     private final String username;
@@ -55,14 +53,14 @@ public class JsonWebTokenAuthentication implements Authentication {
             String[] parts = token.split("\\.");
             String b64DecodedPayload = StringUtils.newStringUtf8(Base64.decodeBase64(parts[0]));
             LOGGER.debug("Base64-decoded JWT token header: {}", b64DecodedPayload);
-            header = (Map<String, Object>)OBJECT_MAPPER.readValue(b64DecodedPayload, Map.class);
+            Map<String, Object> header = (Map<String, Object>) OBJECT_MAPPER.readValue(b64DecodedPayload, Map.class);
             b64DecodedPayload = StringUtils.newStringUtf8(Base64.decodeBase64(parts[1]));
             LOGGER.debug("Base64-decoded JWT token payload: {}", b64DecodedPayload);
-            payload = (Map<String, Object>)OBJECT_MAPPER.readValue(b64DecodedPayload, Map.class);
-            keyId = (String)header.get("kid");
-            email = (String)payload.get("email");
-            username = (String)payload.get("username");
-            String roles = (String)payload.get(rolesFieldName);
+            Map<String, Object> payload = (Map<String, Object>) OBJECT_MAPPER.readValue(b64DecodedPayload, Map.class);
+            keyId = (String) header.get("kid");
+            email = (String) payload.get("email");
+            username = (String) payload.get("username");
+            String roles = (String) payload.get(rolesFieldName);
             if (roles == null) {
                 throw new IllegalArgumentException("Field \"" + rolesFieldName + "\" not found in JWT payload");
             }

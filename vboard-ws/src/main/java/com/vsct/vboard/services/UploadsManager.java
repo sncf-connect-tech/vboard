@@ -58,7 +58,6 @@ public class UploadsManager {
             byte[] data = Base64.getDecoder().decode(img);
             try (OutputStream stream = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
                 stream.write(data);
-                stream.close();
             } catch (Exception e) {
                 this.logger.error(e.getMessage());
             }
@@ -83,7 +82,6 @@ public class UploadsManager {
             byte[] data = Base64.getDecoder().decode(img);
             try (OutputStream stream = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile())) {
                 stream.write(data);
-                stream.close();
             } catch (Exception e) {
                 this.logger.error(e.getMessage());
             }

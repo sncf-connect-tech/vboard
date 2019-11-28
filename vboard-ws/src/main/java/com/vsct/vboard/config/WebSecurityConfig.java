@@ -55,8 +55,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements WebSecurityConfigurer<WebSecurity> {
 
     private static final SessionAuthenticationStrategy SESSION_AUTH_STRATEGY = new NullAuthenticatedSessionStrategy();
-    private ApplicationContext applicationContext;
-    private AwsCognitoConfig awsCognitoConfig;
+    private final ApplicationContext applicationContext;
+    private final AwsCognitoConfig awsCognitoConfig;
 
     @Autowired
     public WebSecurityConfig(ApplicationContext applicationContext, AwsCognitoConfig awsCognitoConfig) {

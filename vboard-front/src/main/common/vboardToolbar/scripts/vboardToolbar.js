@@ -16,15 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardToolbar', function () {
+angular.module('vboard').directive('vboardToolbar', function vboardToolbar() {
     return {
         restrict: 'E',
         scope: {}, // Isolate scope
         templateUrl: 'common/vboardToolbar/templates/vboardToolbar.html',
         controller: 'VboardToolbarController',
-        link: function ($scope, $element) {
+        link($scope, $element) {
             $element.bind('keydown', function (event) {
                 if (event.keyCode === 13) {
                     $scope.search.label = '';
@@ -36,7 +35,7 @@ angular.module('vboard').directive('vboardToolbar', function () {
     }
 });
 
-angular.module('vboard').controller('VboardToolbarController', function ($scope, $rootScope, $window, ngDialog, $location, $http, $timeout, $interval, vboardPinsCollection, vboardMessageInterceptor, CONFIG, vboardAuth, vboardKeycloakAuth) {
+angular.module('vboard').controller('VboardToolbarController', function VboardToolbarController($scope, $rootScope, $window, ngDialog, $location, $http, $timeout, $interval, vboardPinsCollection, vboardMessageInterceptor, CONFIG, vboardAuth, vboardKeycloakAuth) {
 
     $scope.apiEndpoint = CONFIG.apiEndpoint;
     $scope.blogUrl = CONFIG.blogUrl;
@@ -46,7 +45,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     };
 
     // Send the actual userAuthenticated scope to the view and get the user's notification
-    $rootScope.$watch('userAuthenticated', function(newVal) {
+    $rootScope.$watch('userAuthenticated', function (newVal) {
         $scope.userAuthenticated = newVal;
         if ($rootScope.userAuthenticated) {
             $scope.getNotif();
@@ -54,7 +53,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     });
 
     // Get if the authentication process is running or not
-    $rootScope.$on('islogin', function() {
+    $rootScope.$on('islogin', function () {
         $scope.islogin = $rootScope.islogin;
     });
 
@@ -71,7 +70,7 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     // Launch the search by changing the url
     $scope.triggerSearch = function () {
         // triggers a $locationChangeSuccess
-        $location.search({'text': $scope.search.text || null, 'label': $scope.search.label|| null});
+        $location.search({ 'text': $scope.search.text || null, 'label': $scope.search.label|| null });
     };
 
     // Force the refresh
@@ -82,12 +81,12 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // Open a popin to add a new pin
     $scope.openAddPinDialog = function () {
-        var popin = ngDialog.open({
+        const popin = ngDialog.open({
             template: 'common/vboardAddPinDialog/templates/vboardAddPinDialog.html',
             controller: 'VboardAddPinDialogController',
             className: 'ngdialog-theme-default ngdialog-theme-addPin'
         });
-        popin.closePromise.then(function(data) {
+        popin.closePromise.then(function (data) {
             if (data && data.value && data.value==='OK') {
                 $scope.info = "ajoutée";
                 ngDialog.open({
@@ -117,17 +116,15 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // Search the labels displayed on the pins
     $scope.getLabels = function () {
-        var labels;
+        let { labels } = vboardPinsCollection;
         if ($scope.getAllLabels) {
             labels = vboardPinsCollection.getAllLabelsOnPins();
-        } else {
-            labels = vboardPinsCollection.labels;
         }
         return labels;
     };
 
     // Show/hide all labels
-    $scope.showAllLabels = function() {
+    $scope.showAllLabels = function () {
         $scope.getAllLabels = !$scope.getAllLabels;
     };
 
@@ -135,8 +132,8 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     $scope.addOrDeleteLabel = function (label, trigger) {
         if ($scope.search.label && $scope.search.label.split('#').indexOf(label.substring(1)) > -1) {
             // Update the search using an array. The symbol '#' is removed to check if the label is included in that array
-            var index = $scope.search.label.split('#').indexOf(label.substring(1));
-            var labels = $scope.search.label.split('#');
+            const index = $scope.search.label.split('#').indexOf(label.substring(1));
+            const labels = $scope.search.label.split('#');
             labels.splice(index, 1);
             $scope.search.label = labels.join('#');
         } else {
@@ -148,8 +145,8 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     };
 
     // Check whether the label is active, ie whether the label has been clicked on one time
-    $scope.isActive = function(label) {
-        var active = false;
+    $scope.isActive = function (label) {
+        let active = false;
         if ($scope.search.label) {
             active = $scope.search.label.split('#').indexOf(label.substring(1)) > -1;
         }
@@ -165,30 +162,30 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
 
     /* Check if the window is being focus or not */
-    var windowFocus = true;
+    let windowFocus = true;
 
-    $(window).focus(function() {
+    $(window).focus(function () {
         windowFocus = true;
-    }).blur(function() {
+    }).blur(function () {
         windowFocus = false;
     });
 
     // Get the user's notification
     $scope.getNotif = function () {
-        var previewNotificationNumber = $scope.notificationsUnseen ? $scope.notificationsUnseen.length : 0;
+        const previewNotificationNumber = $scope.notificationsUnseen ? $scope.notificationsUnseen.length : 0;
         // API call on the unclicked notification: notification on which the user never clicked on.
-        $http.get(CONFIG.apiEndpoint + '/notifications/unclicked').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/notifications/unclicked`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Notifications get failed:' + JSON.stringify(response));
+                throw new Error(`Notifications get failed:${  JSON.stringify(response) }`);
             }
             // Sort them by date
-            $scope.notifications = _.sortBy(response.data, function(notif) { var date = new Date(notif.date); return -date });
+            $scope.notifications = _.sortBy(response.data, (notif) => -(new Date(notif.date)));
             // Get all notification never seen by the user
             $scope.notificationsUnseen = $scope.notifications.filter(function (notif) {
                 return !notif.seen;
             });
             // Get the notifications seen but not clicked by the user
-            var notificationsSeen = $scope.notifications.filter(function (notif) {
+            const notificationsSeen = $scope.notifications.filter(function (notif) {
                 return notif.seen;
             });
             // If the notifications not seen are less than 5, the array is completed to get at least 5 notifications.
@@ -199,10 +196,10 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
             }
             // Chrome and Firefox browser notification when the window is not focused on
             if ($scope.notificationsUnseen.length > 0 && !windowFocus && previewNotificationNumber !== $scope.notificationsUnseen.length) {
-                var plural = $scope.notificationsUnseen.length === 1 ? '': 's';
+                const plural = $scope.notificationsUnseen.length === 1 ? '': 's';
 
                 // Visually, the numbers of notifications over 99 are displayed as 99
-                $scope.notification('VBoard', 'Vous avez ' + $scope.notificationsUnseen.length > 99 ? 99 : $scope.notificationsUnseen.length + ' nouvelle' + plural + ' notification' + plural);
+                $scope.notification('VBoard', `Vous avez ${  $scope.notificationsUnseen.length }` > 99 ? 99 : `${ $scope.notificationsUnseen.length  } nouvelle${  plural  } notification${  plural }`);
             }
         }, function (error) {
             vboardMessageInterceptor.showError(error, 'getNotif');
@@ -214,13 +211,13 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // See notification historic (add 5 notification by default: number)
     $scope.getSeenNotif = function (number) {
-        $http.get(CONFIG.apiEndpoint + '/notifications/seen').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/notifications/seen`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Notifications get failed:' + JSON.stringify(response));
+                throw new Error(`Notifications get failed:${  JSON.stringify(response) }`);
             }
             // Notification not seen are already all displayed.
-            var notificationsSeen = _.sortBy(response.data, function(notif) { var date = new Date(notif.date); return -date });
-            var notifNumber = $scope.notifications.length;
+            const notificationsSeen = _.sortBy(response.data, (notif) => -(new Date(notif.date)));
+            const notifNumber = $scope.notifications.length;
             // Add notifications not yet in the array
             $scope.notifications = $scope.notifications.concat(notificationsSeen.slice($scope.notificationSeenLoaded, number + $scope.notificationSeenLoaded));
             $scope.notificationSeenLoaded = number + $scope.notificationSeenLoaded;
@@ -235,23 +232,24 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // When the user click on the notification button, he sees the notification and so all notifications not seen are set to seen under 7s
     $scope.notificationsCheck = function () {
-        $scope.notificationsUnseen.forEach( function(notif) {
-            $http.post(CONFIG.apiEndpoint + '/notifications/seen/' + notif.id);
+        $scope.notificationsUnseen.forEach( function (notif) {
+            $http.post(`${ CONFIG.apiEndpoint  }/notifications/seen/${  notif.id }`);
             $timeout(function () {
                 _.remove($scope.notificationsUnseen, notif);
             }, 7000);
         });
     };
 
-    var millisecond = 1;
-    var second = millisecond * 1000;
-    var minute = second * 60;
+    const millisecond = 1;
+    const second = millisecond * 1000;
+    const minute = second * 60;
     // Auto refresh every 2 minutes to retrieve the last notifications
-    $interval(function() {
+    $interval(function () {
         $scope.getNotif();
     }, minute*2);
 
     // Needed to allow browser notification (and ask the user for its authorisation)
+    /* eslint-disable-next-line angular/document-service */
     document.addEventListener('DOMContentLoaded', function () {
         if (Notification.permission !== "granted") {
             Notification.requestPermission();
@@ -260,10 +258,8 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
 
     // Browser notification (Chrome and Firefox)
     $scope.notification = function (title, message) {
-        if (Notification.permission !== "granted") {
-            Notification.requestPermission();
-        } else {
-            var notification = new Notification(title, {
+        if (Notification.permission === "granted") {
+            const notification = new Notification(title, {
                 icon: 'images/logo_vsc.jpg', // App logo
                 body: message // message to display
             });
@@ -271,6 +267,8 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
             notification.onclick = function () {
                 $window.focus();
             };
+        } else {
+            Notification.requestPermission();
         }
     };
 
@@ -293,14 +291,14 @@ angular.module('vboard').controller('VboardToolbarController', function ($scope,
     // Simulate a click on all favorite labels (if the user has some)
     $scope.searchByFavoriteLabels = false;
     $scope.toggleSearchByFavoriteLabels = function () {
-        var self = this;
+        const self = this;
         $scope.searchByFavoriteLabels = !$scope.searchByFavoriteLabels;
         if ($scope.searchByFavoriteLabels) {
             vboardAuth.getUser($rootScope.userAuthenticated).then(function (success) {
-                var labels = success.favorite_labels.split(',');
+                const labels = success.favorite_labels.split(',');
                 $scope.search.label = null;
-                for (var i = 0; i < labels.length; i++) {
-                    self.addOrDeleteLabel(labels[i], false);
+                for (let labelIndex = 0; labelIndex < labels.length; labelIndex++) {
+                    self.addOrDeleteLabel(labels[labelIndex], false);
                 }
                 $scope.triggerSearch();
             });

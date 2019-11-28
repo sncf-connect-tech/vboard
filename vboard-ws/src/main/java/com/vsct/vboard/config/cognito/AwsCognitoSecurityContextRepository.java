@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AwsCognitoSecurityContextRepository implements SecurityContextRepository {
 
-    private AwsCognitoConfig awsCognitoConfig;
+    private final AwsCognitoConfig awsCognitoConfig;
 
     public AwsCognitoSecurityContextRepository(AwsCognitoConfig awsCognitoConfig) {
         this.awsCognitoConfig = awsCognitoConfig;

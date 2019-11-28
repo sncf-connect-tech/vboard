@@ -237,7 +237,9 @@ public class GamificationController {
         } else {
             try {
                 lastConnexion = new DateTime(date);
-        } catch (IllegalArgumentException e) {} // NOPMD
+        } catch (IllegalArgumentException e) {
+                logger.debug("Date parsing error", e);
+            }
         }
         // Gamification connexion can only be increased once a day.
         if (lastConnexion.plusDays(1).isBeforeNow()) {

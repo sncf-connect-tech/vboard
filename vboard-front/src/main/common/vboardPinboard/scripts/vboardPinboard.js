@@ -16,17 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
 angular.module('vboard').constant('VboardPinsContainerClassname', '.vboardPinboard');
 
-angular.module('vboard').directive('vboardPinboard', function ($timeout) {
+angular.module('vboard').directive('vboardPinboard', function vboardPinboard($timeout) {
     return {
         restrict: 'E',
         scope: {}, // Isolate scope
         templateUrl: 'common/vboardPinboard/templates/vboardPinboard.html',
         controller: 'VboardPinboardController',
-        link: function(scope) {
+        link(scope) {
 
             /** Create the unique packer */
             if (!scope.packer) {
@@ -52,10 +51,10 @@ angular.module('vboard').directive('vboardPinboard', function ($timeout) {
     }
 });
 
-angular.module('vboard').controller('VboardPinboardController', function ($rootScope, $scope, $q, $timeout, $element, waitUntil, vboardPinsCollection, VboardPinsContainerClassname) {
+angular.module('vboard').controller('VboardPinboardController', function VboardPinboardController($rootScope, $scope, $q, $timeout, $element, waitUntil, vboardPinsCollection, VboardPinsContainerClassname) {
 
     /** Display the layout after images finish loading */
-    var recomputeAfterImagesLoaded = function () {
+    const recomputeAfterImagesLoaded = function () {
         imagesLoaded(VboardPinsContainerClassname, function () {
             $scope.refresh();
         });
@@ -75,7 +74,7 @@ angular.module('vboard').controller('VboardPinboardController', function ($rootS
     /** Display the pin panel */
     $scope.render = function () {
         return waitUntil.elemCreated(VboardPinsContainerClassname).then(function () {
-            //$scope.create = true; (Can be used to trigger function in the directive with a $watch)
+            // $scope.create = true; (Can be used to trigger function in the directive with a $watch)
             return recomputeAfterImagesLoaded();
         }).catch(function (error) {
             throw error;
@@ -101,7 +100,7 @@ angular.module('vboard').controller('VboardPinboardController', function ($rootS
         $scope.pinsCollection.fetchNoMore();
     });
 
-    $rootScope.$watch('userAuthenticated', function() {
+    $rootScope.$watch('userAuthenticated', function () {
         if ($rootScope.userAuthenticated) {
             /** Retrieve the user's likes */
             vboardPinsCollection.getUserLikes().then(function (success) {
@@ -112,7 +111,7 @@ angular.module('vboard').controller('VboardPinboardController', function ($rootS
                 });
             });
             /** Retrieve the user's savedPins */
-            vboardPinsCollection.getUserSavedPins().then(function(success) {
+            vboardPinsCollection.getUserSavedPins().then(function (success) {
                 $scope.saved = [];
                 $scope.saved = _.map(success.data, 'pin_id'); // Put in scope.saved the pin's id saved by the current user
             });

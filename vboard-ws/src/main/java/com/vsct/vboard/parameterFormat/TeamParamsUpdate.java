@@ -50,13 +50,13 @@ public class TeamParamsUpdate {
 
     @JsonCreator
     public TeamParamsUpdate(@JsonProperty(value = "name", required = true) String name,
-                            @JsonProperty(value = "email", required = false) String email,
-                            @JsonProperty(value = "avatar", required = false) String avatar,
-                            @JsonProperty(value = "info", required = false) String info,
-                            @JsonProperty(value = "latitude", required = false) double latitude,
-                            @JsonProperty(value = "longitude", required = false) double longitude,
-                            @JsonProperty(value = "localisation", required = false) String localisation,
-                            @JsonProperty(value = "project", required = false) String project) {
+                            @JsonProperty(value = "email") String email,
+                            @JsonProperty(value = "avatar") String avatar,
+                            @JsonProperty(value = "info") String info,
+                            @JsonProperty(value = "latitude") double latitude,
+                            @JsonProperty(value = "longitude") double longitude,
+                            @JsonProperty(value = "localisation") String localisation,
+                            @JsonProperty(value = "project") String project) {
         this.name = name;
         this.email = email;
         this.avatar = avatar;

@@ -16,17 +16,16 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').factory('VboardPin', function () {
+angular.module('vboard').factory('VboardPin', function VboardPinFactory() {
     /* Constants = fields not nulls */
-    var NON_EMPTY_FIELDS = ['pinId', 'postDateUTC'];
+    const NON_EMPTY_FIELDS = ['pinId', 'postDateUTC'];
     /* Object VBoardPin */
-    return function (datum) {
+    return function VboardPin(datum) {
         if (!datum) {
-            throw new Error('Falsey datum provided to create a Pin:' + datum);
+            throw new Error(`Falsey datum provided to create a Pin:${  datum }`);
         }
-        var newPin = angular.extend(this, {
+        const newPin = angular.extend(this, {
             pinId: datum.pin_id,
             pinTitle: datum.pin_title,
             hrefUrl: datum.href_url,
@@ -39,9 +38,9 @@ angular.module('vboard').factory('VboardPin', function () {
             commentsNumber: datum.comments_number,
             lastComment: datum.last_comment
         });
-        var newPinWithOnlyNonEmptyFields = _.pick(newPin, NON_EMPTY_FIELDS);
+        const newPinWithOnlyNonEmptyFields = _.pick(newPin, NON_EMPTY_FIELDS);
         if (_.any(newPinWithOnlyNonEmptyFields, _.isEmpty)) {
-            throw new Error('Forbidden empty field found during Pin validation: ' + _.findKey(newPinWithOnlyNonEmptyFields, _.isEmpty));
+            throw new Error(`Forbidden empty field found during Pin validation: ${  _.findKey(newPinWithOnlyNonEmptyFields, _.isEmpty) }`);
         }
         return newPin;
     };

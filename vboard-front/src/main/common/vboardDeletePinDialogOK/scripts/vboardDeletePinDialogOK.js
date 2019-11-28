@@ -16,12 +16,11 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').controller('VboardDeletePinDialogOKController', function ($scope, $timeout, vboardPinsCollection) {
+angular.module('vboard').controller('VboardDeletePinDialogOKController', function VboardDeletePinDialogOKController($scope, $timeout, vboardPinsCollection) {
 
     // If the timeout is too short, the update will not be taken into account in front
-    $timeout(function() {
+    $timeout(function () {
         vboardPinsCollection.forceUpdate();
     }, 1000);
 

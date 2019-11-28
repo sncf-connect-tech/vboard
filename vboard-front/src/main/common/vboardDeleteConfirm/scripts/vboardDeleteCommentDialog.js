@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardDeleteComment', function () {
+angular.module('vboard').directive('vboardDeleteComment', function vboardDeleteComment() {
     return {
         restrict: 'E',
         scope: true, // new child scope
@@ -27,18 +26,18 @@ angular.module('vboard').directive('vboardDeleteComment', function () {
     }
 });
 
-angular.module('vboard').controller('VboardDeleteCommentDialogController', function (vboardPinsCollection, $scope, $http, CONFIG, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardDeleteCommentDialogController', function VboardDeleteCommentDialogController(vboardPinsCollection, $scope, $http, CONFIG, vboardMessageInterceptor) {
 
     // Comment Deletion validation
     $scope.submit = function () {
-        $http.delete(CONFIG.apiEndpoint + '/comments/', {
+        $http.delete(`${ CONFIG.apiEndpoint  }/comments/`, {
             params: {
                 id: $scope.comment.id
             }
         }).then(function () {
             vboardMessageInterceptor.showInfoMessage("La suppression du commentaire a été effectuée.");
             $scope.closeThisDialog('OK'); // Close the popin
-        }, function(error) {
+        }, function (error) {
             vboardMessageInterceptor.showError(error, 'submit');
         });
     };

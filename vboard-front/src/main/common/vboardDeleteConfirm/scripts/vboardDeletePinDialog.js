@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardDeletePin', function () {
+angular.module('vboard').directive('vboardDeletePin', function vboardDeletePin() {
     return {
         restrict: 'E',
         scope: true, // new child scope
@@ -27,7 +26,7 @@ angular.module('vboard').directive('vboardDeletePin', function () {
     }
 });
 
-angular.module('vboard').controller('VboardDeletePinDialogController', function (vboardPinsCollection, $scope, $timeout, ngDialog) {
+angular.module('vboard').controller('VboardDeletePinDialogController', function VboardDeletePinDialogController(vboardPinsCollection, $scope, $timeout, ngDialog) {
 
     // Pin Deletion validation
     $scope.submit = function () {
@@ -42,7 +41,7 @@ angular.module('vboard').controller('VboardDeletePinDialogController', function 
     };
 
     $scope.delete = function () {
-        var popin = ngDialog.open({
+        const popin = ngDialog.open({
             template: 'common/vboardDeleteConfirm/templates/vboardDeletePinConfirm.html',
             controller: 'VboardDeletePinDialogController',
             scope: $scope

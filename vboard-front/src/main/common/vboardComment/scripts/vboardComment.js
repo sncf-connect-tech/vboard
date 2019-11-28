@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardComment', function () {
+angular.module('vboard').directive('vboardComment', function vboardComment() {
     return {
         restrict: 'E',
         scope: true, // new child scope
@@ -27,7 +26,7 @@ angular.module('vboard').directive('vboardComment', function () {
     }
 });
 
-angular.module('vboard').controller('VboardCommentController', function ($scope, $rootScope, $http, vboardAuth, vboardImgs, vboardMessageInterceptor, vboardPinsCollection, CONFIG, ngDialog) {
+angular.module('vboard').controller('VboardCommentController', function VboardCommentController($scope, $rootScope, $http, vboardAuth, vboardImgs, vboardMessageInterceptor, vboardPinsCollection, CONFIG, ngDialog) {
 
     $scope.avatar = "images/avatar.png";
 
@@ -39,9 +38,10 @@ angular.module('vboard').controller('VboardCommentController', function ($scope,
     /** Get comment's author nice name */
     // Check if the author string has the right format (firstName,LastName,email)
     if ($scope.comment.author && $scope.comment.author.indexOf(',', $scope.comment.author.indexOf(',') + 1) > -1) {
-        $scope.name = $scope.comment.author.split(',')[0] + ' ' + $scope.comment.author.split(',')[1];
-        $scope.email = $scope.comment.author.split(',')[2];
-        $scope.avatar = "/avatar/" + $scope.email + ".png";
+        const [firstName, lastName, email] = $scope.comment.author.split(',');
+        $scope.name = `${ firstName } ${ lastName }`;
+        $scope.email = email;
+        $scope.avatar = `/avatar/${  $scope.email  }.png`;
     } else {
         $scope.name = $scope.comment.author;
         $scope.email = $scope.comment.author;
@@ -54,13 +54,13 @@ angular.module('vboard').controller('VboardCommentController', function ($scope,
     $scope.date = moment($scope.comment.post_date_utc).fromNow();
 
     // Check if the user can modify/delete the comments, ie if he is the author or an admin
-    $scope.perm = $rootScope.userAuthenticated ? (($rootScope.userAuthenticated.first_name + ',' + $rootScope.userAuthenticated.last_name + ',' + $rootScope.userAuthenticated.email) === $scope.comment.author
-    || vboardAuth.isAdmin() || vboardAuth.isModerator()): false;
+    $scope.perm = $rootScope.userAuthenticated ? ((`${ $rootScope.userAuthenticated.first_name  },${  $rootScope.userAuthenticated.last_name  },${  $rootScope.userAuthenticated.email }`) === $scope.comment.author ||
+    vboardAuth.isAdmin() || vboardAuth.isModerator()): false;
 
     /** Comment functions */
 
-    $scope.deleteComment = function() {
-        var popin = ngDialog.open({
+    $scope.deleteComment = function () {
+        const popin = ngDialog.open({
             template: 'common/vboardDeleteConfirm/templates/vboardDeleteCommentConfirm.html',
             controller: 'VboardDeleteCommentDialogController',
             scope: $scope

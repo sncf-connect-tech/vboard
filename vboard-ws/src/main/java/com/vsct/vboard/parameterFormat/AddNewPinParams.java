@@ -41,11 +41,11 @@ public class AddNewPinParams {
     private final String author;
 
     @JsonCreator
-    public AddNewPinParams(@JsonProperty(value = "title", required = false) String title,
-            @JsonProperty(value = "url", required = false) String url,
-            @JsonProperty(value = "imgType", required = false) String imgType,
+    public AddNewPinParams(@JsonProperty(value = "title") String title,
+            @JsonProperty(value = "url") String url,
+            @JsonProperty(value = "imgType") String imgType,
             @JsonProperty(value = "description", required = true) String description,
-            @JsonProperty(value = "labels", required = false) String[] labels,
+            @JsonProperty(value = "labels") String[] labels,
             @JsonProperty(value = "author", required = true) String author) {
         this.title = title;
         this.url = url;

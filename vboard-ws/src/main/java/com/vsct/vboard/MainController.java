@@ -35,10 +35,8 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
-@SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class)
-@ComponentScan(basePackages = "com.vsct.vboard")
+@SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class, scanBasePackages = "com.vsct.vboard")
 @Configuration
-@EnableAutoConfiguration
 @EnableSwagger2
 @Controller
 public class MainController extends SpringBootServletInitializer {

@@ -322,8 +322,7 @@ public class ElasticSearchClient {
         if (!elsResult.isSucceeded()) {
             throw new ElsRequestError("ElasticSearch failed: " + elsResult.getErrorMessage());
         }
-        List<HashMap> itemsFound = getResponseAsList(elsResult);
-        return itemsFound;
+        return getResponseAsList(elsResult);
     }
 
     // Create the jest (elasticSearch for Java) search query

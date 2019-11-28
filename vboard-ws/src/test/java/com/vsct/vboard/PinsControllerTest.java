@@ -108,7 +108,7 @@ public class PinsControllerTest {
     }
 
     @Test
-    public void searchAll() throws Exception {
+    public void searchAll() {
         Iterator<Pin> dummyPinIterator = dummyPinGenerator();
         for (int i = 0; i < 10; i++) {
             Pin dummyPin = dummyPinIterator.next();
@@ -128,7 +128,7 @@ public class PinsControllerTest {
     }
 
     @Test
-    public void addNewPinWithUrlencParamsFails() throws Exception {
+    public void addNewPinWithUrlencParamsFails() {
         //@formatter:off
         given()
             .contentType(ContentType.URLENC)
@@ -142,7 +142,7 @@ public class PinsControllerTest {
     }
 
     @Test
-    public void addNewPinWithJsonParamsFails() throws Exception {
+    public void addNewPinWithJsonParamsFails() {
         //@formatter:off
         given()
             .contentType(ContentType.JSON)
@@ -156,7 +156,7 @@ public class PinsControllerTest {
     }
 
     @Test
-    public void addNewPinWithMissingParamsFails() throws Exception {
+    public void addNewPinWithMissingParamsFails() {
         //@formatter:off
         Map<String , String> params = new HashMap<String , String>() {{
             put("labels", "tag1,tag2");
@@ -172,7 +172,7 @@ public class PinsControllerTest {
     }
 
     @Test
-    public void addNewPinWithUtf8JsonContentType() throws Exception {
+    public void addNewPinWithUtf8JsonContentType() {
         //@formatter:off
         Mockito.doReturn(null).when(permission).getSessionUserWithSyncFromDB();
         Map<String , Object> params = new HashMap<String , Object>() {{

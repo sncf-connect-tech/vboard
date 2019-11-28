@@ -16,15 +16,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardPin', function () {
+angular.module('vboard').directive('vboardPin', function vboardPin() {
     return {
         restrict: 'E',
         scope: true, // new child scope
         templateUrl: 'common/vboardPin/templates/vboardPin.html',
         controller: 'VboardPinController',
-        link: function ($scope) {
+        link($scope) {
 
             /** pin's date of creation */
             $scope.creationDate = function (pin) {
@@ -42,7 +41,7 @@ angular.module('vboard').directive('vboardPin', function () {
     };
 });
 
-angular.module('vboard').controller('VboardPinController', function ($scope, $rootScope, vboardAuth, vboardImgs, vboardPinsCollection, ngDialog, $http, CONFIG, vboardMessageInterceptor, $sce) {
+angular.module('vboard').controller('VboardPinController', function VboardPinController($scope, $rootScope, vboardAuth, vboardImgs, vboardPinsCollection, ngDialog, $http, CONFIG, vboardMessageInterceptor, $sce) {
 
     $scope.authorLink = '';
     $scope.likesAuthors = "";
@@ -52,7 +51,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     $scope.readableAuthor = $scope.pin.author;
     if ($scope.pin.author && $scope.pin.author.indexOf(',') > -1 && $scope.pin.author.indexOf('@') > -1) {
-        $scope.authorLink = '#profil/' + $scope.pin.author.split(',')[2];
+        $scope.authorLink = `#profil/${  $scope.pin.author.split(',')[2] }`;
     }
 
     // Check whether the user is the author of the pin or an admin, so if the user can delete/update the pin.
@@ -64,8 +63,8 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     };
 
     $scope.setModificationPerm = function () {
-        $scope.perm = $rootScope.userAuthenticated ? (($rootScope.userAuthenticated.first_name + ',' + $rootScope.userAuthenticated.last_name + ',' + $rootScope.userAuthenticated.email) === $scope.pin.author
-        || vboardAuth.isAdmin() || vboardAuth.isModerator() || $rootScope.userAuthenticated.email === $scope.pin.author /* version compatible code*/): false;
+        $scope.perm = $rootScope.userAuthenticated ? ((`${ $rootScope.userAuthenticated.first_name  },${  $rootScope.userAuthenticated.last_name  },${  $rootScope.userAuthenticated.email }`) === $scope.pin.author ||
+        vboardAuth.isAdmin() || vboardAuth.isModerator() || $rootScope.userAuthenticated.email === $scope.pin.author /* version compatible code*/): false;
     };
 
     /** Media */
@@ -75,7 +74,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
             // Value set to null to avoid the view to display 'custom'
             $scope.pin.imgType = null;
             vboardImgs.getPinImage($scope.pin.pinId).then(function (success) {
-                $scope.pin.imgType = "data:image/png;base64," + success; // Base64 string representation of the image
+                $scope.pin.imgType = `data:image/png;base64,${  success }`; // Base64 string representation of the image
                 vboardPinsCollection.sendBroadcastUpdate();
             });
         }
@@ -84,8 +83,8 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     // If the link contains <iframe, the app put it as a vidéo (set videoLink)
     $scope.videoLink = "";
     if ($scope.pin.imgType && $scope.pin.imgType.indexOf('<iframe') === 0) {
-        var scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
-        $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); //trust the url, the iframe is recreating in html to avoid injection
+        const scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
+        $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); // trust the url, the iframe is recreating in html to avoid injection
     }
 
 
@@ -102,13 +101,15 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     $scope.unlike = function (pinId) {
         vboardPinsCollection.removeLike(pinId).then(function () {
-            var index = $scope.likes.indexOf(pinId);
+            const index = $scope.likes.indexOf(pinId);
             if (index > -1) {
                 $scope.likes.splice(index, 1); // Remove the like in front (when mouse over)
                 $scope.pin.likes--; // Show the number of likes
             }
             // To prevent loading likes failed at the start and display 0
-            if ($scope.pin.likes <= 0 ) { $scope.pin.likes = 0; }
+            if ($scope.pin.likes <= 0 ) {
+                $scope.pin.likes = 0;
+            }
         }, function (error) {
             vboardMessageInterceptor.showError(error, 'unlike');
         });
@@ -173,11 +174,11 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     // Content to display on the tooltip of likes
     $scope.setLikesAuthors = function (email) {
         vboardAuth.getUserByEmail(email).then(function (success2) {
-            if ($scope.likesAuthors.indexOf(success2.first_name + ' '+ success2.last_name) === -1) {
+            if ($scope.likesAuthors.indexOf(`${ success2.first_name  } ${ success2.last_name }`) === -1) {
                 if ($scope.likesAuthors) {
-                    $scope.likesAuthors = $scope.likesAuthors + '\n'
+                    $scope.likesAuthors = `${ $scope.likesAuthors  }\n`
                 }
-                $scope.likesAuthors = $scope.likesAuthors + success2.first_name + ' ' + success2.last_name;
+                $scope.likesAuthors = `${ $scope.likesAuthors + success2.first_name  } ${  success2.last_name }`;
             }
         });
     };
@@ -187,13 +188,13 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // Open the popin to edit the current pin
     $scope.openEditPopin = function () {
-        var popin = ngDialog.open({
+        const popin = ngDialog.open({
             template: 'common/vboardAddPinDialog/templates/vboardAddPinDialog.html',
             controller: 'VboardAddPinDialogController',
             className: 'ngdialog-theme-default ngdialog-theme-addPin',
             scope: $scope
         });
-        popin.closePromise.then(function(data) {
+        popin.closePromise.then(function (data) {
             if (data && data.value && data.value==='OK') {
                 $scope.info = "mise à jour";
                 ngDialog.open({
@@ -209,7 +210,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // Allow a newsletter user to add or remove the tad #newsletter to a pin
     $scope.toggleNewsletterTag = function () {
-        $http.post(CONFIG.apiEndpoint + '/pins/toggleNewsletterLabel/' + $scope.pin.pinId).then(function () {
+        $http.post(`${ CONFIG.apiEndpoint  }/pins/toggleNewsletterLabel/${  $scope.pin.pinId }`).then(function () {
             vboardMessageInterceptor.showInfoMessage("Label changé");
         }, function (error) {
             console.error('error: ', error);
@@ -221,7 +222,7 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // Save a pin to be able to read it later without searching too long for it. (Set as favorite)
     $scope.savePin = function () {
-        $http.post(CONFIG.apiEndpoint + '/savedpins/' + $scope.pin.pinId).then(function () {
+        $http.post(`${ CONFIG.apiEndpoint  }/savedpins/${  $scope.pin.pinId }`).then(function () {
             vboardMessageInterceptor.showInfoMessage("Epingle enregistrée");
             $scope.saved.push($scope.pin.pinId);
         }, function (error) {
@@ -231,9 +232,9 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
 
     // UnSave a pin (opposite of previous function)
     $scope.unSavePin = function () {
-        $http.delete(CONFIG.apiEndpoint + '/savedpins/' + $scope.pin.pinId).then(function () {
+        $http.delete(`${ CONFIG.apiEndpoint  }/savedpins/${  $scope.pin.pinId }`).then(function () {
             vboardMessageInterceptor.showInfoMessage("Epingle retirée des favoris");
-            var index = $scope.saved.indexOf($scope.pin.pinId);
+            const index = $scope.saved.indexOf($scope.pin.pinId);
             if (index > -1) {
                 $scope.saved.splice(index, 1);
             }
@@ -260,18 +261,18 @@ angular.module('vboard').controller('VboardPinController', function ($scope, $ro
     /** Init */
     $scope.setPerm();
     // Check whether the user format is valid (version compatibility)
-    var fullAuthor = $scope.pin.author && $scope.pin.author.indexOf(',', $scope.pin.author.indexOf(',') + 1) > -1;
+    const fullAuthor = $scope.pin.author && $scope.pin.author.indexOf(',', $scope.pin.author.indexOf(',') + 1) > -1;
     if (fullAuthor) {
-        var authorEmail = $scope.pin.author.split(',')[2];
-        $scope.pinAvatar = "/avatar/" + authorEmail + ".png";
-        $scope.readableAuthor = $scope.pin.author.split(',')[0] + ' ' + $scope.pin.author.split(',')[1];
+        const [authorFirstName, authorLastName, authorEmail] = $scope.pin.author.split(',');
+        $scope.pinAvatar = `/avatar/${  authorEmail  }.png`;
+        $scope.readableAuthor = `${ authorFirstName } ${ authorLastName }`;
     } else {
         vboardAuth.getUserByEmail($scope.pin.author).then(function (success) {
             if (success) {
-                $scope.readableAuthor = success.first_name + ' ' + success.last_name;
-                $scope.authorLink = "#profil/" + success.email;
+                $scope.readableAuthor = `${ success.first_name  } ${  success.last_name }`;
+                $scope.authorLink = `#profil/${  success.email }`;
                 if (success.avatar) {
-                    $scope.pinAvatar = "/avatar/" + success.email + ".png";
+                    $scope.pinAvatar = `/avatar/${  success.email  }.png`;
                 }
             } else {
                 // Find or create the user if the name of the author is only constituted of an email (used mainly for vblog pins)

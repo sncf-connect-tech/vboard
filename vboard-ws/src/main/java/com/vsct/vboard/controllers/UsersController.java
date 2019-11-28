@@ -133,7 +133,7 @@ public class UsersController {
             throw new NotFoundException("User not found");
         }
 
-        List<String> previousList = Arrays.asList(user.getTeam().split(","));
+        String[] previousList = user.getTeam().split(",");
         List<String> newList = Arrays.asList(team.split(","));
         List<String> removedTeam =  new ArrayList<>();
         if (!user.getTeam().isEmpty()) {

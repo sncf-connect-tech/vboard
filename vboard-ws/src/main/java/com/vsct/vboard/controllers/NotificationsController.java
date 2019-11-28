@@ -118,7 +118,7 @@ public class NotificationsController {
         this.notificationDAO.save(notif);
     }
 
-    public Notification addNotification(String email, String link, String message, String type, String from) {
+    public void addNotification(String email, String link, String message, String type, String from) {
         Notification notif = new Notification(email, link, message, type, from, false, false);
         try {
             this.logger.debug("Notification: target={} - link={} -message={} -type={} -from={}", email, link, message, type, from);
@@ -126,7 +126,6 @@ public class NotificationsController {
         } catch (UnexpectedRollbackException e) {
             throw new VBoardException(e.getMessage(), e.getMostSpecificCause());
         }
-        return notif;
     }
 
     // Notification created when a pin with a label matches a user favorite label
@@ -160,12 +159,10 @@ public class NotificationsController {
             }
             List<Comment> comments = this.commentDAO.findByPin(pinId);
             // Send notifications to all user that have commented on that pin except the author of the pin (which already got a notification)
-            Set<User> users = StreamSupport.stream(comments.spliterator(), false).map(c -> this.userDAO.findByEmail(User.getEmailFromString(c.getAuthor()).get())).collect(Collectors.toSet());
-            if (users.contains(pinAuthor)) {
-                users.remove(pinAuthor);
-            }
+            Set<User> users = comments.stream().map(c -> this.userDAO.findByEmail(User.getEmailFromString(c.getAuthor()).get())).collect(Collectors.toSet());
+            users.remove(pinAuthor);
             // Prevent the author of the comment getting a notification from it's own action
-            StreamSupport.stream(users.spliterator(), false).filter(u -> !u.getEmail().equals(permission.getSessionUser().getEmail())).forEach(u -> {
+            users.stream().filter(u -> !u.getEmail().equals(permission.getSessionUser().getEmail())).forEach(u -> {
                 try {
                     this.addNotification(u.getEmail(), "#/?id=" + pinId, "a commenté sur une épingle où vous avez vous même laissé un commentaire", "comment", permission.getSessionUser().getUserString());
                 } catch (VBoardException e) {
@@ -174,12 +171,10 @@ public class NotificationsController {
             });
             List<Like> likes = this.likeDAO.findByPin(pinId);
             // Send notifications to all user that have liked the pin except the users that already got a notifications
-            StreamSupport.stream(likes.spliterator(), false).forEach(l -> users.add(this.userDAO.findByEmail(l.getAuthor())));
-            if (users.contains(pinAuthor)) {
-                users.remove(pinAuthor);
-            }
-            StreamSupport.stream(comments.spliterator(), false).forEach(c -> users.remove(this.userDAO.findByEmail(User.getEmailFromString(c.getAuthor()).get())));
-            StreamSupport.stream(users.spliterator(), false).filter(u -> !u.getEmail().equals(permission.getSessionUser().getEmail())).forEach(u -> {
+            likes.stream().forEach(l -> users.add(this.userDAO.findByEmail(l.getAuthor())));
+            users.remove(pinAuthor);
+            comments.stream().forEach(c -> users.remove(this.userDAO.findByEmail(User.getEmailFromString(c.getAuthor()).get())));
+            users.stream().filter(u -> !u.getEmail().equals(permission.getSessionUser().getEmail())).forEach(u -> {
                 try {
                     this.addNotification(u.getEmail(), "#/?id=" + pinId, "a commenté sur une épingle que vous aimez", "comment", permission.getSessionUser().getUserString());
                 } catch (VBoardException e) {

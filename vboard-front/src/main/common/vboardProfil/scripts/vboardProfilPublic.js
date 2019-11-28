@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').controller('VboardProfilPublicController', function ($scope, $rootScope, $routeParams, $location, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, CONFIG, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilPublicController', function VboardProfilPublicController($scope, $rootScope, $routeParams, $location, $timeout, $http, vboardPinsCollection, vboardAuth, vboardImgs, CONFIG, vboardMessageInterceptor) {
 
     $scope.email = $routeParams.email;
     $scope.public = true;
@@ -52,45 +51,47 @@ angular.module('vboard').controller('VboardProfilPublicController', function ($s
         }
     };
 
-    var personnalInfoDiv = angular.element(document.querySelector('#profil--personnal--info'))[0];
-    var personnalInfoHeight = personnalInfoDiv.offsetHeight;
+    /* eslint-disable-next-line prefer-destructuring */
+    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing
     $scope.profileResize = function () {
         $timeout(function () {
-            var textarea = angular.element(document.querySelector(".textArea-resize"))[0];
+            /* eslint-disable-next-line prefer-destructuring */
+            const textarea = angular.element('.textArea-resize')[0];
             textarea.style.height = "45px";
-            var isScrollBarShowing = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight);
-            textarea.style.height = isScrollBarShowing ? (textarea.scrollHeight) + "px": textarea.style.height;
-            var teamHeight = 65.6 * ($scope.user.team.length -1); // 65.6 is the size of the info element
+            const isScrollBarShowing = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight);
+            textarea.style.height = isScrollBarShowing ? `${ textarea.scrollHeight  }px`: textarea.style.height;
+            const teamHeight = 65.6 * ($scope.user.team.length -1); // 65.6 is the size of the info element
             // textAreaSize: textarea size by default  -> textarea.scrollHeight - 40 = difference de la fenetre, - fileInputButton for the hidden buttons size and drop zone of upload files
-            var heightCorrection = 100;
-            personnalInfoDiv.style.height = (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight + "px";
+            const heightCorrection = 100;
+            personnalInfoDiv.style.height = `${ (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight  }px`;
         }, 100);
     };
 
     /** Gamification */
-    $http.get(CONFIG.apiEndpoint + '/gamification/getBadges/' + $scope.email).then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/gamification/getBadges/${  $scope.email }`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('Badges search failed:' + JSON.stringify(response));
+            throw new Error(`Badges search failed:${  JSON.stringify(response) }`);
         }
         $scope.badges = response.data;
     }, function (error) {
         vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
     });
 
-    $http.get(CONFIG.apiEndpoint + '/gamification/getStats/' + $scope.email).then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/gamification/getStats/${  $scope.email }`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('Stats search failed:' + JSON.stringify(response));
+            throw new Error(`Stats search failed:${  JSON.stringify(response) }`);
         }
         $scope.stats = response.data;
     }, function (error) {
         vboardMessageInterceptor.showError(error, 'VboardProfilPublicController');
     });
 
-    $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage/' + $scope.email).then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/gamification/getStatsPercentage/${  $scope.email }`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
+            throw new Error(`StatsPercentage search failed:${  JSON.stringify(response) }`);
         }
         $scope.statsPercentage = response.data;
     }, function (error) {

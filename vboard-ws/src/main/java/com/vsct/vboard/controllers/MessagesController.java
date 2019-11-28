@@ -434,10 +434,7 @@ public class MessagesController {
 
     // Create the html content for global emails
     public String prepareEmailContentForGlobalPins() {
-        Stream<Pin> streamPin = StreamSupport.stream(this.pinDAO.findAll().spliterator(), false); // Get all labels
-        // Filter labels posted less than a month ago, and sort them by likes
-        List<Pin> pins = streamPin.filter(p -> p.getPostDate().isAfter(new DateTime(DateTimeZone.UTC).minusMonths(1).getMillis()))
-                .sorted((p1, p2) -> p2.getLikes() - p1.getLikes()).limit(10).collect(Collectors.toList());
+        List<Pin> pins = getPins();
         if (pins.isEmpty()) {
             return null; /* Do not send the email if no pins  have been posted in the last month */
         }
@@ -463,17 +460,23 @@ public class MessagesController {
         }
         final List<String> labels = Arrays.asList(favoriteLabels.split(","));
         final Stream<Pin> streamPin = StreamSupport.stream(this.pinDAO.findAll().spliterator(), false);
-        final List<Pin> pins = streamPin.filter(p -> new DateTime(p.getPostDateUTC()).isAfter(new DateTime(DateTimeZone.UTC).minusMonths(1).getMillis()) && !Collections.disjoint(p.getLabelsAsList(), labels)).collect(Collectors.toList());
+        final List<Pin> pins = streamPin
+                .filter(p -> new DateTime(p.getPostDateUTC()).isAfter(new DateTime(DateTimeZone.UTC).minusMonths(1).getMillis()) && !Collections.disjoint(p.getLabelsAsList(), labels))
+                .sorted((Pin p1, Pin p2) -> p2.getPostDateUTC().compareTo(p1.getPostDateUTC()))
+                .collect(Collectors.toList());
         // Sort the pins according to posted date (recent to old)
-        Collections.sort(pins, (Pin p1, Pin p2) -> p2.getPostDateUTC().compareTo(p1.getPostDateUTC()));
         return pins;
     }
 
     // Get all the pins used for the global email
     public List<Pin> getPins() {
+        // Filter labels posted less than a month ago, and sort them by likes
         Stream<Pin> streamPin = StreamSupport.stream(this.pinDAO.findAll().spliterator(), false);
-        List<Pin> pins = streamPin.filter(p -> p.getPostDate().isAfter(new DateTime(DateTimeZone.UTC).minusMonths(1).getMillis())).sorted((p1, p2) -> p2.getLikes() - p1.getLikes()).limit(10).collect(Collectors.toList());
-        return pins;
+        return streamPin
+                .filter(p -> p.getPostDate().isAfter(new DateTime(DateTimeZone.UTC).minusMonths(1).getMillis()))
+                .sorted((p1, p2) -> p2.getLikes() - p1.getLikes())
+                .limit(10)
+                .collect(Collectors.toList());
     }
 
     // Send notification and global emails

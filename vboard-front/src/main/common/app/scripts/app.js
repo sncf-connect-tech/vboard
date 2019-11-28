@@ -16,8 +16,6 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
-
 angular.module('vboard', ['ngDialog', 'nsPopover', 'ngSanitize', 'ngRoute', 'ngImgCrop', 'ngCookies', 'ui.select']);
 
 angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $interval, vboardPinsCollection, CONFIG, $location, vboardMessageInterceptor, $cookieStore) {
@@ -32,27 +30,22 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     // CORS fix
     $http.defaults.withCredentials = true;
 
-    var second = 1000;
-    var minute = 60 * second;
-    var needRefresh = false;
+    const second = 1000;
+    const minute = 60 * second;
     // Auto refresh every 2 minutes to retrieve new pins (posted by other)
-    $interval(function() {
+    $interval(function () {
         // Prevent refreshing pins if the user is not on the default page (vboardpinboard)
-        if ($location.url().indexOf("profil") === -1 && $location.url().indexOf("leaderboard") === -1 && $location.url().indexOf("search") === -1 && $location.url().indexOf("konami") === -1) {
+        if ($location.url().indexOf("profil") < 0 && $location.url().indexOf("leaderboard") < 0 && $location.url().indexOf("search") < 0 && $location.url().indexOf("konami") < 0) {
             vboardPinsCollection.forceUpdate();
         }
         vboardMessageInterceptor.getGeneralMessage();
-        if (needRefresh) {
-            vboardMessageInterceptor.showWarningMessage("Veuillez recharger votre page pour éviter l'expiration de votre token au niveau du serveur");
-        }
     }, 2*minute);
 
     $timeout(function () {
         // Set last connection to set it even if the user didn't quit the app
         $cookieStore.put('lastConnection', new Date());
-        $http.post(CONFIG.apiEndpoint + '/users/setLastConnection');
+        $http.post(`${ CONFIG.apiEndpoint  }/users/setLastConnection`);
     }, 30*second);
-
 
     $rootScope.$on('$locationChangeSuccess', function () {
         // A $rootScope listener cannot be defined inside a service (i.e. vboardPinsCollection), it has to be registered in `app.run`
@@ -60,10 +53,10 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     });
 
     // Set the lastConnection cookie and DB value before quitting the app.
-    window.onbeforeunload = function () {
+    $window.onbeforeunload = function () {
         if ($rootScope.userAuthenticated) {
             $cookieStore.put('lastConnection', new Date());
-            $http.post(CONFIG.apiEndpoint + '/users/setLastConnection');
+            $http.post(`${ CONFIG.apiEndpoint  }/users/setLastConnection`);
         }
     };
 
@@ -72,7 +65,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
 
 angular.module('vboard').config(['$routeProvider',
     // Url allowed and controller/template linked
-    function($routeProvider) {
+    function ($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'common/vboardContainer/templates/vboardContainer.html'
@@ -97,7 +90,7 @@ angular.module('vboard').config(['$routeProvider',
             })
             .when('/konami-page', {
                 templateUrl: 'common/vboardKonami/templates/vboardKonami.html',
-                controller: 'VboardKonamiExecute'
+                controller: 'VboardKonamiExecuteController'
             })
             .otherwise({
                 redirectTo: '/'
@@ -105,15 +98,15 @@ angular.module('vboard').config(['$routeProvider',
     }
 ]);
 
-angular.module('vboard').factory('authInterceptor', function($q, vboardKeycloakAuth) {
+angular.module('vboard').factory('authInterceptor', function authInterceptor($q, vboardKeycloakAuth) {
     return {
-        request: function(config) {
-            var defer = $q.defer();
+        request(config) {
+            const defer = $q.defer();
             if (vboardKeycloakAuth.token) {
-                vboardKeycloakAuth.updateToken(5).success(function() {
-                    config.headers.Authorization = 'Bearer ' + vboardKeycloakAuth.token;
+                vboardKeycloakAuth.updateToken(5).success(function () {
+                    config.headers.Authorization = `Bearer ${  vboardKeycloakAuth.token }`;
                     defer.resolve(config);
-                }).error(function() {
+                }).error(function () {
                     defer.resolve(config);
                 });
             } else {
@@ -124,25 +117,26 @@ angular.module('vboard').factory('authInterceptor', function($q, vboardKeycloakA
     }
 });
 
-angular.module('vboard').config(function($httpProvider) {
+angular.module('vboard').config(function ($httpProvider) {
     $httpProvider.interceptors.push('authInterceptor');
 });
 
 /* eslint-disable no-undef */
-angular.element(document).ready(function() {
+angular.element(document).ready(function () {
 
-    if (typeof window.Keycloak === 'undefined' || window.Keycloak === 'DISABLED') {
-        var isKeycloakVoluntarilyDisabled = typeof window.Keycloak !== 'undefined';
+    if (typeof $window.Keycloak === 'undefined' || $window.Keycloak === 'DISABLED') {
+        const isKeycloakVoluntarilyDisabled = typeof $window.Keycloak !== 'undefined';
         // If keycloak is unavailable, so is the client adapter
         // Therefore, we mock the adapter so the ui can load, and show an error message
-        angular.module('vboard').factory('vboardKeycloakAuth', function() {
-            return { token: null, authenticated: isKeycloakVoluntarilyDisabled, login: function() {}, logout: function() {} };
+        angular.module('vboard').factory('vboardKeycloakAuth', function vboardKeycloakAuth() {
+            return { token: null, authenticated: isKeycloakVoluntarilyDisabled, login() {}, logout() {} };
         });
-        angular.module('vboard').run(function(vboardAuth) {
-            vboardAuth.login(); // Loads user profile
+        angular.module('vboard').run(function vboardRun(vboardAuth) {
+            // Loads user profile:
+            vboardAuth.login();
         });
         if (!isKeycloakVoluntarilyDisabled) {
-            angular.module('vboard').run(function(vboardMessageInterceptor) {
+            angular.module('vboard').run(function (vboardMessageInterceptor) {
                 vboardMessageInterceptor.showErrorMessage('Le serveur Keycloak est indisponible, vous ne pourrez donc pas vous connecter!');
             });
         }
@@ -150,25 +144,26 @@ angular.element(document).ready(function() {
 
     } else {
 
-        var keycloak = new Keycloak('compile/scripts/keycloak.json');
-        angular.module('vboard').factory('vboardKeycloakAuth', function() {
+        const keycloak = new Keycloak('compile/scripts/keycloak.json');
+        angular.module('vboard').factory('vboardKeycloakAuth', function vboardKeycloakAuth() {
             return keycloak;
         });
-        angular.module('vboard').run(function(vboardAuth) {
-            vboardAuth.login(); // Loads user profile
+        angular.module('vboard').run(function (vboardAuth) {
+            // Loads user profile:
+            vboardAuth.login();
         });
-        var options = {
+        const options = {
             onLoad: 'check-sso',
             checkLoginIframe: false
         };
-        var refreshToken = localStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken !== null) {
             options.refreshToken = refreshToken;
         }
-        keycloak.init(options).success(function() {
+        keycloak.init(options).success(function () {
             localStorage.setItem('refreshToken', keycloak.refreshToken);
             angular.bootstrap(document, ['vboard']);
-        }).error(function(error) {
+        }).error(function (error) {
             console.error(error);
             angular.bootstrap(document, ['vboard']);
         });

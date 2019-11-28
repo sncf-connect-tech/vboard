@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardLeaderBoard', function () {
+angular.module('vboard').directive('vboardLeaderBoard', function vboardLeaderBoard() {
     return {
         restrict: 'E',
         scope: true, // new child scope
@@ -27,20 +26,20 @@ angular.module('vboard').directive('vboardLeaderBoard', function () {
     };
 });
 
-angular.module('vboard').controller('VboardLeaderBoardController', function ($rootScope, $scope, $http, CONFIG, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardLeaderBoardController', function VboardLeaderBoardController($rootScope, $scope, $http, CONFIG, vboardMessageInterceptor) {
 
     /** Hide the search toolbar */
     $rootScope.hideSearchField();
     // Reactivate the search by saved labels
     $rootScope.disableFavoriteLabels = false;
-    var defaultAvatar = "images/avatar.png";
+    const defaultAvatar = "images/avatar.png";
 
     /** Get the userLeaderBoard */
     $scope.userLeaderBoard = function () {
         $scope.teamStat = false;
-        $http.get(CONFIG.apiEndpoint + '/gamification/getLeaders').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/gamification/getLeaders`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Leaders search failed:' + JSON.stringify(response));
+                throw new Error(`Leaders search failed:${  JSON.stringify(response) }`);
             }
             // Set the avatar and points (gamification points) of the leaders
             $scope.setAllAvatarImagesAndPoints(response.data);
@@ -54,9 +53,9 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
     $scope.teamLeaderBoard = function () {
         $scope.teamStat = true;
         $scope.leaders = null;
-        $http.get(CONFIG.apiEndpoint + '/gamification/getLeaders/teams').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/gamification/getLeaders/teams`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Leaders search failed:' + JSON.stringify(response));
+                throw new Error(`Leaders search failed:${  JSON.stringify(response) }`);
             }
             // Set the avatar and points (gamification points) of the leaders
             $scope.setAllAvatarImagesAndPoints(response.data);
@@ -70,50 +69,50 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
 
 
     $scope.displayName = function (leader) {
-        return leader.name ? leader.name : leader.first_name + ' ' + leader.last_name;
+        return leader.name ? leader.name : `${ leader.first_name  } ${  leader.last_name }`;
     };
 
     // Set the avatar and points (gamification points) of the leaders
-    $scope.setAllAvatarImagesAndPoints = function(stats) {
+    $scope.setAllAvatarImagesAndPoints = function (stats) {
 
         // Action done for each section (pins posted, likes posted and receive, ...)
 
-        stats.pins_posted.forEach(function(profil) {
+        stats.pins_posted.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.likes_received.forEach(function(profil) {
+        stats.likes_received.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.likes_received_for_one_pin.forEach(function(profil) {
+        stats.likes_received_for_one_pin.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.likes_posted.forEach(function(profil) {
+        stats.likes_posted.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.comment_received.forEach(function(profil) {
+        stats.comment_received.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.comments_received_for_one_pin.forEach(function(profil) {
+        stats.comments_received_for_one_pin.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.comments_posted.forEach(function(profil) {
+        stats.comments_posted.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
 
-        stats.connexions.forEach(function(profil) {
+        stats.connexions.forEach(function (profil) {
             $scope.setAvatarImage(profil);
             $scope.setPoints(profil);
         });
@@ -126,9 +125,9 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
         if (profil && profil.avatar) {
             profil.avatar = defaultAvatar;
             if (profil.name) {
-                profil.avatar = "/avatar/" + profil.name + ".png";
+                profil.avatar = `/avatar/${  profil.name  }.png`;
             } else if (profil.email) {
-                profil.avatar = "/avatar/" + profil.email + ".png";
+                profil.avatar = `/avatar/${  profil.email  }.png`;
             }
         } else {
             profil.avatar = defaultAvatar;
@@ -138,24 +137,24 @@ angular.module('vboard').controller('VboardLeaderBoardController', function ($ro
     // Set the points of the leaders
     $scope.setPoints = function (profil) {
         if (profil) {
-            var serviceUrl = null;
+            let serviceUrl = null;
             if (profil.name) {
-                serviceUrl = CONFIG.apiEndpoint + '/gamification/getPoints/team/' + profil.name;
+                serviceUrl = `${ CONFIG.apiEndpoint  }/gamification/getPoints/team/${  profil.name }`;
             } else if (profil.email) {
-                serviceUrl = CONFIG.apiEndpoint + '/gamification/getPoints/' + profil.email;
+                serviceUrl = `${ CONFIG.apiEndpoint  }/gamification/getPoints/${  profil.email }`;
             }
 
             if (serviceUrl) {
                 $http.get(serviceUrl).then(function (response) {
                     if (response.status !== 200) {
-                        throw new Error('Stats search failed:' + JSON.stringify(response));
+                        throw new Error(`Stats search failed:${  JSON.stringify(response) }`);
                     }
                     profil.points = response.data;
                 }, function (error) {
                     vboardMessageInterceptor.showError(error, 'setPoints');
                 });
             } else {
-                console.warn("Le profil" + profil + " n'a ni nom ni email permettant de retrouver ses points");
+                console.warn(`Le profil${  profil  } n'a ni nom ni email permettant de retrouver ses points`);
             }
         }
     };

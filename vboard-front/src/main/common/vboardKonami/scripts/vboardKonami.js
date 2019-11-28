@@ -16,16 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').controller('VboardKonami', function ($scope, vboardMessageInterceptor, $http, CONFIG, $location) {
+angular.module('vboard').controller('VboardKonamiController', function VboardKonamiController($scope, vboardMessageInterceptor, $http, CONFIG, $location) {
 
-    var konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
-    var index = 0;
-    var executed = false;
-    var nbexecution = 0;
+    const konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    let index = 0;
+    let executed = false;
+    let nbexecution = 0;
 
-    var messageDisplay = function () {
+    const messageDisplay = function () {
         switch (nbexecution) {
         case 2:
             vboardMessageInterceptor.showSuccessMessage("Quoi ? Encore ? Non ! Du moins pas maintenant !");
@@ -50,18 +49,18 @@ angular.module('vboard').controller('VboardKonami', function ($scope, vboardMess
         }
     };
 
-    $scope.keydown = function(event) {
+    $scope.keydown = function (event) {
         if (index === konami.length-1) {
             index = 0;
             nbexecution++;
-            if (!executed) {
+            if (executed) {
+                messageDisplay();
+            } else {
                 vboardMessageInterceptor.showSuccessMessage("Konami Code !! (En cours de création, retentez plus tard)");
                 executed = true;
-                $http.post(CONFIG.apiEndpoint + '/gamification/secret');
-                $http.post(CONFIG.apiEndpoint + '/konami/new/' + 0);
+                $http.post(`${ CONFIG.apiEndpoint  }/gamification/secret`);
+                $http.post(`${ CONFIG.apiEndpoint  }/konami/new/${  0 }`);
                 $location.path('konami-page');
-            } else {
-                messageDisplay();
             }
         } else {
             if (event.keyCode === konami[index]) {
@@ -75,17 +74,17 @@ angular.module('vboard').controller('VboardKonami', function ($scope, vboardMess
 
 });
 
-angular.module('vboard').controller('VboardKonamiExecute', function ($http, CONFIG, $scope, $rootScope) {
+angular.module('vboard').controller('VboardKonamiExecuteController', function VboardKonamiExecuteController($http, CONFIG, $scope, $rootScope) {
 
     /** Cache la barre de recherche */
     $rootScope.hideSearchField();
 
-    $http.get(CONFIG.apiEndpoint + '/konami').then(function(response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/konami`).then(function (response) {
         $scope.curious = response.data;
     });
 
     $scope.getNiceName = function (name) {
-        return name.split(',')[0] + ' ' + name.split(',')[1];
+        return `${ name.split(',')[0]  } ${  name.split(',')[1] }`;
     };
 
     $scope.getNiceDate = function (date) {

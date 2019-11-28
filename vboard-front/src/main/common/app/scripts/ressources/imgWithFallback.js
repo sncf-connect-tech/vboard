@@ -16,16 +16,15 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('imgWithFallback', function () {
+angular.module('vboard').directive('imgWithFallback', function imgWithFallback() {
     return {
         restrict: 'E',
-        link: function ($scope, $element, $attrs) {
-            var imgSrc = $scope.$eval($attrs.src);
-            $element.replaceWith('<object data="' + imgSrc + '" type="' + $attrs.type + '" name="' + $attrs.name + '">'
-                                 + '<img src="' + $attrs.fallback + '" />'
-                               + '</object>');
+        link($scope, $element, $attrs) {
+            const imgSrc = $scope.$eval($attrs.src);
+            $element.replaceWith(`<object data="${  imgSrc  }" type="${  $attrs.type  }" name="${  $attrs.name  }">` +
+                                 `<img src="${  $attrs.fallback  }" />` +
+                               `</object>`);
         }
     }
 });

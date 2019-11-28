@@ -16,10 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
 
-/*eslint-disable camelcase*/
-var VALID_DATUM = {
+/* eslint-disable camelcase*/
+const VALID_DATUM = {
     pin_id: "tweet-598713611012460544",
     href_url: "https://twitter.com/bytesforall/status/598713611012460544",
     indexable_text_content: "\"How would you like this wrapped?\" https://imgur.com/nh7OBuG  #Netfreedom @APC_News @IFEX",
@@ -27,15 +26,16 @@ var VALID_DATUM = {
     author: 'obiwan_kenobi',
     post_date_utc: "2015-05-14T06:57:03.000+02:00"
 };
-/*eslint-enable camelcase*/
+/* eslint-enable camelcase*/
 
 describe("vboardPin", function () {
     beforeEach(module('vboard'));
 
-    var VboardPin;
-    beforeEach(inject(['VboardPin', function (VboardPinClass) {
-        VboardPin = VboardPinClass;
-    }]));
+    let VboardPin = null;
+    beforeEach(inject(['VboardPin',
+        function (VboardPinClass) {
+            VboardPin = VboardPinClass;
+        }]));
 
     it("can detect missing fields", function () {
         expect(function () {
@@ -50,17 +50,17 @@ describe("vboardPin", function () {
     });
 
     it("can detect forbidden empty fields", function () {
-        var datum = _.clone(VALID_DATUM);
-        /*eslint-disable camelcase*/
+        const datum = _.clone(VALID_DATUM);
+        /* eslint-disable camelcase*/
         datum.post_date_utc = "";
-        /*eslint-enable camelcase*/
+        /* eslint-enable camelcase*/
         expect(function () {
             new VboardPin(datum);
         }).toThrowError(/Forbidden empty field found/);
     });
 
     it("does not mind empty labels", function () {
-        var datum = _.clone(VALID_DATUM);
+        const datum = _.clone(VALID_DATUM);
         datum.labels = "";
         expect(function () {
             new VboardPin(datum);

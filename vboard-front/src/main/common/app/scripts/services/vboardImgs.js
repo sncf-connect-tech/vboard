@@ -16,37 +16,36 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
 /**
  * Service to manage Images
  */
-angular.module('vboard').service('vboardImgs', function ($http, $q, $rootScope, CONFIG) {
+angular.module('vboard').factory('vboardImgs', function vboardImgs($http, $q, $rootScope, CONFIG) {
 
+    return {
+        /** Retrieve user's avatar (base64) */
+        getAvatar(email) {
+            return $http.get(`${ CONFIG.apiEndpoint  }/users/avatar/${  email }`).then(function (response) {
+                if (response.status !== 200) {
+                    throw new Error(`Avatar search failed:${  JSON.stringify(response) }`);
+                }
+                return `data:image/png;base64,${  response.data }`;
+            }, function (error) {
+                console.log('error: ', error );
+            });
+        },
 
-    /** Retrieve user's avatar (base64) */
-    this.getAvatar = function (email) {
-        return $http.get(CONFIG.apiEndpoint + '/users/avatar/' + email).then(function (response) {
-            if (response.status !== 200) {
-                throw new Error('Avatar search failed:' + JSON.stringify(response));
-            }
-            return "data:image/png;base64," + response.data;
-        }, function(error) {
-            console.log('error: ', error );
-        });
+        /** Retrieve pin's image */
+        setPinImage(pinId) {
+            return $http.get(`${ CONFIG.apiEndpoint  }/pins/image/${  pinId }`).then(function (response) {
+                if (response.status !== 200) {
+                    throw new Error(`Pin Image search failed:${  JSON.stringify(response) }`);
+                }
+                return response.data;
+            }, function (error) {
+                console.log('error: ', error );
+            });
+        },
     };
-
-    /** Retrieve pin's image */
-    this.getPinImage = function (pinId) {
-        return $http.get(CONFIG.apiEndpoint + '/pins/image/' + pinId).then(function (response) {
-            if (response.status !== 200) {
-                throw new Error('Pin Image search failed:' + JSON.stringify(response));
-            }
-            return response.data;
-        }, function(error) {
-            console.log('error: ', error );
-        });
-    };
-
 
 });

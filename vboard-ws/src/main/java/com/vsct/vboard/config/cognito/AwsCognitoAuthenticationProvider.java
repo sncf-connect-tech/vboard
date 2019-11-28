@@ -31,9 +31,9 @@ import org.springframework.security.core.AuthenticationException;
 
 public class AwsCognitoAuthenticationProvider implements AuthenticationProvider {
 
-    private static Logger logger = LoggerFactory.getLogger(AwsCognitoAuthenticationProvider.class);
+    private static final Logger logger = LoggerFactory.getLogger(AwsCognitoAuthenticationProvider.class);
 
-    private AwsCognitoConfig awsCognitoConfig;
+    private final AwsCognitoConfig awsCognitoConfig;
 
     public AwsCognitoAuthenticationProvider(AwsCognitoConfig awsCognitoConfig) {
         this.awsCognitoConfig = awsCognitoConfig;

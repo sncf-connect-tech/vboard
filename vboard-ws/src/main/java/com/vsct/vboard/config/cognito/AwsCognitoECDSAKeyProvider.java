@@ -40,10 +40,10 @@ import static com.vsct.vboard.config.cognito.PemUtils.parsePEM;
 
 public class AwsCognitoECDSAKeyProvider implements ECDSAKeyProvider {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(AwsCognitoECDSAKeyProvider.class);
-    private String region;
-    private String kid;
-    private Map<String, ECPublicKey> cache = new HashMap<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(AwsCognitoECDSAKeyProvider.class);
+    private final String region;
+    private final String kid;
+    private final Map<String, ECPublicKey> cache = new HashMap<>();
 
     AwsCognitoECDSAKeyProvider(String region, String kid) {
         this.region = region;

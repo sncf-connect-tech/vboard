@@ -39,15 +39,15 @@ public class VersionController {
     private String buildDate;
 
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody Version getVersion() throws Exception {
+    public @ResponseBody Version getVersion() {
         return new Version(name, version, buildDate);
     }
 
     @SuppressFBWarnings("URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD")
     static class Version {
-        public String name;
-        public String version;
-        public String buildDate;
+        public final String name;
+        public final String version;
+        public final String buildDate;
 
         Version(String name, String version, String buildDate) {
             this.name = name;

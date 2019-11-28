@@ -27,7 +27,9 @@ import com.vsct.vboard.controllers.*;
 import com.vsct.vboard.models.*;
 import com.vsct.vboard.parameterFormat.AddNewPinParams;
 import com.vsct.vboard.parameterFormat.CommentParams;
-import com.vsct.vboard.services.*;
+import com.vsct.vboard.services.ElasticSearchClient;
+import com.vsct.vboard.services.GamificationService;
+import com.vsct.vboard.services.UploadsManager;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -45,12 +47,14 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.vsct.vboard.TestUtil.createTestDB;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 

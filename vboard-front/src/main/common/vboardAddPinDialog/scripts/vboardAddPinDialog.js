@@ -16,10 +16,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
 /* eslint-disable complexity */
-angular.module('vboard').controller('VboardAddPinDialogController', function (vboardPinsCollection, $scope, $rootScope, ngDialog, vboardImgs, vboardAuth, $http, CONFIG, $timeout, $sce, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardAddPinDialogController', function VboardAddPinDialogController(vboardPinsCollection, $scope, $rootScope, ngDialog, vboardImgs, vboardAuth, $http, CONFIG, $timeout, $sce, vboardMessageInterceptor) {
 
     // Init
     // $scope.pin is only defined when the pin is updated (and not created)
@@ -28,8 +27,8 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
     $scope.popupTitle = 'Nouvelle épingle';
     $scope.videoLink = '';
     $scope.editablePin = {
-        author: $rootScope.userAuthenticated ? $rootScope.userAuthenticated.first_name + ' ' + $rootScope.userAuthenticated.last_name : 'unknown',
-        avatar: '/avatar/' + $rootScope.userAuthenticated.email + '.png',
+        author: $rootScope.userAuthenticated ? `${ $rootScope.userAuthenticated.first_name  } ${  $rootScope.userAuthenticated.last_name }` : 'unknown',
+        avatar: `/avatar/${  $rootScope.userAuthenticated.email  }.png`,
         date: moment().fromNow(),
         description: '',
         descriptionShow: '',
@@ -46,8 +45,8 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
 
     /** Label */
-    $scope.addLabel = function() {
-        var label = $scope.editablePin.newLabel;
+    $scope.addLabel = function () {
+        let label = $scope.editablePin.newLabel;
         // If the label does not start with #, one is added
         label = (label.indexOf('#')===0 ? '' : '#') + label;
         $scope.editablePin.labels.push(label);
@@ -55,16 +54,16 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         $scope.editablePin.newLabel = '';
     };
 
-    $scope.deleteLabel = function(ind) {
+    $scope.deleteLabel = function (ind) {
         $scope.editablePin.labels.splice(ind, 1);
         $scope.displayLabels = $scope.editablePin.labels ? $scope.editablePin.labels.join(' ')  : '';
     };
 
     // Add automatic tags (based on most popular pin labels put, if put regularly
     // If more than 50% of pins posted by a user have the same tags, they are automatically added in the creation of the pin (they can be removed)
-    $http.get(CONFIG.apiEndpoint + '/pins/getMostUsedLabels').then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/pins/getMostUsedLabels`).then(function (response) {
         if (!$scope.pin && response.data.length > 0) {
-            var labels = response.data.split(",");
+            const labels = response.data.split(",");
             labels.forEach(function (label) {
                 $scope.editablePin.newLabel = label;
                 $scope.addLabel();
@@ -74,8 +73,8 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
     // Used for autocompletion/suggestion
     vboardPinsCollection.getEveryLabels().then(function (allLabelsObject) {
-        var allLabels = [];
-        for (var labelValue in allLabelsObject) {
+        let allLabels = [];
+        for (const labelValue in allLabelsObject) {
             allLabels.push((allLabelsObject[labelValue].label_name).slice(1));
         }
         allLabels = allLabels.sort();
@@ -99,16 +98,16 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
             $scope.image.type = $scope.image.show ? $scope.image.croppedImage.slice($scope.image.croppedImage.indexOf(',')+1): null;
         }
 
-        var author = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.first_name + ',' + $rootScope.userAuthenticated.last_name + ',' + $rootScope.userAuthenticated.email : 'unknown';
+        const author = $rootScope.userAuthenticated ? `${ $rootScope.userAuthenticated.first_name  },${  $rootScope.userAuthenticated.last_name  },${  $rootScope.userAuthenticated.email }` : 'unknown';
         // $scope.pin is only defined when the pin is updated (and not created), and in the update, this scope is passed to the controller in vboardPin.js
+        const timeBeforeReload = 3000;
         if ($scope.pin) {
-            var timeBeforeReload = 3000;
             vboardPinsCollection.updatePin($scope.pin.pinId, $scope.editablePin.title, $scope.editablePin.url, null, $scope.image.type, $scope.editablePin.description, $scope.editablePin.labels, author)
                 .then(function () {
                     $scope.closeThisDialog('OK');
                     // If the timeout is too short, the update will not be taken into account in front
                     // The ELS needs to be updated in the back-end and then the app refresh all, otherwise the update will be made in less than 2 min (auto refresh)
-                    $timeout(function() {
+                    $timeout(function () {
                         vboardPinsCollection.forceUpdate();
                     }, timeBeforeReload);
                 }, function (error) {
@@ -120,7 +119,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
                 .then(function () {
                     $scope.closeThisDialog('OK');
                     // If the timeout is too short, the update will not be taken into account in front
-                    $timeout(function() {
+                    $timeout(function () {
                         vboardPinsCollection.forceUpdate();
                     }, timeBeforeReload);
                 }, function (error) {
@@ -141,9 +140,9 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
             $scope.image.show = true;
             // If the link contains <iframe, the app put it as a vidéo (set videoLink)
             if ($scope.pin.imgType.indexOf('<iframe') === 0) {
-                var scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
+                const scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
                 // 5: to remove the src=" and only keep what is inside the src (what is after here, and only what is inside the src in the next line
-                $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); //trust the url, the iframe is recreating in html to avoid injection
+                $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); // trust the url, the iframe is recreating in html to avoid injection
             }
         }
         $scope.image.croppedImage = $scope.pin.imgType;
@@ -152,8 +151,8 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         $scope.editablePin.date = moment($scope.pin.postDateUTC).fromNow();
         $scope.popupTitle = "Modification d'épingle";
         if ($scope.pin.author.split(',').length === 3) {
-            $scope.editablePin.author = $scope.pin.author.split(',').length === 3 ? $scope.pin.author.split(',')[0] + ' ' + $scope.pin.author.split(',')[1] : $scope.pin.author;
-            $scope.editablePin.avatar = $scope.pin.author.split(',').length === 3 ? "/avatar/" + $scope.pin.author.split(',')[2] + ".png": $scope.pin.author;
+            $scope.editablePin.author = $scope.pin.author.split(',').length === 3 ? `${ $scope.pin.author.split(',')[0]  } ${  $scope.pin.author.split(',')[1] }` : $scope.pin.author;
+            $scope.editablePin.avatar = $scope.pin.author.split(',').length === 3 ? `/avatar/${  $scope.pin.author.split(',')[2]  }.png`: $scope.pin.author;
         }
     }
 
@@ -183,19 +182,19 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         if ($scope.image.croppedImage && $scope.image.croppedImage.indexOf('<iframe') === 0) {
             $scope.image.show = true;
             /* eslint-disable camelcase */
-            var scr_url = $scope.image.croppedImage.substring($scope.image.croppedImage.indexOf('src') + 5);
-            $scope.videoLink = $sce.trustAsResourceUrl(scr_url.substring(0, scr_url.indexOf('"')));
+            const scrUrl = $scope.image.croppedImage.substring($scope.image.croppedImage.indexOf('src') + 5);
+            $scope.videoLink = $sce.trustAsResourceUrl(scrUrl.substring(0, scrUrl.indexOf('"')));
         }
     };
 
-    $scope.uploadFile = function(file) {
+    $scope.uploadFile = function (file) {
         $scope.showCrop = true;
         if (file) {
             // ng-img-crop
-            var imageReader = new FileReader();
-            imageReader.onload = function(image) {
+            const imageReader = new FileReader();
+            imageReader.onload = function (image) {
                 /* eslint-disable no-shadow */
-                $scope.$apply(function($scope) {
+                $scope.$apply(function ($scope) {
                     $scope.image.originalImage = image.target.result;
                     $scope.image.show = true;
                 });
@@ -204,10 +203,10 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
         }
     };
 
-    $scope.$watch('image.croppedImage', function(newValue, oldValue) {
+    $scope.$watch('image.croppedImage', function (newValue, oldValue) {
         // The following string match an empty image, which is being updated by the cropping
         // This watch allow the user to preview the image of the updated pin without it being overwritten by the cropped one (the empty cropped one).
-        var emptyImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAsUlEQVR4nO3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8GXHmAAFMgHIEAAAAAElFTkSuQmCC";
+        const emptyImg = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAAsUlEQVR4nO3BAQEAAACCIP+vbkhAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB8GXHmAAFMgHIEAAAAAElFTkSuQmCC";
         if ($scope.image.show && newValue === emptyImg && oldValue !== newValue) {
             $scope.image.croppedImage = oldValue;
         }
@@ -215,13 +214,13 @@ angular.module('vboard').controller('VboardAddPinDialogController', function (vb
 
 
     /** Scrapping */
-    $scope.getInfoFromURL = function(url) {
+    $scope.getInfoFromURL = function (url) {
         if (url && url.indexOf("http") === 0) {
-            $http.post(CONFIG.apiEndpoint + '/pins/url/', {
+            $http.post(`${ CONFIG.apiEndpoint  }/pins/url/`, {
                 urlinfo: url
             }).then(function (response) {
                 if (response.status !== 200) {
-                    throw new Error('User search failed:' + JSON.stringify(response));
+                    throw new Error(`User search failed:${  JSON.stringify(response) }`);
                 }
                 if (!$scope.editablePin.title) {
                     $scope.editablePin.title = response.data.title;

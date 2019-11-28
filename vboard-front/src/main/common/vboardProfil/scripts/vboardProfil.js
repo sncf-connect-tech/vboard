@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardProfil', function () {
+angular.module('vboard').directive('vboardProfil', function vboardProfil() {
     return {
         restrict: 'E',
         scope: false,
@@ -28,11 +27,9 @@ angular.module('vboard').directive('vboardProfil', function () {
 });
 
 
-angular.module('vboard').controller('VboardProfilController', function ($scope, $rootScope, $timeout, $window, vboardPinsCollection, vboardAuth, $location, $element, $http, CONFIG, vboardImgs, vboardMessageInterceptor) {
-
+angular.module('vboard').controller('VboardProfilController', function VboardProfilController($scope, $rootScope, $timeout, $window, vboardPinsCollection, vboardAuth, $location, $element, $http, CONFIG, vboardImgs, vboardMessageInterceptor) {
 
     /** Init */
-
     $scope.user = "";
     $scope.focus = false;
     $scope.defaultAvatar = "images/avatar.png";
@@ -58,7 +55,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     // Update the user
     $scope.submitUserUpdate = function (user) {
         $scope.focus = false;
-        var userToSend = angular.copy($scope.submitTeamUpdate(user));
+        const userToSend = angular.copy($scope.submitTeamUpdate(user));
         // Check whether the avatar is not the one in the DB (boolean) but the base64 string
         userToSend.avatar = (user.avatar && user.avatar !== true && user.avatar !== false) ? user.avatar : "unchanged";
         userToSend.team = user.team ? user.team.join(",") : "";
@@ -111,39 +108,41 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
             /** With rezising when the cropping element disappear, there is a zoom on the image that was not the one choosen by the user
              The element just need to be refreshed */
             // Check whether the avatar is not the one in the DB (boolean) but the base64 string
-            $scope.myCroppedAvatar = ($scope.user.avatar && $scope.user.avatar !== true && $scope.user.avatar !== false) ? "data:image/png;base64,"+$scope.user.avatar : $scope.defaultAvatar;
+            $scope.myCroppedAvatar = ($scope.user.avatar && $scope.user.avatar !== true && $scope.user.avatar !== false) ? `data:image/png;base64,${ $scope.user.avatar }` : $scope.defaultAvatar;
         }
     });
 
-    var personnalInfoDiv = angular.element(document.querySelector('#profil--personnal--info'))[0];
-    var personnalInfoHeight = personnalInfoDiv.offsetHeight;
+    /* eslint-disable-next-line prefer-destructuring */
+    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing
     $scope.profileResize = function () {
         $timeout(function () {
-            var textarea = angular.element(document.querySelector(".textArea-resize"))[0];
-            var teamHeight = 65.6 * ($scope.user.team.length -1); // 65.6 is the size of the info element
+            /* eslint-disable-next-line prefer-destructuring */
+            const textarea = angular.element('.textArea-resize')[0];
+            const teamHeight = 65.6 * ($scope.user.team.length -1); // 65.6 is the size of the info element
             textarea.style.height = "45px";
             // 5 is to have a little margin under the text (to allow g,q,j,y letters not to be cut)
-            textarea.style.height = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight) ? (textarea.scrollHeight) + 5 + "px": textarea.style.height;
+            textarea.style.height = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight) ? `${ (textarea.scrollHeight) + 5  }px`: textarea.style.height;
             if (textarea.scrollHeight > 100) {
-                var heightCorrection = 100;
-                personnalInfoDiv.style.height = (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight + "px";
+                const heightCorrection = 100;
+                personnalInfoDiv.style.height = `${ (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight  }px`;
             } else {
-                personnalInfoDiv.style.height = personnalInfoHeight + teamHeight + "px";
+                personnalInfoDiv.style.height = `${ personnalInfoHeight + teamHeight  }px`;
             }
         }, 100);
     };
 
     // Submit all the teams to the back-end
     $scope.submitTeamUpdate = function (user) {
-        for (var i = user.team.length-1; i >= 0; i--) {
+        for (let userTeamIndex = user.team.length-1; userTeamIndex >= 0; userTeamIndex--) {
             // If the field team is empty and if there are another team already set, the field is removed
-            if (!user.team[i] && user.team.length > 1) {
-                user.team.splice(i, 1);
+            if (!user.team[userTeamIndex] && user.team.length > 1) {
+                user.team.splice(userTeamIndex, 1);
             }
-            if (user.team[i]) {
-                vboardAuth.addTeam(user.team[i]);
+            if (user.team[userTeamIndex]) {
+                vboardAuth.addTeam(user.team[userTeamIndex]);
             }
         }
         $scope.profileResize();
@@ -152,9 +151,9 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
 
     // Add a new field to put a team
     $scope.addTeam = function () {
-        for (var i = $scope.user.team.length-1; i >= 0; i--) {
-            if (!$scope.user.team[i] && $scope.user.team.length > 1) {
-                $scope.user.team.splice(i, 1);
+        for (let userTeamIndex = $scope.user.team.length-1; userTeamIndex >= 0; userTeamIndex--) {
+            if (!$scope.user.team[userTeamIndex] && $scope.user.team.length > 1) {
+                $scope.user.team.splice(userTeamIndex, 1);
             }
         }
         // Prevent user to have more than 5 teams (only front-end restriction)
@@ -167,9 +166,9 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     };
 
     // List of teams
-    $http.get(CONFIG.apiEndpoint + '/users/teams').then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/users/teams`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('User search failed:' + JSON.stringify(response));
+            throw new Error(`User search failed:${  JSON.stringify(response) }`);
         }
         $scope.teamSuggest = response.data;
     }, function (error) {
@@ -177,12 +176,13 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     });
 
 
-    var handleAvatarSelect = function (event) {
+    const handleAvatarSelect = function (event) {
         // Display cropping element
         $scope.showCrop = true;
         $scope.imageSaved = false;
-        var file = event.currentTarget.files[0];
-        var reader = new FileReader();
+        /* eslint-disable-next-line prefer-destructuring */
+        const file = event.currentTarget.files[0];
+        const reader = new FileReader();
         reader.onload = function (evt) {
             /* eslint-disable no-shadow */
             $scope.$apply(function ($scope) {
@@ -191,24 +191,24 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
         };
         reader.readAsDataURL(file);
     };
-    angular.element(document.querySelector('#avatarInput')).on('change', handleAvatarSelect);
+    angular.element('#avatarInput').on('change', handleAvatarSelect);
 
     // Used for user to follow some labels
     $scope.getAllLabels = function () {
         vboardPinsCollection.getEveryLabels().then(function (allLabelsObject) {
-            var allLabels = [];
-            for (var labelValue in allLabelsObject) {
+            let allLabels = [];
+            for (const labelValue in allLabelsObject) {
                 allLabels.push(allLabelsObject[labelValue].label_name);
             }
             allLabels = allLabels.sort(); // Sort by special characters, then by Capital letters, then by lower-case letters
             if ($scope.user.favorite_labels && $scope.user.favorite_labels !== '') {
-                var labels = $scope.user.favorite_labels.split(',');
+                const labels = $scope.user.favorite_labels.split(',');
                 $scope.favoriteLabels = labels.sort();
                 // Put the user's favorite label in one table and the other in another one
-                for (var i = 0; i < $scope.favoriteLabels.length; i++) {
+                for (let labelIndex = 0; labelIndex < $scope.favoriteLabels.length; labelIndex++) {
                     // So elements already in user's favorite labels are removed
-                    if (allLabels.indexOf($scope.favoriteLabels[i]) > -1) {
-                        allLabels.splice(allLabels.indexOf($scope.favoriteLabels[i]), 1);
+                    if (allLabels.indexOf($scope.favoriteLabels[labelIndex]) > -1) {
+                        allLabels.splice(allLabels.indexOf($scope.favoriteLabels[labelIndex]), 1);
                     }
                 }
             }
@@ -217,7 +217,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     };
 
     /** Labels */
-    $scope.addLabel = function(label) {
+    $scope.addLabel = function (label) {
         if ($scope.allLabels.indexOf(label) > -1) {
             $scope.allLabels.splice($scope.allLabels.indexOf(label), 1);
         }
@@ -229,7 +229,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
         $scope.saveFavoriteLabels();
     };
 
-    $scope.removeLabel = function(label) {
+    $scope.removeLabel = function (label) {
         if ($scope.favoriteLabels.indexOf(label) > -1) {
             $scope.favoriteLabels.splice($scope.favoriteLabels.indexOf(label), 1);
         }
@@ -240,15 +240,15 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
 
     $scope.saveFavoriteLabels = function () {
         if ($rootScope.userAuthenticated) {
-            var labels = $scope.favoriteLabels;
+            let labels = $scope.favoriteLabels;
             labels = labels.join(',');
             /* eslint-disable camelcase */
             $rootScope.userAuthenticated.favorite_labels = labels;
-            $http.post(CONFIG.apiEndpoint + '/users/favoriteLabels', {
-                labels: labels
+            $http.post(`${ CONFIG.apiEndpoint  }/users/favoriteLabels`, {
+                labels
             }).then(function (response) {
                 if (response.status !== 200) {
-                    throw new Error('Favorite Labels save failed:' + JSON.stringify(response));
+                    throw new Error(`Favorite Labels save failed:${  JSON.stringify(response) }`);
                 }
             }, function (error) {
                 vboardMessageInterceptor.showError(error, 'saveFavoriteLabels');
@@ -257,28 +257,28 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
     };
 
     /** Gamification */
-    var gamification = function () {
-        $http.get(CONFIG.apiEndpoint + '/gamification/getBadges').then(function (response) {
+    const gamification = function () {
+        $http.get(`${ CONFIG.apiEndpoint  }/gamification/getBadges`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Badges search failed:' + JSON.stringify(response));
+                throw new Error(`Badges search failed:${  JSON.stringify(response) }`);
             }
             $scope.badges = response.data;
         }, function (error) {
             vboardMessageInterceptor.showError(error, 'gamification');
         });
 
-        $http.get(CONFIG.apiEndpoint + '/gamification/getStats').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/gamification/getStats`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('Stats search failed:' + JSON.stringify(response));
+                throw new Error(`Stats search failed:${  JSON.stringify(response) }`);
             }
             $scope.stats = response.data;
         }, function (error) {
             vboardMessageInterceptor.showError(error, 'gamification');
         });
 
-        $http.get(CONFIG.apiEndpoint + '/gamification/getStatsPercentage').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/gamification/getStatsPercentage`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
+                throw new Error(`StatsPercentage search failed:${  JSON.stringify(response) }`);
             }
             $scope.statsPercentage = response.data;
         }, function (error) {
@@ -286,7 +286,7 @@ angular.module('vboard').controller('VboardProfilController', function ($scope, 
         });
     };
 
-    $rootScope.$watch('userAuthenticated', function() {
+    $rootScope.$watch('userAuthenticated', function () {
         if ($rootScope.userAuthenticated) {
             // Retrieve the user in the DB
             vboardAuth.getUser($rootScope.userAuthenticated).then(function (success) {

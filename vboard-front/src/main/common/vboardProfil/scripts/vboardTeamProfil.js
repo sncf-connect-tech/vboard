@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').controller('VboardTeamProfilController', function ($routeParams, $scope, vboardAuth, vboardMessageInterceptor, vboardImgs, $timeout, $rootScope, $location, $window, $http, CONFIG) {
+angular.module('vboard').controller('VboardTeamProfilController', function VboardTeamProfilController($routeParams, $scope, vboardAuth, vboardMessageInterceptor, vboardImgs, $timeout, $rootScope, $location, $window, $http, CONFIG) {
 
     $scope.name = $routeParams.teamName;
     $scope.defaultAvatar = "images/avatar.png";
@@ -29,16 +28,16 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
     $rootScope.hideSearchField();
 
     // List of localisations
-    $scope.localisations = CONFIG.localisations.map(function(a) {return a.id;});
-    $scope.localisationName = function(localisation) {
+    $scope.localisations = CONFIG.localisations.map((loc) => loc.id);
+    $scope.localisationName = function (localisation) {
         return CONFIG.localisations.find(function (loc) {
             return loc.id === localisation;
         }).name;
     };
 
     // Check if the current user is on the team, and so if he can update the team info (based on user behavior as anyone can add themselves to a team)
-    $scope.initPermission = function(team) {
-        $scope.perm = team.members.indexOf($rootScope.userAuthenticated.first_name + ';' + $rootScope.userAuthenticated.last_name + ';' + $rootScope.userAuthenticated.email) !== -1;
+    $scope.initPermission = function (team) {
+        $scope.perm = team.members.indexOf(`${ $rootScope.userAuthenticated.first_name  };${  $rootScope.userAuthenticated.last_name  };${  $rootScope.userAuthenticated.email }`) !== -1;
         if ($scope.perm) {
             $scope.getUsers();
         }
@@ -55,7 +54,9 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
             }, 2000);
         }
         // When the array is empty, the server still get an array with one empty element
-        if (success.members.length === 1 && success.members[0].length === 0) { $scope.team.members = []; }
+        if (success.members.length === 1 && success.members[0].length === 0) {
+            $scope.team.members = [];
+        }
         $scope.retrieveTeamAvatarBase64();
         $scope.profileResize();
     }, function (error) {
@@ -73,20 +74,22 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         }
     };
 
-    var personnalInfoDiv = angular.element(document.querySelector('#profil--personnal--info'))[0];
-    var personnalInfoHeight = personnalInfoDiv.offsetHeight;
+    /* eslint-disable-next-line prefer-destructuring */
+    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing
     $scope.profileResize = function () {
         $timeout(function () {
-            var textarea = angular.element(document.querySelector(".textArea-resize"))[0];
+            /* eslint-disable-next-line prefer-destructuring */
+            const textarea = angular.element('.textArea-resize')[0];
             textarea.style.height = "45px";
-            var isScrollBarShowing = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight);
-            textarea.style.height = isScrollBarShowing ? (textarea.scrollHeight) + "px": textarea.style.height;
-            var teamHeight = 65.6 * ($scope.team.members.length > 4 ? $scope.team.members.length -4: 0); // 65.6 is the size of the team element
+            const isScrollBarShowing = (parseInt(textarea.style.height.slice(0, -2), 10) < textarea.scrollHeight);
+            textarea.style.height = isScrollBarShowing ? `${ textarea.scrollHeight  }px`: textarea.style.height;
+            const teamHeight = 65.6 * ($scope.team.members.length > 4 ? $scope.team.members.length -4: 0); // 65.6 is the size of the team element
             // textAreaSize: textarea size by default  -> textarea.scrollHeight - 40 = difference de la fenetre, - fileInputButton for the hidden buttons size and drop zone of upload files
-            var heightCorrection = 100;
-            personnalInfoDiv.style.height = (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight + "px";
+            const heightCorrection = 100;
+            personnalInfoDiv.style.height = `${ (personnalInfoHeight - heightCorrection + parseInt(textarea.style.height.slice(0, -2), 10)) + teamHeight  }px`;
         }, 100);
     };
 
@@ -130,7 +133,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
             /** With rezising when the cropping element disappear, there is a zoom on the image that was not the one choosen by the user
              The element just need to be refreshed */
             // Check whether the avatar is not the one in the DB (boolean) but the base64 string
-            $scope.myCroppedAvatar = ($scope.team.avatar && $scope.team.avatar !== true && $scope.team.avatar !== false) ? "data:image/png;base64,"+$scope.team.avatar : $scope.defaultAvatar;
+            $scope.myCroppedAvatar = ($scope.team.avatar && $scope.team.avatar !== true && $scope.team.avatar !== false) ? `data:image/png;base64,${ $scope.team.avatar }` : $scope.defaultAvatar;
         }
     });
 
@@ -142,12 +145,13 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         $scope.myCroppedAvatar = $scope.defaultAvatar;
     };
 
-    var handleAvatarSelect = function (event) {
+    const handleAvatarSelect = function (event) {
         // Display cropping element
         $scope.showCrop = true;
         $scope.imageSaved = false;
-        var file = event.currentTarget.files[0];
-        var reader = new FileReader();
+        /* eslint-disable-next-line prefer-destructuring */
+        const file = event.currentTarget.files[0];
+        const reader = new FileReader();
         reader.onload = function (evt) {
             /* eslint-disable no-shadow */
             $scope.$apply(function ($scope) {
@@ -156,34 +160,34 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
         };
         reader.readAsDataURL(file);
     };
-    angular.element(document.querySelector('#avatarInput')).on('change', handleAvatarSelect);
+    angular.element('#avatarInput').on('change', handleAvatarSelect);
 
     $scope.viewValue = function (member) {
-        return member.split(';')[0] + ' ' + member.split(';')[1];
+        return `${ member.split(';')[0]  } ${  member.split(';')[1] }`;
     };
 
     $scope.userSuggest = [];
     // Get the list of all VBoard users
     $scope.getUsers = function () {
-        $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response) {
+        $http.get(`${ CONFIG.apiEndpoint  }/users/getAll/`).then(function (response) {
             if (response.status !== 200) {
-                throw new Error('User search failed:' + JSON.stringify(response));
+                throw new Error(`User search failed:${  JSON.stringify(response) }`);
             }
-            for (var index in response.data) {
-                var user = response.data[index].first_name + ';' + response.data[index].last_name + ';' + response.data[index].email;
+            for (const index in response.data) {
+                const user = `${ response.data[index].first_name  };${  response.data[index].last_name  };${  response.data[index].email }`;
                 if (!_.contains($scope.team.members, user)) {
                     $scope.userSuggest.push(user);
                 }
             }
-        }, function(error) {
+        }, function (error) {
             vboardMessageInterceptor.showError(error, 'getUsers');
         });
     };
 
     $scope.addTeam = function () {
-        for (var i = $scope.team.members.length-1; i >= 0; i--) {
-            if ($scope.team.members[i] === "Nouveau;Membre;@" && $scope.team.members.length > 1) {
-                $scope.team.members.splice(i, 1);
+        for (let index = $scope.team.members.length-1; index >= 0; index--) {
+            if ($scope.team.members[index] === "Nouveau;Membre;@" && $scope.team.members.length > 1) {
+                $scope.team.members.splice(index, 1);
             }
         }
         $scope.team.members.push("Nouveau;Membre;@");
@@ -217,24 +221,26 @@ angular.module('vboard').controller('VboardTeamProfilController', function ($rou
 
     $scope.getCoords =  function (event) {
         if ($scope.setLocalisation && $scope.perm) {
+            /* eslint-disable-next-line angular/document-service */
             $scope.team.latitude = event.offsetY ? (event.offsetY) : event.pageY - document.getElementById("imglocalisation").offsetTop;
+            /* eslint-disable-next-line angular/document-service */
             $scope.team.longitude = event.offsetX ? (event.offsetX) : event.pageX - document.getElementById("imglocalisation").offsetLeft;
         }
     };
 
     /** Gamification */
-    $http.get(CONFIG.apiEndpoint + '/gamification/getBadges/team/' + $scope.name).then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/gamification/getBadges/team/${  $scope.name }`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('Badges search failed:' + JSON.stringify(response));
+            throw new Error(`Badges search failed:${  JSON.stringify(response) }`);
         }
         $scope.badges = response.data;
     }, function (error) {
         vboardMessageInterceptor.showError(error, 'VboardTeamProfilController');
     });
 
-    $http.get(CONFIG.apiEndpoint + '/gamification/getTeamStatsPercentage/' + $scope.name).then(function (response) {
+    $http.get(`${ CONFIG.apiEndpoint  }/gamification/getTeamStatsPercentage/${  $scope.name }`).then(function (response) {
         if (response.status !== 200) {
-            throw new Error('StatsPercentage search failed:' + JSON.stringify(response));
+            throw new Error(`StatsPercentage search failed:${  JSON.stringify(response) }`);
         }
         $scope.statsPercentage = response.data;
     }, function (error) {

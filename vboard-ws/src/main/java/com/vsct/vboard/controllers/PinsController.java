@@ -151,19 +151,15 @@ public class PinsController {
 
         // Delete all likes on that pin
         List<Like> likes = this.likeDAO.findByPin(pinId);
-        for (Like l : likes) {
-            this.likeDAO.delete(l);
-        }
+        this.likeDAO.delete(likes);
 
         // Delete all comment on that pin
         List<Comment> comments = this.commentDAO.findByPin(pinId);
-        for (Comment c : comments) {
-            this.commentDAO.delete(c);
-        }
+        this.commentDAO.delete(comments);
 
         // Delete all savedPin which points on this pins
         List<SavedPin> savedPins = this.savedPinDAO.findByPinId(pinId);
-        savedPins.forEach(this.savedPinDAO::delete);
+        this.savedPinDAO.delete(savedPins);
         // Update the stats
         this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
         return result;
@@ -576,7 +572,7 @@ public class PinsController {
 
             info.put("description", description);
         } catch (JSONException jsonException) {
-            this.logger.error("Could not add key to JSON object: {}", jsonException);
+            this.logger.error("Could not add key to JSON object", jsonException);
         }
         return info.toString();
     }

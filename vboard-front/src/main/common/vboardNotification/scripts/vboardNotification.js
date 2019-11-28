@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardNotification', function () {
+angular.module('vboard').directive('vboardNotification', function vboardNotification() {
     return {
         restrict: 'E',
         scope: true,
@@ -27,13 +26,14 @@ angular.module('vboard').directive('vboardNotification', function () {
     }
 });
 
-angular.module('vboard').controller('VboardNotificationController', function ($scope, $http, $rootScope, CONFIG) {
+angular.module('vboard').controller('VboardNotificationController', function VboardNotificationController($scope, $http, $rootScope, CONFIG) {
 
     /** Retrieve the name of the notification's author */
     // Check whether the user format is valid (version compatibility)
     if ($scope.notification.from_user && $scope.notification.from_user.split(',').length > 2) {
-        $scope.name = $scope.notification.from_user.split(',')[0] + ' ' + $scope.notification.from_user.split(',')[1];
-        $scope.email = $scope.notification.from_user.split(',')[2];
+        const [firstName, lastname, email] = $scope.notification.from_user.split(',');
+        $scope.name = `${ firstName } ${ lastname }`;
+        $scope.email = email;
     } else {
         $scope.name = $scope.notification.from_user;
         $scope.email = $scope.notification.from_user;
@@ -55,7 +55,7 @@ angular.module('vboard').controller('VboardNotificationController', function ($s
 
     // Notify the back-end that the notification has been clicked on, and set it as seen by the user (front)
     $scope.notificationClick = function () {
-        $http.post(CONFIG.apiEndpoint + '/notifications/clicked/' + $scope.notification.id);
+        $http.post(`${ CONFIG.apiEndpoint  }/notifications/clicked/${  $scope.notification.id }`);
         $scope.notification.seen = true;
     };
 

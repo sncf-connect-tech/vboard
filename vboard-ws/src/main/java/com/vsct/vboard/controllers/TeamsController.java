@@ -141,7 +141,7 @@ public class TeamsController {
         return team;
     }
 
-    public Team removeMember(String teamName, String member) {
+    public void removeMember(String teamName, String member) {
         member = member.replace(',', ';');
         final Team team = this.teamDAO.findByName(teamName);
         this.checkIfUserInTeam(team, member); // Throw an error if the user is not part of the team (not authorized)
@@ -152,7 +152,6 @@ public class TeamsController {
         } catch (UnexpectedRollbackException e) {
             throw new VBoardException(e.getMessage(), e.getMostSpecificCause());
         }
-        return team;
     }
 
     public Team addMember(String teamName, String member) {

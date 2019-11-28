@@ -16,22 +16,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
-angular.module('vboard').directive('vboardProfilAdmin', function () {
+angular.module('vboard').directive('vboardProfilAdmin', function vboardProfilAdmin() {
     return {
         restrict: 'E',
         scope: {}, // Isolate scope
         templateUrl: 'common/vboardProfilRole/templates/vboardProfilAdmin.html',
-        controller: 'VboardProfilAdmin'
+        controller: 'VboardProfilAdminController'
     }
 });
 
-angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http, CONFIG, vboardAuth, vboardMessageInterceptor) {
+angular.module('vboard').controller('VboardProfilAdminController', function VboardProfilAdminController($scope, $http, CONFIG, vboardAuth, vboardMessageInterceptor) {
 
-    var adminInit = function () {
+    const adminInit = function () {
 
-        $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
+        $http.get(`${ CONFIG.apiEndpoint  }/messages`).then( function (success) {
             if (success.data !== null || success.data !== '') {
                 $scope.message = success.data;
             }
@@ -39,50 +38,50 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
 
         // Get the list of all newsletters moderators
         vboardAuth.getRole('Newsletter').then(function (response) {
-            for (var index in response.data) {
-                var newsletterMember = response.data[index].first_name + ',' + response.data[index].last_name + ',' + response.data[index].email;
+            for (const index in response.data) {
+                const newsletterMember = `${ response.data[index].first_name  },${  response.data[index].last_name  },${  response.data[index].email }`;
                 $scope.newsletterMembers.push(newsletterMember);
             }
             // Get the list of all VBoard users
-            $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response2) {
+            $http.get(`${ CONFIG.apiEndpoint  }/users/getAll/`).then(function (response2) {
                 if (response2.status !== 200) {
-                    throw new Error('User search failed:' + JSON.stringify(response2));
+                    throw new Error(`User search failed:${  JSON.stringify(response2) }`);
                 }
-                for (var index2 in response2.data) {
-                    var user = response2.data[index2].first_name + ',' + response2.data[index2].last_name + ',' + response2.data[index2].email;
+                for (const subIndex in response2.data) {
+                    const user = `${ response2.data[subIndex].first_name  },${  response2.data[subIndex].last_name  },${  response2.data[subIndex].email }`;
                     if ($scope.newsletterMembers.indexOf(user) === -1) {
                         $scope.userSuggest.push(user);
                     }
                 }
-            }, function(error) {
+            }, function (error) {
                 vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
             });
-        }, function(error) {
+        }, function (error) {
             vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
             console.error(error);
         });
 
         // Get the list of all newsletters moderators
         vboardAuth.getRole('Moderateur').then(function (response) {
-            for (var index in response.data) {
-                var moderatorMember = response.data[index].first_name + ',' + response.data[index].last_name + ',' + response.data[index].email;
+            for (const index in response.data) {
+                const moderatorMember = `${ response.data[index].first_name  },${  response.data[index].last_name  },${  response.data[index].email }`;
                 $scope.moderatorMembers.push(moderatorMember);
             }
             // Get the list of all VBoard users
-            $http.get(CONFIG.apiEndpoint + '/users/getAll/').then(function (response2) {
+            $http.get(`${ CONFIG.apiEndpoint  }/users/getAll/`).then(function (response2) {
                 if (response2.status !== 200) {
-                    throw new Error('User search failed:' + JSON.stringify(response2));
+                    throw new Error(`User search failed:${  JSON.stringify(response2) }`);
                 }
-                for (var index2 in response2.data) {
-                    var user = response2.data[index2].first_name + ',' + response2.data[index2].last_name + ',' + response2.data[index2].email;
+                for (const subIndex in response2.data) {
+                    const user = `${ response2.data[subIndex].first_name  },${  response2.data[subIndex].last_name  },${  response2.data[subIndex].email }`;
                     if ($scope.moderatorMembers.indexOf(user) === -1) {
                         $scope.userSuggest2.push(user);
                     }
                 }
-            }, function(error) {
+            }, function (error) {
                 vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
             });
-        }, function(error) {
+        }, function (error) {
             vboardMessageInterceptor.showError(error, 'VboardProfilAdmin');
         });
 
@@ -111,7 +110,7 @@ angular.module('vboard').controller('VboardProfilAdmin', function ($scope, $http
 
     /** Display the full name of a user */
     $scope.viewUser = function (user) {
-        return user.split(',')[0] + ' ' + user.split(',')[1];
+        return `${ user.split(',')[0]  } ${  user.split(',')[1] }`;
     };
 
     $scope.viewEmail = function (user) {

@@ -38,7 +38,7 @@ public class EmailParams {
 
     @JsonCreator
     public EmailParams(@JsonProperty(value = "title", required = true) String title,
-                       @JsonProperty(value = "firstMessage", required = false) String firstMessage) {
+                       @JsonProperty(value = "firstMessage") String firstMessage) {
         this.title = title;
         this.firstMessage = firstMessage;
     }

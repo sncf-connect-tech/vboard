@@ -36,7 +36,7 @@ public class GamificationService {
     private static final int LEVEL_8 = 2500;
     private static final int LEVEL_9 = 5000;
     private static final int LEVEL_10 = 10000;
-    private final int LEVEL[] = {LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10};
+    private final int[] LEVEL = {LEVEL_1, LEVEL_2, LEVEL_3, LEVEL_4, LEVEL_5, LEVEL_6, LEVEL_7, LEVEL_8, LEVEL_9, LEVEL_10};
 
     // Get the level corresponding to the points given
     public int getLevel(int points) {

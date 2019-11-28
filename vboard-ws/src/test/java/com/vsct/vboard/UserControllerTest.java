@@ -139,12 +139,12 @@ public class UserControllerTest {
         Assert.assertNotEquals(user.getInfo(), getUser.getInfo());
         Assert.assertEquals(getUser.getInfo(), "info");
         Assert.assertEquals(getUser.getTeam(), "team");
-        Assert.assertEquals(getUser.hasCustomAvatar(), true);
+        Assert.assertTrue(getUser.hasCustomAvatar());
 
         params = new UserParamsUpdate("newAddEmail@vsct", "default", "team", false, false, false, false, "info");
         userController.updateUser(params);
         getUser = this.userDAO.findByEmail("newAddEmail@vsct");
-        Assert.assertEquals(getUser.hasCustomAvatar(), false);
+        Assert.assertFalse(getUser.hasCustomAvatar());
     }
 
     @Test

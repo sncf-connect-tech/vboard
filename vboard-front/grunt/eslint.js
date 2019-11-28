@@ -18,7 +18,8 @@
 
 module.exports = {
     options: {
-        configFile: '.eslintrc'
+        configFile: '.eslintrc.json',
+        fix: true,
     },
     target: [
         'src/main/common/*/scripts/**/*.js',

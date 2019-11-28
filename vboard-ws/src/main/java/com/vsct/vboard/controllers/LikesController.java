@@ -109,11 +109,10 @@ public class LikesController {
     }
 
 
-    private Pin addLikeToPin(String pinId) {
-        Pin pin = null;
+    private void addLikeToPin(String pinId) {
         if (pinId.contains("vboard-") || pinId.contains("vblog-")) { // Check if the element starts with vboard or vblog and so if it is in the DB
             // (other kind of pins can be seen with Elasticsearch but be base on an other DB (facebook, tweeter pins, ..., if implemented)
-            pin = this.pinDAO.findByPinId(pinId);
+            Pin pin = this.pinDAO.findByPinId(pinId);
             // Increase the number of likes on the pin
             pin.addLike();
             try {
@@ -131,7 +130,6 @@ public class LikesController {
                 }
             }
         }
-        return pin;
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)

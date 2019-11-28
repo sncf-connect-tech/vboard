@@ -16,9 +16,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-"use strict";
 
-var TEST_PINS = [
+const TEST_PINS = [
     {
         "pinId": "imgur-uastMqD",
         "type": "imgur",
@@ -51,16 +50,17 @@ var TEST_PINS = [
 describe("vboardPinsCollection", function () {
     beforeEach(module('vboard'));
 
-    var pinsCollection;
+    let pinsCollection = null;
     beforeEach(inject(''));
-    beforeEach(inject(['vboardPinsCollection', function (vboardPinsCollection) {
-        pinsCollection = vboardPinsCollection;
-        pinsCollection.allPins = TEST_PINS;
-    }]));
+    beforeEach(inject(['vboardPinsCollection',
+        function (vboardPinsCollection) {
+            pinsCollection = vboardPinsCollection;
+            pinsCollection.allPins = TEST_PINS;
+        }]));
 
     it("can sort the pins by postDate", function () {
         pinsCollection.replacePinsAndLabels();
-        var aprilPins = pinsCollection.pins;
+        const aprilPins = pinsCollection.pins;
         expect(_.first(aprilPins).description).toBe('uastMqD');
         expect(_.last(aprilPins).description).toBe('Q5QXBhj');
     });

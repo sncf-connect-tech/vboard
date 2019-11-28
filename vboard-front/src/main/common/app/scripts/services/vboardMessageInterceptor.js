@@ -16,17 +16,19 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-'use strict';
 
 /**
  * Catch errors when API calls do not return a valid response (to put in a promise or call back).
  */
-angular.module('vboard').service('vboardMessageInterceptor', function ($rootScope, $timeout, $http, CONFIG) {
+// Too much a of refactoring needed:
+/* eslint-disable no-invalid-this */
+/* eslint-disable-next-line angular/no-service-method */
+angular.module('vboard').service('vboardMessageInterceptor', function vboardMessageInterceptor($rootScope, $timeout, $http, CONFIG) {
 
-    var messageDisplay = false;
-    var SHORT_TIME_DISPLAY = 4000;
-    var AVERAGE_TIME_DISPLAY = 6000;
-    var LONG_TIME_DISPLAY = 8000;
+    let messageDisplay = false;
+    const SHORT_TIME_DISPLAY = 4000;
+    const AVERAGE_TIME_DISPLAY = 6000;
+    const LONG_TIME_DISPLAY = 8000;
 
     function SuccessMessage(message) {
         this.content = message;
@@ -58,9 +60,9 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
 
     this.showError = function (error, callContext) {
         // the call to parseInt handle the case of the zero string: '0'
-        var message = parseInt(error.status, 10) ? `HTTP ${error.status} ${error.data.message || error.data}` : `${error}`;
+        let message = parseInt(error.status, 10) ? `HTTP ${ error.status } ${ error.data.message || error.data }` : `${ error }`;
         if (callContext) {
-            message += ' in ' + callContext;
+            message += ` in ${  callContext }`;
         }
         this.showErrorMessage(message)
         console.error(error);
@@ -71,7 +73,7 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     };
 
     this.showMessage = function (message) {
-        $rootScope.message = {type: null, message: null};
+        $rootScope.message = { type: null, message: null };
         $rootScope.message.content = message.content;
         $rootScope.message.show = true;
 
@@ -86,16 +88,20 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
         switch (message.constructor) {
         case SuccessMessage:
             $rootScope.message.class = "alert-success";
-            $rootScope.message.type = "Succès"; break;
+            $rootScope.message.type = "Succès";
+            break;
         case InfoMessage:
             $rootScope.message.class = "alert-info";
-            $rootScope.message.type = "Info"; break;
+            $rootScope.message.type = "Info";
+            break;
         case WarningMessage:
             $rootScope.message.class = "alert-warning";
-            $rootScope.message.type = "Warning"; break;
+            $rootScope.message.type = "Warning";
+            break;
         case ErrorMessage:
             $rootScope.message.class = "alert-danger";
-            $rootScope.message.type = "Erreur"; break;
+            $rootScope.message.type = "Erreur";
+            break;
         default:
             $rootScope.message.class = "alert-info";
             $rootScope.message.type = "";
@@ -106,15 +112,18 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     /** Each type of message appear a couple of secondes (longer for more critical messages) */
     /* eslint-disable complexity */
     this.getMessageDelay = function (message) {
-        var delay = LONG_TIME_DISPLAY;
+        let delay = LONG_TIME_DISPLAY;
         switch (message.constructor) {
         case SuccessMessage:
         case InfoMessage:
-            delay = SHORT_TIME_DISPLAY; break;
+            delay = SHORT_TIME_DISPLAY;
+            break;
         case WarningMessage:
-            delay = AVERAGE_TIME_DISPLAY; break;
+            delay = AVERAGE_TIME_DISPLAY;
+            break;
         case ErrorMessage:
-            delay = LONG_TIME_DISPLAY; break;
+            delay = LONG_TIME_DISPLAY;
+            break;
         default:
             delay = SHORT_TIME_DISPLAY;
         }
@@ -129,8 +138,8 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     };
 
     this.showMessageAdmin = function (type, message) {
-        $http.post(CONFIG.apiEndpoint + '/messages', {
-            type: type,
+        $http.post(`${ CONFIG.apiEndpoint  }/messages`, {
+            type,
             content: message
         });
         this.showGeneralMessage(type, message);
@@ -138,7 +147,7 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
 
     this.showGeneralMessage = function (type, message) {
         if (!messageDisplay) {
-            $rootScope.message = {type: null, message: null};
+            $rootScope.message = { type: null, message: null };
             $rootScope.message.type = type;
             $rootScope.message.content = message;
             $rootScope.message.show = true;
@@ -157,20 +166,19 @@ angular.module('vboard').service('vboardMessageInterceptor', function ($rootScop
     };
 
     this.hideMessageAdmin = function () {
-        $http.post(CONFIG.apiEndpoint + '/messages/remove');
+        $http.post(`${ CONFIG.apiEndpoint  }/messages/remove`);
         $rootScope.message.type = null;
     };
 
     this.getGeneralMessage = function () {
-        var self = this;
-        $http.get(CONFIG.apiEndpoint + '/messages').then( function (success) {
+        const self = this;
+        $http.get(`${ CONFIG.apiEndpoint  }/messages`).then( function (success) {
             if (success.data === null || success.data === "") {
                 messageDisplay = false;
             } else {
                 self.showGeneralMessage(success.data.type, success.data.content);
             }
         });
-    }
-
+    };
 
 });
