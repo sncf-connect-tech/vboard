@@ -90,7 +90,7 @@ public class User implements Profil, Serializable {
         this.receivePopularPinsEmails = true;
         this.receiveLeaderboardEmails = true;
         this.receiveRecapEmails = true;
-        this.roles = "Utilisateur";
+        this.roles = "";
         this.favoriteLabels = "";
         this.newsletterLabel = "#newsletter";
         this.isAdmin = false;

@@ -23,6 +23,7 @@ import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
 import com.vsct.vboard.config.AdministratorsConfig;
 import com.vsct.vboard.config.ProxyConfig;
+import com.vsct.vboard.config.WebSecurityConfig;
 import com.vsct.vboard.controllers.*;
 import com.vsct.vboard.models.*;
 import com.vsct.vboard.services.ElasticSearchClient;
@@ -91,6 +92,8 @@ public class GamificationControllerTest {
     private UploadsManager uploadsManager;
     @Mock
     private NotificationsController notificationsController;
+    @Mock
+    private  WebSecurityConfig webSecurityConfig;
 
     private GamificationController gamificationController;
 
@@ -100,7 +103,7 @@ public class GamificationControllerTest {
 
         MockitoAnnotations.initMocks(this);
 
-        final AuthenticationController authController = new AuthenticationController(userDAO, administratorsConfig, session);
+        final AuthenticationController authController = new AuthenticationController(userDAO, administratorsConfig, webSecurityConfig, session);
         PinsController pinsController = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, authController, gamificationController, notificationsController, new ProxyConfig());
         CommentsController commentsController = new CommentsController(jdbcTemplate, commentDAO, pinDAO, userDAO, elsClient, authController, gamificationController, notificationsController);
         this.gamificationController = new GamificationController(gamificationService, jdbcTemplate, likeDAO, commentDAO, pinDAO, badgesDAO, statsDAO, userDAO, teamDAO, savedPinDAO, authController, notificationsController);

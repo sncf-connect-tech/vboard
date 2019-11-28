@@ -8,6 +8,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [?] - 20YY-MM-DD
 ### Fixed
 - When visiting the profile URL of a non-existing user, UI loaded forever (#44)
+- per-author pin search (#9)
+- issue with Cognito auth & getSessionUser, that use to rely on the `JSESSIONID` cookie
+(it does not anymore)
+
+### Changed
+- requiring $KCK_ENABLED to be defined when using this auth mode
+(when the property was left undefined, the SpringBoot connector was misbehaving)
+- properly handling "user not found" situations with a 404
+- in anonymous (no-auth) mode, all users are admin
+- default HTTP error is now a 500
+
+### Added
+- permalink anchor link on pins (#8)
+- support for HTTPs to PinsController web crawler (#42)
+- link to Swagger in web UI menu
+- config option `uploads.multiplePinsPerUrlAllowed`, with corresponding environment variable `$VBOARD_ALLOW_MULTIPLE_PINS_PER_URL`
+- `$ENABLE_WHITELABEL_ERRORS` environment variable
+
+### Removed
+- roles `Administrateur` (redundant with `User.isAdmin`)  & `Utilisateur` (useless, correspond to any authentified user)
+
 
 ## [1.2.0] - 2019-11-22
 ### Added

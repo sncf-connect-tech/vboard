@@ -19,7 +19,7 @@ aws-cognito:
 server:
   error:
     whitelabel:
-      enabled: false
+      enabled: ${ENABLE_WHITELABEL_ERRORS:false}
 endpoints: # by default disable and protect all actuator endpoints
   enabled: false
   sensitive: true

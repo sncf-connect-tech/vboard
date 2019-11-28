@@ -19,8 +19,6 @@
 package com.vsct.vboard.models;
 
 public enum Role {
-    Administrateur,
-    Utilisateur,
     Newsletter,
     Moderateur
 }

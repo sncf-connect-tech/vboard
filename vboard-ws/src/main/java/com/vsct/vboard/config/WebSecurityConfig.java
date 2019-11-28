@@ -79,7 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
             http.authenticationProvider(new AwsCognitoAuthenticationProvider(awsCognitoConfig))
                     .securityContext().securityContextRepository(new AwsCognitoSecurityContextRepository(awsCognitoConfig));
         }
-        if (KeycloakEnabledInEnv.evaluate() || awsCognitoConfig.isEnabled()) {
+        if (isAuthEnabled()) {
             http.authorizeRequests()
                     .requestMatchers(new AntPathRequestMatcher("/**", "OPTIONS")).permitAll()
                     .requestMatchers(new AntPathRequestMatcher("/**", "GET")).permitAll()
@@ -88,6 +88,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         } else {
             http.authorizeRequests().antMatchers("/**").permitAll();
         }
+    }
+
+    public boolean isAuthEnabled() {
+        return KeycloakEnabledInEnv.evaluate() || awsCognitoConfig.isEnabled();
     }
 
     protected void configureKeycloakSecurity(HttpSecurity http) throws Exception {

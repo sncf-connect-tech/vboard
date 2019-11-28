@@ -42,7 +42,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity handleNotFound(Exception exception, WebRequest request) {
-        // Next line is workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
+        // Next line is a workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
         request.removeAttribute(PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, SCOPE_REQUEST);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
@@ -53,7 +53,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler({DuplicateContentException.class})
     public ResponseEntity handleDuplicateContent(Exception exception, WebRequest request) {
-        // Next line is workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
+        // Next line is a workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
         request.removeAttribute(PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, SCOPE_REQUEST);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
@@ -62,10 +62,21 @@ public class GlobalControllerExceptionHandler {
                 .body(exception.getMessage());
     }
 
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity handleBadRequest(Exception ex, WebRequest request) {
+        // Next line is a workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
+        request.removeAttribute(PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, SCOPE_REQUEST);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .headers(headers)
+                .body(ex.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)  // Catch any exception. ie : NPE
     public ResponseEntity handleException(Exception exception, WebRequest request) {
         logger.error("Error 500", exception);
-        // Next line is workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
+        // Next line is a workaround for SpringBoot 1.5 from: https://github.com/spring-projects/spring-framework/issues/20865#issuecomment-453465378
         request.removeAttribute(PRODUCIBLE_MEDIA_TYPES_ATTRIBUTE, SCOPE_REQUEST);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
@@ -73,7 +84,7 @@ public class GlobalControllerExceptionHandler {
         if (exception.getCause() != null) {
             msg += "\nCaused by: " + exception.getCause().toString();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .headers(headers)
                 .body(msg);
     }

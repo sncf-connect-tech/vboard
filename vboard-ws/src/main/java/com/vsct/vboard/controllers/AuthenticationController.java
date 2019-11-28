@@ -20,6 +20,7 @@ package com.vsct.vboard.controllers;
 
 import com.vsct.vboard.DAO.UserDAO;
 import com.vsct.vboard.config.AdministratorsConfig;
+import com.vsct.vboard.config.WebSecurityConfig;
 import com.vsct.vboard.config.cognito.JsonWebTokenAuthentication;
 import com.vsct.vboard.models.Role;
 import com.vsct.vboard.models.User;
@@ -52,12 +53,14 @@ public class AuthenticationController {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final UserDAO userDAO;
     private final AdministratorsConfig administratorsConfig;
+    private final WebSecurityConfig webSecurityConfig;
     private final HttpSession session;
 
     @Autowired
-    public AuthenticationController(UserDAO userDAO, AdministratorsConfig administratorsConfig, HttpSession session) {
+    public AuthenticationController(UserDAO userDAO, AdministratorsConfig administratorsConfig, WebSecurityConfig webSecurityConfig, HttpSession session) {
         this.userDAO = userDAO;
         this.administratorsConfig = administratorsConfig;
+        this.webSecurityConfig = webSecurityConfig;
         this.session = session;
     }
 
@@ -74,7 +77,7 @@ public class AuthenticationController {
             try {
                 this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, ANONYMOUS_USER);
             } catch (IllegalStateException e) {
-                this.logger.error("Could not set attribute User in current session: {}", e);
+                this.logger.error("Could not set attribute User in current session", e);
             }
             return ANONYMOUS_USER;
         }
@@ -151,13 +154,13 @@ public class AuthenticationController {
     }
 
     public void ensureCurrentUserIsAdmin() {
-        if (!this.getSessionUser().isAdmin()) {
+        if (webSecurityConfig.isAuthEnabled() && !this.getSessionUser().isAdmin()) {
             throw new VBoardException("Unauthorized Access - Current user is not an admin");
         }
     }
 
     public void ensureUserHasNewsletterRole() {
-        if (!this.getSessionUserWithSyncFromDB().hasRole(Role.Newsletter)) {
+        if (webSecurityConfig.isAuthEnabled() && !this.getSessionUserWithSyncFromDB().hasRole(Role.Newsletter)) {
             throw new VBoardException("Unauthorized Access - Current user does not have the 'Newsletter' role");
         }
     }
@@ -181,8 +184,9 @@ public class AuthenticationController {
     void ensureUserHasRightsToAlterPin(String pinAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
-        if(!(userString.equals(pinAuthor) || sessionUser.isAdmin() || hasModeratorRole())) {
-            throw new VBoardException("Unauthorized Access - User cannot update nor delete pins: " + userString);
+        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(pinAuthor) || sessionUser.isAdmin() || hasModeratorRole())) {
+            throw new VBoardException("Unauthorized Access - User cannot update nor delete pins: " + userString
+                                      + " isAdmin=" + sessionUser.isAdmin());
         }
     }
 
@@ -190,7 +194,7 @@ public class AuthenticationController {
     void ensureUserHasRightsToAlterComment(String commentAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
-        if(!(userString.equals(commentAuthor) || sessionUser.isAdmin() || this.getSessionUser().getEmail().equals(commentAuthor) || hasModeratorRole())) {
+        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(commentAuthor) || sessionUser.isAdmin() || this.getSessionUser().getEmail().equals(commentAuthor) || hasModeratorRole())) {
             throw new VBoardException("Unauthorized Access - The user does not have the authorization to do that action(" + userString + ")");
         }
     }

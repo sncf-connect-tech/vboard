@@ -46,7 +46,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 import static com.vsct.vboard.TestUtil.createTestDB;
@@ -87,8 +86,6 @@ public class CommentControllerTest {
     private NotificationsController notifications;
     @Mock
     private ProxyConfig proxyConfig;
-    @Mock
-    HttpSession session;
 
     @Before
     public void setUp() {

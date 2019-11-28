@@ -50,7 +50,7 @@ angular.module('vboard').service('vboardAuth', function($rootScope, $http, vboar
     };
 
     this.isAdmin = function () {
-        return $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.indexOf('Administrateur') >= 0: false;
+        return $rootScope.userAuthenticated && $rootScope.userAuthenticated.isAdmin;
     };
 
     this.isModerator = function () {

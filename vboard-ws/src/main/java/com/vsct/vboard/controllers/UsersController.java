@@ -244,9 +244,6 @@ public class UsersController {
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        if (user.getRoles().equals(Role.Utilisateur.toString())){
-            user.removeRole(Role.Utilisateur);
-        }
         user.addRole(Role.valueOf(role));
         this.userDAO.save(user);
         this.notificationsController.addNotificationsFromRole(user, role, "ajouter");
@@ -265,9 +262,6 @@ public class UsersController {
             throw new NotFoundException("User not found");
         }
         user.removeRole(Role.valueOf(role));
-        if (user.getRoles().equals(Role.valueOf(role).toString())){
-            user.addRole(Role.Utilisateur);
-        }
         this.userDAO.save(user);
         this.notificationsController.addNotificationsFromRole(user, role, "enlever");
         this.logger.debug("User {} got the following role removed: {}", user.getNiceName(), role);
