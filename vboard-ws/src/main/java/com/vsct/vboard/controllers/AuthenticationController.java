@@ -47,6 +47,7 @@ import javax.validation.constraints.NotNull;
 @RequestMapping(value = "/authentication")
 public class AuthenticationController {
 
+    private static final String SESSION_USER_ATTRIBUTE_NAME = "User";
     private static final User ANONYMOUS_USER = new User("@nonymous", "Anonymous", "User");
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final UserDAO userDAO;
@@ -63,15 +64,19 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String initializeUser() {
+    public String login() {
+        return initializeUser().toString();
+    }
+
+    private User initializeUser() {
         final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth == null || "anonymousUser".equals(auth.getPrincipal())) {
             try {
-                this.session.setAttribute("User", ANONYMOUS_USER);
+                this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, ANONYMOUS_USER);
             } catch (IllegalStateException e) {
                 this.logger.error("Could not set attribute User in current session: {}", e);
             }
-            return ANONYMOUS_USER.toString();
+            return ANONYMOUS_USER;
         }
         String userEmail = getUserEmailFromAuth(auth);
         User user = this.userDAO.findByEmail(userEmail);
@@ -83,8 +88,8 @@ public class AuthenticationController {
             // in case the config has changed:
             user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
         }
-        this.session.setAttribute("User", user);
-        return user.toString();
+        this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, user);
+        return user;
     }
 
     private static String getUserEmailFromAuth(Authentication auth) {
@@ -118,19 +123,15 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public void logout() {
-        session.removeAttribute("User");
+        session.removeAttribute(SESSION_USER_ATTRIBUTE_NAME);
     }
 
     public @NotNull User getSessionUser() {
-        try {
-            final User user = (User) session.getAttribute("User");
-            if (user == null) {
-                return ANONYMOUS_USER;
-            }
+        User user = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
+        if (user != null) {
             return user;
-        } catch (IllegalStateException e) {
-            return ANONYMOUS_USER;
         }
+        return initializeUser();
     }
 
     public @NotNull User getSessionUserWithSyncFromDB() {
@@ -144,7 +145,7 @@ public class AuthenticationController {
         }
         if (!dbUser.equals(this.getSessionUser())) {
             this.logger.debug("Updating user in session cache");
-            this.session.setAttribute("User", dbUser);
+            this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, dbUser);
         }
         return dbUser;
     }
@@ -177,7 +178,7 @@ public class AuthenticationController {
     }
 
     // Check whether the user has the authorization to do that action (the author or an admins)
-    public void ensureUserHasRightsToAlterPin(String pinAuthor) {
+    void ensureUserHasRightsToAlterPin(String pinAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
         if(!(userString.equals(pinAuthor) || sessionUser.isAdmin() || hasModeratorRole())) {
@@ -186,7 +187,7 @@ public class AuthenticationController {
     }
 
     // Check whether the user has the authorization to do that action (the author or an admins)
-    public void ensureUserHasRightsToAlterComment(String commentAuthor) {
+    void ensureUserHasRightsToAlterComment(String commentAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
         if(!(userString.equals(commentAuthor) || sessionUser.isAdmin() || this.getSessionUser().getEmail().equals(commentAuthor) || hasModeratorRole())) {

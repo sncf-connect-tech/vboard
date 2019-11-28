@@ -145,7 +145,8 @@ public class PinsController {
         try {
             this.elsClient.deletePin(pinId);
         } catch (VBoardException e) {
-        } // NOPMD
+            this.logger.debug("Failed to delete pin", e);
+        }
         int result = pinDAO.removeByPinId(pinId);
 
         // Delete all likes on that pin
