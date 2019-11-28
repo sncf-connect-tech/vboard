@@ -122,7 +122,7 @@ angular.module('vboard').config(function ($httpProvider) {
 });
 
 /* eslint-disable no-undef */
-angular.element(document).ready(function () {
+angular.element(document).ready(function ($window) {
 
     if (typeof $window.Keycloak === 'undefined' || $window.Keycloak === 'DISABLED') {
         const isKeycloakVoluntarilyDisabled = typeof $window.Keycloak !== 'undefined';

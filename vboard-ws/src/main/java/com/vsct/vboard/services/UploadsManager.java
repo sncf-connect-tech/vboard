@@ -21,6 +21,7 @@ package com.vsct.vboard.services;
 import com.vsct.vboard.config.ProxyConfig;
 import com.vsct.vboard.config.UploadsConfig;
 import com.vsct.vboard.models.VBoardException;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.slf4j.Logger;
@@ -53,6 +54,7 @@ public class UploadsManager {
     }
 
     // img should be the base64 encoded image (exception: "default")
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION") // handled by try() syntax
     public void saveAvatar(String img, String name) {
         if (!"default".equals(img)) { // which means the user wanted to delete it's avatar, thus the default one is set
             byte[] data = Base64.getDecoder().decode(img);
@@ -62,13 +64,13 @@ public class UploadsManager {
                 this.logger.error(e.getMessage());
             }
         } else {
-            try { // Save the avatar the this.openAMConfig.getHostName() + /images folder (NAS)
-                InputStream is = this.getClass().getClassLoader().getResource("avatar.png").openStream();
-                OutputStream os = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile());
-                IOUtils.copy(is, os);
-                is.close();
-                os.close();
-                this.logger.debug("Avatar de base enregistré dans le NAS pour: {}", name);
+            try (InputStream is = this.getClass().getClassLoader().getResource("avatar.png").openStream()) { // Save the avatar the this.openAMConfig.getHostName() + /images folder (NAS)
+                try (OutputStream os = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
+                    IOUtils.copy(is, os);
+                    this.logger.debug("Avatar de base enregistré dans le NAS pour: {}", name);
+                } catch (Exception e) {
+                    this.logger.error(e.getMessage());
+                }
             } catch (Exception e) {
                 this.logger.error(e.getMessage());
             }
@@ -77,6 +79,7 @@ public class UploadsManager {
     }
 
     // img should be the base64 encoded image (exception: url)
+    @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION")
     public void savePinImage(String img, String name) {
         if (!img.startsWith("http")) { // If the image is an url, the image is downloaded and uploaded on the pinImg folder (NAS)
             byte[] data = Base64.getDecoder().decode(img);
@@ -96,18 +99,16 @@ public class UploadsManager {
             } catch (MalformedURLException e) {
                 throw new VBoardException("Could not retrieve pin image from the web", e);
             }
-            try {
-                InputStream is = url.openStream();
-                OutputStream os = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile());
-                byte[] b = new byte[2048];
-                int length;
-
-                while ((length = is.read(b)) != -1) {
-                    os.write(b, 0, length);
+            try (InputStream is = url.openStream()) {
+                try (OutputStream os = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile())) {
+                    byte[] b = new byte[2048];
+                    int length;
+                    while ((length = is.read(b)) != -1) {
+                        os.write(b, 0, length);
+                    }
+                } catch (IOException e) {
+                    throw new VBoardException("Could not write pin image to filesystem", e);
                 }
-
-                is.close();
-                os.close();
             } catch (IOException e) {
                 throw new VBoardException("Could not write pin image to filesystem", e);
             }
