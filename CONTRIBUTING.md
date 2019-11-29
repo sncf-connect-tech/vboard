@@ -143,7 +143,7 @@ Code reviewers should follow those guidelines:
 
 # Publishing new releases
 
-1. Update version in `vboard-ws/pom.xml`, `vboard-front/package.json` & `vboard-front/bower.json`
+1. Update version in `vboard-ws/pom.xml` & `vboard-front/package.json`
 2. Update `CHANGELOG.md`
 3. Create a new release & tag on [GitHub](https://github.com/voyages-sncf-technologies/vboard/releases)
 

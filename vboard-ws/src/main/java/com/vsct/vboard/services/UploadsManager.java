@@ -106,8 +106,6 @@ public class UploadsManager {
                     while ((length = is.read(b)) != -1) {
                         os.write(b, 0, length);
                     }
-                } catch (IOException e) {
-                    throw new VBoardException("Could not write pin image to filesystem", e);
                 }
             } catch (IOException e) {
                 throw new VBoardException("Could not write pin image to filesystem", e);

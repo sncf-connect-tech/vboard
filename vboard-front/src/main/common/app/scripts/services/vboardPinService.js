@@ -39,7 +39,7 @@ angular.module('vboard').factory('VboardPin', function VboardPinFactory() {
             lastComment: datum.last_comment
         });
         const newPinWithOnlyNonEmptyFields = _.pick(newPin, NON_EMPTY_FIELDS);
-        if (_.any(newPinWithOnlyNonEmptyFields, _.isEmpty)) {
+        if (_.some(newPinWithOnlyNonEmptyFields, _.isEmpty)) {
             throw new Error(`Forbidden empty field found during Pin validation: ${  _.findKey(newPinWithOnlyNonEmptyFields, _.isEmpty) }`);
         }
         return newPin;

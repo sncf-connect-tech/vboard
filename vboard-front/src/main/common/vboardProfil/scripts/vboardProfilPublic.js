@@ -51,8 +51,8 @@ angular.module('vboard').controller('VboardProfilPublicController', function Vbo
         }
     };
 
-    /* eslint-disable-next-line prefer-destructuring */
-    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    /* eslint-disable-next-line angular/document-service */
+    const personnalInfoDiv = document.getElementById('profil--personnal--info');
     const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing

@@ -16,13 +16,13 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-angular.module('vboard', ['ngDialog', 'nsPopover', 'ngSanitize', 'ngRoute', 'ngImgCrop', 'ngCookies', 'ui.select']);
+angular.module('vboard', ['ngCookies', 'ngDialog', 'ngRoute', 'ngSanitize', 'nsPopover', 'uiCropper', 'ui.select']);
 
-angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $interval, vboardPinsCollection, CONFIG, $location, vboardMessageInterceptor, $cookieStore) {
+angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $interval, vboardPinsCollection, CONFIG, $location, vboardMessageInterceptor, $cookies) {
 
     // Used to change the color of a pin in light blue to show the user the pins added from its last connection.
     /* eslint-disable camelcase */
-    $rootScope.lastConnection = $cookieStore.get('lastConnection');
+    $rootScope.lastConnection = $cookies.get('lastConnection');
 
     // Display the admin message if there is one
     vboardMessageInterceptor.getGeneralMessage();
@@ -43,7 +43,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
 
     $timeout(function () {
         // Set last connection to set it even if the user didn't quit the app
-        $cookieStore.put('lastConnection', new Date());
+        $cookies.put('lastConnection', new Date());
         $http.post(`${ CONFIG.apiEndpoint  }/users/setLastConnection`);
     }, 30*second);
 
@@ -55,7 +55,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     // Set the lastConnection cookie and DB value before quitting the app.
     $window.onbeforeunload = function () {
         if ($rootScope.userAuthenticated) {
-            $cookieStore.put('lastConnection', new Date());
+            $cookies.put('lastConnection', new Date());
             $http.post(`${ CONFIG.apiEndpoint  }/users/setLastConnection`);
         }
     };
@@ -63,40 +63,39 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
 });
 
 
-angular.module('vboard').config(['$routeProvider',
-    // Url allowed and controller/template linked
-    function ($routeProvider) {
-        $routeProvider
-            .when('/', {
-                templateUrl: 'common/vboardContainer/templates/vboardContainer.html'
-            })
-            .when('/profil', {
-                templateUrl: 'common/vboardProfilContainer/templates/vboardProfilContainer.html'
-            })
-            .when('/profil/team/:teamName', {
-                templateUrl: 'common/vboardProfil/templates/vboardTeamProfil.html',
-                controller: 'VboardTeamProfilController'
-            })
-            .when('/profil/:email', {
-                templateUrl: 'common/vboardProfil/templates/vboardProfil.html',
-                controller: 'VboardProfilPublicController'
-            })
-            .when('/leaderboard', {
-                templateUrl: 'common/vboardLeaderBoard/templates/vboardLeaderBoardContainer.html'
-            })
-            .when('/search', {
-                templateUrl: 'common/vboardProfilSearch/templates/vboardProfilSearch.html',
-                controller: 'VboardProfilSearchController'
-            })
-            .when('/konami-page', {
-                templateUrl: 'common/vboardKonami/templates/vboardKonami.html',
-                controller: 'VboardKonamiExecuteController'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    }
-]);
+angular.module('vboard').config(function ($locationProvider, $routeProvider) {
+    $locationProvider.html5Mode(false).hashPrefix('');
+    // Url allowed and controller/template linked:
+    $routeProvider
+        .when('/', {
+            templateUrl: 'common/vboardContainer/templates/vboardContainer.html'
+        })
+        .when('/profil', {
+            templateUrl: 'common/vboardProfilContainer/templates/vboardProfilContainer.html'
+        })
+        .when('/profil/team/:teamName', {
+            templateUrl: 'common/vboardProfil/templates/vboardTeamProfil.html',
+            controller: 'VboardTeamProfilController'
+        })
+        .when('/profil/:email', {
+            templateUrl: 'common/vboardProfil/templates/vboardProfil.html',
+            controller: 'VboardProfilPublicController'
+        })
+        .when('/leaderboard', {
+            templateUrl: 'common/vboardLeaderBoard/templates/vboardLeaderBoardContainer.html'
+        })
+        .when('/search', {
+            templateUrl: 'common/vboardProfilSearch/templates/vboardProfilSearch.html',
+            controller: 'VboardProfilSearchController'
+        })
+        .when('/konami-page', {
+            templateUrl: 'common/vboardKonami/templates/vboardKonami.html',
+            controller: 'VboardKonamiExecuteController'
+        })
+        .otherwise({
+            redirectTo: '/'
+        });
+});
 
 angular.module('vboard').factory('authInterceptor', function authInterceptor($q, vboardKeycloakAuth) {
     return {
@@ -122,10 +121,10 @@ angular.module('vboard').config(function ($httpProvider) {
 });
 
 /* eslint-disable no-undef */
-angular.element(document).ready(function ($window) {
-
-    if (typeof $window.Keycloak === 'undefined' || $window.Keycloak === 'DISABLED') {
-        const isKeycloakVoluntarilyDisabled = typeof $window.Keycloak !== 'undefined';
+angular.element(document).ready(function () {
+    /* eslint-disable angular/window-service */
+    if (typeof window.Keycloak === 'undefined' || window.Keycloak === 'DISABLED') {
+        const isKeycloakVoluntarilyDisabled = typeof window.Keycloak !== 'undefined';
         // If keycloak is unavailable, so is the client adapter
         // Therefore, we mock the adapter so the ui can load, and show an error message
         angular.module('vboard').factory('vboardKeycloakAuth', function vboardKeycloakAuth() {
@@ -144,7 +143,7 @@ angular.element(document).ready(function ($window) {
 
     } else {
 
-        const keycloak = new Keycloak('compile/scripts/keycloak.json');
+        const keycloak = new Keycloak('keycloak.json');
         angular.module('vboard').factory('vboardKeycloakAuth', function vboardKeycloakAuth() {
             return keycloak;
         });

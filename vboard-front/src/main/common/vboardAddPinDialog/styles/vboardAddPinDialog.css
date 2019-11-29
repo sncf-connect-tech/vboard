@@ -96,7 +96,7 @@
     height: 10rem;
 }
 
-div img-crop {
+div ui-cropper {
     display: inline-flex;
     width: 100%;
     height: 100%;

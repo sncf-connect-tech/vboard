@@ -36,7 +36,7 @@ angular.module('vboard').factory('vboardImgs', function vboardImgs($http, $q, $r
         },
 
         /** Retrieve pin's image */
-        setPinImage(pinId) {
+        getPinImage(pinId) {
             return $http.get(`${ CONFIG.apiEndpoint  }/pins/image/${  pinId }`).then(function (response) {
                 if (response.status !== 200) {
                     throw new Error(`Pin Image search failed:${  JSON.stringify(response) }`);

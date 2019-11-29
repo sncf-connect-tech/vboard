@@ -17,31 +17,6 @@
   -->
 
 <header class="vboardToolbar t-color-white--background">
-    <!-- Profil Menu -->
-    <script type="text/ng-template" id="profile">
-        <div class="triangle triangle-menu"></div>
-        <div class="ns-popover-tooltip ns-popover-tooltip-profile">
-            <ul>
-                <li><a href="#/" title="Retour au Dashboard" data-ng-click="forceUpdate()" class="t-color-darkgray--text">Dashboard</a></li>
-                <li data-ng-if="userAuthenticated"><a href="#profil" title="Page de profil" class="t-color-darkgray--text">Profil</a></li>
-                <li data-ng-if="blogUrl"><a title="Accéder au blog wordpress pour y créer un article dont l'épingle sera visible ici" href="{{blogUrl}}" target="_blank"  class="t-color-darkgray--text">Accéder au blog</a></li>
-                <li><a title="Voir le classement des utilisateurs et équipes les plus actifs dans certaines catégories" href="#leaderboard" class="t-color-darkgray--text">LeaderBoard</a></li>
-                <li><a title="Trouver le profil d'une équipe ou d'un utilisateur" href="#search" class="t-color-darkgray--text">Rechercher un profil</a></li>
-                <li><a href="{{ apiEndpoint }}/swagger-ui.html" class="t-color-darkgray--text">Swagger</a></li>
-                <li data-ng-if="userAuthenticated"><a title="Se déconnecter de l'application" href="#/" data-ng-click="logout()" class="t-color-darkgray--text">Déconnexion</a></li>
-            </ul>
-        </div>
-    </script>
-    <!-- Notification Menu -->
-    <script type="text/ng-template" id="notification">
-        <div class="triangle ns-popover-tooltip-notification--position"></div>
-        <div class="ns-popover-tooltip ns-popover-tooltip-notification ns-popover-tooltip-notification--position">
-            <vboard-notification ng-repeat="notification in notifications track by $id(notification)"></vboard-notification>
-            <div class="ns-popover-tooltip-notification--noNotification" data-ng-if="notifications.length <= 0 && !canLoadPreviousNotif">Aucune notification récente</div>
-            <div class="ns-popover-tooltip-notification--more" data-ng-if="canLoadPreviousNotif" data-ng-click="getSeenNotif(5)">Charger d'anciennes notifications</div>
-        </div>
-    </script>
-
     <!-- First Line -->
     <div class="vboardToolbar--topRow">
         <!-- Search column -->
@@ -94,7 +69,7 @@
             </a>
         </div>
         <div data-ns-popover
-             data-ns-popover-template="notification"
+             data-ns-popover-template="common/vboardToolbar/templates/vboardToolbarNotificationMenu.html"
              data-ns-popover-trigger="click"
              data-ns-popover-theme="ns-popover-tooltip-theme"
              data-ns-popover-placement="bottom"
@@ -105,7 +80,7 @@
             </a>
         </div>
         <div data-ns-popover
-             data-ns-popover-template="profile"
+             data-ns-popover-template="common/vboardToolbar/templates/vboardToolbarProfileMenu.html"
              data-ns-popover-trigger="click"
              data-ns-popover-theme="ns-popover-tooltip-theme"
              data-ns-popover-placement="bottom"

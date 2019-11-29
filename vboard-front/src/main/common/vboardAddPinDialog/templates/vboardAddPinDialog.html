@@ -91,7 +91,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="vboardAddPinDialog--crop"><img-crop data-ng-show="showCrop" area-type="rectangle" area-min-size="{w:60, h:40}" aspect-ratio="1.5" result-image-size="{w:300, h:200}" class="cropArea" image="image.originalImage" result-image="image.croppedImage"></img-crop></div>
+                <div class="vboardAddPinDialog--crop">
+                    <ui-cropper data-ng-show="showCrop" area-type="rectangle" area-min-size="{w:60, h:40}"
+                                aspect-ratio="1.5" result-image-size="{w:300, h:200}" class="cropArea"
+                                image="image.originalImage" result-image="image.croppedImage">
+                    </ui-cropper>
+                </div>
 
                 <div class="vboardAddPinDialog--formgroup">
                     <label for="pin_description" class="t-fontSize-small">Description *</label>
