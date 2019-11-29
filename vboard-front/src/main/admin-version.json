@@ -1,7 +1,7 @@
 {
   "application": {
     "id": "vboard-front",
-    "version": "@@version",
-    "buildDate": "@@buildDate"
+    "version": "${version}",
+    "buildDate": "${buildDate}"
   }
 }

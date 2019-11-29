@@ -3,7 +3,7 @@
         "src/main/common/*/styles/*.css",
         "src/main/common/*/styles/*/*.css"
     ],
-    "out": "grunt-target/styles/app.css",
+    "out": "app-pleeeased.css",
     "autoprefixer": {"browsers": ["last 2 versions", "> 2%", "Explorer >= 8", "Android >= 4.1"], "cascade": true},
     "filters": true,
     "rem": ["10px"],

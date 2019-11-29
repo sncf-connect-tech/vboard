@@ -190,7 +190,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
     $scope.uploadFile = function (file) {
         $scope.showCrop = true;
         if (file) {
-            // ng-img-crop
+            // ui-cropper
             const imageReader = new FileReader();
             imageReader.onload = function (image) {
                 /* eslint-disable no-shadow */

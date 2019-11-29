@@ -4,8 +4,6 @@ repos:
     hooks:
     -   id: check-merge-conflict
     -   id: trailing-whitespace
-        args:
-        - --no-markdown-linebreak-ext
     -   id: check-json
         exclude: vboard-front/.eslintrc.json
     -   id: check-yaml
@@ -57,3 +55,8 @@ repos:
         entry: ng-model="[^.]+"
         files: ^vboard-front.+\.html$
         exclude: vboard-front/src/main/common/vboardProfil.*
+    -   id: angular-element-cannot-select-by-id
+        name: In AngularJS, angular.element('#some-id') will not work
+        language: pygrep
+        entry: angular.element\(.+#
+        files: ^vboard-front.+\.js$

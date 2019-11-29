@@ -1,0 +1,29 @@
+<!--
+  ~ This file is part of the vboard distribution.
+  ~ (https://github.com/voyages-sncf-technologies/vboard)
+  ~ Copyright (c) 2017 VSCT.
+  ~
+  ~ vboard is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU Affero General Public License as
+  ~ published by the Free Software Foundation, version 3.
+  ~
+  ~ vboard is distributed in the hope that it will be useful, but
+  ~ WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero
+  ~ General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Affero General Public License
+  ~ along with this program. If not, see <http://www.gnu.org/licenses/>.
+  -->
+<div class="triangle triangle-menu"></div>
+<div class="ns-popover-tooltip ns-popover-tooltip-profile">
+    <ul>
+        <li><a href="#/" title="Retour au Dashboard" data-ng-click="forceUpdate()" class="t-color-darkgray--text">Dashboard</a></li>
+        <li data-ng-if="userAuthenticated"><a href="#profil" title="Page de profil" class="t-color-darkgray--text">Profil</a></li>
+        <li data-ng-if="blogUrl"><a title="Accéder au blog wordpress pour y créer un article dont l'épingle sera visible ici" href="{{blogUrl}}" target="_blank"  class="t-color-darkgray--text">Accéder au blog</a></li>
+        <li><a title="Voir le classement des utilisateurs et équipes les plus actifs dans certaines catégories" href="#leaderboard" class="t-color-darkgray--text">LeaderBoard</a></li>
+        <li><a title="Trouver le profil d'une équipe ou d'un utilisateur" href="#search" class="t-color-darkgray--text">Rechercher un profil</a></li>
+        <li><a href="{{ apiEndpoint }}/swagger-ui.html" class="t-color-darkgray--text">Swagger</a></li>
+        <li data-ng-if="userAuthenticated"><a title="Se déconnecter de l'application" href="#/" data-ng-click="logout()" class="t-color-darkgray--text">Déconnexion</a></li>
+    </ul>
+</div>

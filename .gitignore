@@ -4,11 +4,12 @@
 target/
 
 # Node JS
-bower_components/
-grunt-target/
+build/
 node_modules/
 npm-debug.log
 
 # IntelliJ
-/.idea/
+.idea/
 *.iml
+
+app-pleeeased.css

@@ -84,7 +84,7 @@
     display: flex;
 }
 
-.profil--card img-crop {
+.profil--card ui-cropper {
     display: inline-flex;
     width: 15rem;
     height: 10rem;

@@ -41,6 +41,13 @@ jobs:
         - cd vboard-ws
         - mvn --version
         - mvn verify
+    - stage: test
+      name: Frontend linters
+      script:
+        - cd vboard-front
+        - npm --version
+        - npm install
+        - npm run lint
 
 cache:
   pip: true

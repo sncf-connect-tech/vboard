@@ -47,13 +47,15 @@
             <h2 class="t-fontSize-big t-color-blue--text t-font-main2">Informations de l'équipe</h2>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="t-color-blue--text">Avatar: </div><img class="profil--card--img" data-ng-src="{{ myCroppedAvatar }}" alt="Avatar" /><img-crop data-ng-show="showCrop" class="cropArea" image="myAvatar" result-image="myCroppedAvatar"></img-crop>
+                    <div class="t-color-blue--text">Avatar: </div><img class="profil--card--img" data-ng-src="{{ myCroppedAvatar }}" alt="Avatar" />
+                    <ui-cropper data-ng-show="showCrop" class="cropArea" image="myAvatar" result-image="myCroppedAvatar"></ui-cropper>
                     <div class="profil--uploadBtn">
                         <div class="button--upload input--file t-color-darkgray--border t-fontSize-small t-color-midgray--background t-color-darkgray--border" data-ng-hide="!perm"
                              ondragover="this.style.borderColor = '#82d3e5'; this.style.backgroundColor = '#cae4f5';"
                              ondragleave="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'"
                              ondrop="this.style.borderColor = '#909090'; this.style.backgroundColor = '#d4d4d4'">
-                            <input type="file" id="avatarInput" dropzone="copy" class="input--file--hide pointer" accept="image/*"/>
+                            <input type="file" id="avatarInput" class="input--file--hide pointer"
+                                   on-file-change="handleAvatarSelect" accept="image/*" dropzone="copy"/>
                             <span class="fi-upload"></span>
                             <span>Upload ou drop</span>
                         </div>

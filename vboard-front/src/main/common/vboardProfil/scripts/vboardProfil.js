@@ -112,8 +112,8 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
         }
     });
 
-    /* eslint-disable-next-line prefer-destructuring */
-    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    /* eslint-disable-next-line angular/document-service */
+    const personnalInfoDiv = document.getElementById('profil--personnal--info');
     const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing
@@ -176,7 +176,7 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
     });
 
 
-    const handleAvatarSelect = function (event) {
+    $scope.handleAvatarSelect = function (event) {
         // Display cropping element
         $scope.showCrop = true;
         $scope.imageSaved = false;
@@ -191,7 +191,6 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
         };
         reader.readAsDataURL(file);
     };
-    angular.element('#avatarInput').on('change', handleAvatarSelect);
 
     // Used for user to follow some labels
     $scope.getAllLabels = function () {
@@ -303,4 +302,15 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
         }
     });
 
+});
+
+// Recipe from: https://stackoverflow.com/a/19647381/636849
+angular.module('vboard').directive('onFileChange', function onFileChange() {
+    return {
+        restrict: 'A',
+        link(scope, element, attrs) {
+            element.on('change', scope.$eval(attrs.onFileChange));
+            element.on('$destroy', () => element.off());
+        }
+    }
 });

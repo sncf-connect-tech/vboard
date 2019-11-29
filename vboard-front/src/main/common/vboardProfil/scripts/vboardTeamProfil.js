@@ -74,8 +74,8 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
         }
     };
 
-    /* eslint-disable-next-line prefer-destructuring */
-    const personnalInfoDiv = angular.element('#profil--personnal--info')[0];
+    /* eslint-disable-next-line angular/document-service */
+    const personnalInfoDiv = document.getElementById('profil--personnal--info');
     const personnalInfoHeight = personnalInfoDiv.offsetHeight;
 
     // Text area and parent element resizing
@@ -145,7 +145,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
         $scope.myCroppedAvatar = $scope.defaultAvatar;
     };
 
-    const handleAvatarSelect = function (event) {
+    $scope.handleAvatarSelect = function (event) {
         // Display cropping element
         $scope.showCrop = true;
         $scope.imageSaved = false;
@@ -160,7 +160,6 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
         };
         reader.readAsDataURL(file);
     };
-    angular.element('#avatarInput').on('change', handleAvatarSelect);
 
     $scope.viewValue = function (member) {
         return `${ member.split(';')[0]  } ${  member.split(';')[1] }`;
