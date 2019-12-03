@@ -68,32 +68,32 @@ public class NotificationsController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getAllNotifications() {
-        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).toString();
+    public List<Notification> getAllNotifications() {
+        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail());
     }
 
     // Get unclicked notifications for the current user
     @RequestMapping(value = "/unclicked", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getUnClickedNotifications() {
-        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(n -> !n.isClicked()).collect(Collectors.toList()).toString();
+    public List<Notification> getUnClickedNotifications() {
+        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(n -> !n.isClicked()).collect(Collectors.toList());
     }
 
     // Get seen notifications for the current user
     @RequestMapping(value = "/seen", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getSeenNotifications() {
-        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(Notification::isSeen).collect(Collectors.toList()).toString();
+    public List<Notification> getSeenNotifications() {
+        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(Notification::isSeen).collect(Collectors.toList());
     }
 
     // Get unseen notifications for the current user
     @RequestMapping(value = "/unseen", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getUnSeenNotifications() {
-        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(n -> !n.isSeen()).collect(Collectors.toList()).toString();
+    public List<Notification> getUnSeenNotifications() {
+        return this.notificationDAO.findByEmail(permission.getSessionUser().getEmail()).stream().filter(n -> !n.isSeen()).collect(Collectors.toList());
     }
 
     // Set a notification as seen

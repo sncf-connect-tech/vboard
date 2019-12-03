@@ -67,8 +67,8 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String login() {
-        return initializeUser().toString();
+    public User login() {
+        return initializeUser();
     }
 
     private User initializeUser() {
@@ -85,12 +85,10 @@ public class AuthenticationController {
         User user = this.userDAO.findByEmail(userEmail);
         if (user == null) {
             user = createUserFromAuth(auth);
-            user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
-            this.userDAO.save(user);
-        } else {
-            // in case the config has changed:
-            user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
         }
+        // We always update this in case the config value has changed:
+        user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
+        this.userDAO.save(user);
         this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, user);
         return user;
     }
@@ -134,6 +132,9 @@ public class AuthenticationController {
         if (user != null) {
             return user;
         }
+        if (logger.isWarnEnabled()) {  // Lazy: do not generate method argument if not needed
+            logger.warn("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName());
+        }
         return initializeUser();
     }
 
@@ -153,19 +154,19 @@ public class AuthenticationController {
         return dbUser;
     }
 
-    public void ensureCurrentUserIsAdmin() {
+    void ensureCurrentUserIsAdmin() {
         if (webSecurityConfig.isAuthEnabled() && !this.getSessionUser().isAdmin()) {
             throw new VBoardException("Unauthorized Access - Current user is not an admin");
         }
     }
 
-    public void ensureUserHasNewsletterRole() {
+    void ensureUserHasNewsletterRole() {
         if (webSecurityConfig.isAuthEnabled() && !this.getSessionUserWithSyncFromDB().hasRole(Role.Newsletter)) {
             throw new VBoardException("Unauthorized Access - Current user does not have the 'Newsletter' role");
         }
     }
 
-    public void ensureEmailMatchesSessionUser(String email) {
+    void ensureEmailMatchesSessionUser(String email) {
         final String sessionUserEmail = this.getSessionUser().getEmail();
         if (!sessionUserEmail.equals(email)) {
             throw new VBoardException("Unauthorized Access - The user given by the frontend is not the one that is given by the backend Front-end user=" + email + ", backend-user=" + sessionUserEmail);

@@ -18,11 +18,14 @@
 
 package com.vsct.vboard.controllers;
 
-import com.vsct.vboard.models.*;
-import com.vsct.vboard.parameterFormat.TeamParamsUpdate;
 import com.vsct.vboard.DAO.TeamDAO;
-import com.vsct.vboard.services.UploadsManager;
 import com.vsct.vboard.DAO.UserDAO;
+import com.vsct.vboard.exceptions.NotFoundException;
+import com.vsct.vboard.models.Team;
+import com.vsct.vboard.models.User;
+import com.vsct.vboard.models.VBoardException;
+import com.vsct.vboard.parameterFormat.TeamParamsUpdate;
+import com.vsct.vboard.services.UploadsManager;
 import com.vsct.vboard.utils.JavaUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
@@ -33,7 +36,9 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
@@ -65,13 +70,12 @@ public class TeamsController {
     @RequestMapping(value = "/{name:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getTeam(@PathVariable("name") String name) {
-        Team t = this.teamDAO.findByName(name);
-        if (t != null) {
-            return t.toString();
-        } else {
-            return null;
+    public Team getTeam(@PathVariable("name") String name) {
+        Team team = this.teamDAO.findByName(name);
+        if (team == null) {
+            throw new NotFoundException("Team not found: " + name);
         }
+        return team;
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
     }

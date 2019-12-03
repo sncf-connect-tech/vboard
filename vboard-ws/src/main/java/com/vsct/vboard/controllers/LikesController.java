@@ -18,6 +18,7 @@
 
 package com.vsct.vboard.controllers;
 
+import com.vsct.vboard.exceptions.NotFoundException;
 import com.vsct.vboard.models.*;
 import com.vsct.vboard.parameterFormat.LikeParams;
 import com.vsct.vboard.services.ElasticSearchClient;
@@ -32,6 +33,7 @@ import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
@@ -68,16 +70,16 @@ public class LikesController {
     @RequestMapping(value = "/by_user/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getLikesFromAuthor(@PathVariable("email") String email) {
-        return this.likeDAO.findByAuthor(email).toString();
+    public List<Like> getLikesFromAuthor(@PathVariable("email") String email) {
+        return this.likeDAO.findByAuthor(email);
     }
 
     // Get all likes on a given pin
     @RequestMapping(value = "/by_pin/{pinId}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getLikesFromPin(@PathVariable("pinId") String pinId) {
-        return this.likeDAO.findByPin(pinId).toString();
+    public List<Like> getLikesFromPin(@PathVariable("pinId") String pinId) {
+        return this.likeDAO.findByPin(pinId);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
@@ -138,15 +140,15 @@ public class LikesController {
     public Like removeLike(@RequestParam(value = "pinId") String pinId, @RequestParam(value = "email") String email) {
         permission.ensureEmailMatchesSessionUser(email);
         this.logger.debug("deleteLike: id={} - email={}", pinId, email);
-        Like like = this.likeDAO.findById(pinId + email);
-        if (like == null) {
-            return null;
-        }
-        this.likeDAO.delete(like);
         Pin pin = this.pinDAO.findByPinId(pinId); // decrease the like count on the pin
         if (pin == null) {
-            return null;
+            throw new NotFoundException("No pin found for ID: " + pinId);
         }
+        Like like = this.likeDAO.findById(pinId + email);
+        if (like == null) {
+            throw new NotFoundException("No like found for user: " + email);
+        }
+        this.likeDAO.delete(like);
         pin.removeLike();
         this.pinDAO.save(pin);
         // Remove the like in elasticsearch

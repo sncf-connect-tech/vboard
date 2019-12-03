@@ -76,12 +76,12 @@ public class UsersController {
     @RequestMapping(value = "/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getUserFromEmail(@PathVariable("email") String email) {
+    public User getUserFromEmail(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        return user.toString();
+        return user;
     }
 
     @RequestMapping(value = "/getAll", method = RequestMethod.GET)

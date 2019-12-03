@@ -106,12 +106,12 @@ public class GamificationController {
     @RequestMapping(value = "/getStats/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getProfilStats(@PathVariable("email") String email) {
+    public Stats getProfilStats(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        return this.getStats(user).toString();
+        return this.getStats(user);
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
     }
@@ -129,29 +129,29 @@ public class GamificationController {
     @RequestMapping(value = "/getStatsPercentage/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getProfilStatsPercentage(@PathVariable("email") String email) {
+    public Stats getProfilStatsPercentage(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        return this.getStatsPercentage(user).toString();
+        return this.getStatsPercentage(user);
     }
 
     // Get the percentage done between the current level and the next one (see class gamificationService for more details) for a given team
     @RequestMapping(value = "/getTeamStatsPercentage/{name:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getTeamProfilStatsPercentage(@PathVariable("name") String name) {
+    public Stats getTeamProfilStatsPercentage(@PathVariable("name") String name) {
         Team team = this.teamDAO.findByName(name);
-        return this.getStatsPercentage(team).toString();
+        return this.getStatsPercentage(team);
     }
 
     // Return the gamification points in each category for a given user
     @RequestMapping(value = "/getPoints/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getUserPoints(@PathVariable("email") String email) {
-        return this.getUserPointsStats(email).toString();
+    public Stats getUserPoints(@PathVariable("email") String email) {
+        return this.getUserPointsStats(email);
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
     }
@@ -160,8 +160,8 @@ public class GamificationController {
     @RequestMapping(value = "/getPoints/team/{name:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getTeamPoints(@PathVariable("name") String name) {
-        return this.getTeamPointsStats(name).toString();
+    public Stats getTeamPoints(@PathVariable("name") String name) {
+        return this.getTeamPointsStats(name);
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
     }
@@ -179,12 +179,12 @@ public class GamificationController {
     @RequestMapping(value = "/getBadges/{email:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getProfilBadges(@PathVariable("email") String email) {
+    public Badges getProfilBadges(@PathVariable("email") String email) {
         User user = this.userDAO.findByEmail(email);
         if (user == null) {
             throw new NotFoundException("User not found");
         }
-        return this.getBadges(user).toString();
+        return this.getBadges(user);
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
 
@@ -194,9 +194,9 @@ public class GamificationController {
     @RequestMapping(value = "/getBadges/team/{name:.+}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getTeamBadges(@PathVariable("name") String name) {
+    public Badges getTeamBadges(@PathVariable("name") String name) {
         Team team = this.teamDAO.findByName(name);
-        return this.getBadges(team).toString();
+        return this.getBadges(team);
         // {email:.+} allow SpringBoot not to remove the email extension, but the default object response does not suit angular
         // The string is well passed to angular and is understood as a json object.
 

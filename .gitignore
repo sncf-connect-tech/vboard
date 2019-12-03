@@ -12,4 +12,7 @@ npm-debug.log
 .idea/
 *.iml
 
-app-pleeeased.css
+/vboard-front/app-pleeeased.css
+
+/vboard-ws/blogImagesDir
+/vboard-ws/imagesStorageDir

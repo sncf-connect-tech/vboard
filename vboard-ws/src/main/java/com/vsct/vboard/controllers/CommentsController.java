@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/comments")
@@ -77,9 +78,9 @@ public class CommentsController {
     @RequestMapping(value = "/{pinId}", method = RequestMethod.GET)
     @ResponseBody
     @Valid
-    public String getCommentsFromPin(@PathVariable("pinId") String pinId) {
+    public List<Comment> getCommentsFromPin(@PathVariable("pinId") String pinId) {
         // List of pins -> string to avoid Mime problems between front and back end for List
-        return this.commentDAO.findByPin(pinId).toString();
+        return this.commentDAO.findByPin(pinId);
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
