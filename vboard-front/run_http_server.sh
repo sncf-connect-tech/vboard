@@ -11,7 +11,7 @@ sed -i "s~\$VBOARD_API_ENDPOINT~${VBOARD_API_ENDPOINT:-}~" index.html
 
 echo 'Injecting env variables in config.js:'
 cp config.js{,.tmpl}
-envsubst < scripts/config.js.tmpl > config.js
+envsubst < config.js.tmpl > config.js
 
 if [ -n "${KCK_REALM:-}" ] || [ -n "${KCK_PUBLIC_HOST:-}" ] || [ -n "${KEYCLOAK_JS_URL:-}" ]; then
     echo 'Keycloak enabled'

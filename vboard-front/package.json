@@ -39,6 +39,10 @@
     "pleeease-cli": "^4.1.0"
   },
   "engineStrict": true,
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:voyages-sncf-technologies/vboard.git"
+  },
   "scripts": {
     "build": "pleeease-compile && node bundler.js",
     "lint": "eslint --fix src/main/ config.js",

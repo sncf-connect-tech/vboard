@@ -15,10 +15,10 @@ all the static files bundles whenever a source file change is detected:
     cd vboard-front
     npm start
 
-Note that the `bundler.js --watch` command invoked behind the scene
+Note that the `bundler.js --watch-and-serve` command invoked behind the scene
 can somehow conflicts with `run_http_server.sh`, as this former script,
 executed when the `vboard-front` container starts, also alters `config.js` & `index.html`.
 
-Hence, currently the compromise is that `bundler.js --watch`:
+Hence, currently the compromise is that `bundler.js --watch-and-serve`:
 - won't update `config.js`
 - will override `index.html`
