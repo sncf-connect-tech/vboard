@@ -127,9 +127,11 @@ public class AuthenticationController {
         session.removeAttribute(SESSION_USER_ATTRIBUTE_NAME);
     }
 
-    public @NotNull User getSessionUser() {
+    @NotNull
+    private User getSessionUser() {
         User user = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
         if (user != null) {
+            logger.info("getSessionUser: niceName={} isAdmin={}", user.getNiceName(), user.isAdmin());
             return user;
         }
         if (logger.isWarnEnabled()) {  // Lazy: do not generate method argument if not needed
