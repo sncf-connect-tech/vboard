@@ -149,8 +149,8 @@ public class AuthenticationController {
         if (dbUser == null) {
             throw new VBoardException("No user found in DB for email=" + sessionUser.getEmail());
         }
-        if (!dbUser.equals(this.getSessionUser())) {
-            this.logger.debug("Updating user in session cache");
+        if (!dbUser.equals(sessionUser)) {
+            this.logger.info("Updating user in session cache niceName={} isAdmin={}", dbUser.getNiceName(), dbUser.isAdmin());
             this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, dbUser);
         }
         return dbUser;
