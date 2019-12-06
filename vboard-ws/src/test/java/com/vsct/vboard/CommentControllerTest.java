@@ -112,7 +112,7 @@ public class CommentControllerTest {
         this.commentDAO.save(comment);
         this.commentDAO.save(new Comment("5", "2", "auth", "comment2", new DateTime().toString()));
         this.commentDAO.save(new Comment("2", "3", "auth3", "comment2", new DateTime().toString()));
-        Assert.assertEquals(listComment.toString(), commentsController.getCommentsFromPin(pin.getPinId()));
+        Assert.assertEquals(listComment, commentsController.getCommentsFromPin(pin.getPinId()));
     }
 
     @Test

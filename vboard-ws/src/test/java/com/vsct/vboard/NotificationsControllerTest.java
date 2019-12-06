@@ -143,8 +143,8 @@ public class NotificationsControllerTest {
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notif1);
         notifications.add(notif2);
-        Collections.sort(notifications, Comparator.comparing(Notification::getId));
-        Assert.assertEquals(notifications.toString(), this.notificationsController.getAllNotifications());
+        notifications.sort(Comparator.comparing(Notification::getId));
+        Assert.assertEquals(notifications, this.notificationsController.getAllNotifications());
     }
 
     @Test
@@ -161,14 +161,14 @@ public class NotificationsControllerTest {
         this.notificationDAO.save(notif2);
         this.notificationDAO.save(notif5);
         this.notificationDAO.save(notif6);
-        Assert.assertEquals(new ArrayList<>().toString(), this.notificationsController.getUnClickedNotifications());
+        Assert.assertEquals(new ArrayList<>(), this.notificationsController.getUnClickedNotifications());
         this.notificationDAO.save(notif3);
         this.notificationDAO.save(notif4);
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notif3);
         notifications.add(notif4);
-        Collections.sort(notifications, Comparator.comparing(Notification::getId));
-        Assert.assertEquals(notifications.toString(), this.notificationsController.getUnClickedNotifications());
+        notifications.sort(Comparator.comparing(Notification::getId));
+        Assert.assertEquals(notifications, this.notificationsController.getUnClickedNotifications());
     }
 
     @Test
@@ -185,14 +185,14 @@ public class NotificationsControllerTest {
         this.notificationDAO.save(notif2);
         this.notificationDAO.save(notif5);
         this.notificationDAO.save(notif6);
-        Assert.assertEquals(new ArrayList<>().toString(), this.notificationsController.getUnSeenNotifications());
+        Assert.assertEquals(new ArrayList<>(), this.notificationsController.getUnSeenNotifications());
         this.notificationDAO.save(notif3);
         this.notificationDAO.save(notif4);
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notif3);
         notifications.add(notif4);
-        Collections.sort(notifications, Comparator.comparing(Notification::getId));
-        Assert.assertEquals(notifications.toString(), this.notificationsController.getUnSeenNotifications());
+        notifications.sort(Comparator.comparing(Notification::getId));
+        Assert.assertEquals(notifications, this.notificationsController.getUnSeenNotifications());
     }
 
     @Test
@@ -237,7 +237,7 @@ public class NotificationsControllerTest {
         this.assertNotification(notif, from, "emailNotif", "#/?id=" + pinNotif.getPinId(), "a ajouté une épingle avec un label que vous suivez", "pin");
     }
 
-    public void assertNotification(Notification notif, User from, String email, String link, String message, String type) {
+    private void assertNotification(Notification notif, User from, String email, String link, String message, String type) {
         Assert.assertEquals(email , notif.getEmail());
         Assert.assertEquals(link , notif.getLink());
         Assert.assertEquals(message , notif.getMessage());
@@ -246,14 +246,14 @@ public class NotificationsControllerTest {
         Assert.assertTrue(new DateTime(notif.getDate()).minusMinutes(2).isBefore(new DateTime()));
     }
 
-    public void checkCleanNotifications(User u) {
+    private void checkCleanNotifications(User u) {
         Mockito.doReturn(u).when(permission).getSessionUser();
         Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
-        Assert.assertEquals("[]", this.notificationsController.getAllNotifications());
+        Assert.assertEquals(Collections.emptyList(), this.notificationsController.getAllNotifications());
         Assert.assertEquals(0, this.notificationDAO.findByEmail(u.getEmail()).size());
     }
 
-    public void postPinByAuthor(String[] labels) {
+    private void postPinByAuthor(String[] labels) {
         // Impossible to test the addNotificationsFromPin call from this.pinController while mocking this.permission.
         // this.pinsController Test. Check if the right method is called with the right arguments, then we test the method called itself with the same arguments.
         NotificationsController notificationsControllerSpy = spy(this.notificationsController);
@@ -263,7 +263,7 @@ public class NotificationsControllerTest {
         verify(notificationsControllerSpy).addNotificationsFromPin(eq(this.pinDAO.findAll().iterator().next().getPinId()), eq("a ajouté une épingle avec un label que vous suivez"));
     }
 
-    public Notification createPinNotificationAsAuthor(User from, Pin pinNotif) {
+    private Notification createPinNotificationAsAuthor(User from, Pin pinNotif) {
         // Simulation as if it was the author that was sending the notification.
         Mockito.doReturn(from).when(permission).getSessionUser();
         this.notificationsController.addNotificationsFromPin(pinNotif.getPinId(), "a ajouté une épingle avec un label que vous suivez");
@@ -271,7 +271,7 @@ public class NotificationsControllerTest {
         return this.notificationDAO.findByEmail("emailNotif").get(0);
     }
 
-    public void cleanAll() {
+    private void cleanAll() {
         this.pinsController.deleteAllPins();
         this.commentsController.deleteAllComments();
         this.notificationsController.deleteAllNotifications();
@@ -301,7 +301,7 @@ public class NotificationsControllerTest {
         this.assertNotification(notif, from, "emailNotif", "#/?id=" + pin.getPinId(), "a commenté sur une de vos épingles", "comment");
     }
 
-    public void postCommentByAuthor(User from, Pin pin) {
+    private void postCommentByAuthor(User from, Pin pin) {
         // Impossible to test the addNotificationsFrom call from this.commentController while mocking this.permission.
         // this.commentController Test. Check if the right method is called with the right arguments, then we test the method called itself with the same arguments.
         NotificationsController notificationsControllerSpy = spy(this.notificationsController);
@@ -310,7 +310,7 @@ public class NotificationsControllerTest {
         verify(notificationsControllerSpy).addNotificationsFromComment(eq(pin.getPinId()));
     }
 
-    public Notification createCommentNotificationAsAuthor(User from, Pin pin) {
+    private Notification createCommentNotificationAsAuthor(User from, Pin pin) {
         // Simulation as if it was the author that was sending the notification.
         Mockito.doReturn(from).when(permission).getSessionUser();
         this.notificationsController.addNotificationsFromComment(pin.getPinId());
@@ -399,7 +399,7 @@ public class NotificationsControllerTest {
         Assert.assertEquals(0, this.notificationDAO.findByEmail("emailNotif").size());
     }
 
-    public void addBadgeNotificationAfter(User u, String message) {
+    private void addBadgeNotificationAfter(User u, String message) {
         this.gamificationController.getStats(u);
         Assert.assertEquals(1, this.notificationDAO.findByEmail(u.getEmail()).size());
         Notification notif = this.notificationDAO.findByEmail(u.getEmail()).get(0);

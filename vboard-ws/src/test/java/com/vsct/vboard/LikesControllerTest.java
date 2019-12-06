@@ -23,6 +23,7 @@ import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc;
 import com.vsct.vboard.DAO.*;
 import com.vsct.vboard.config.ProxyConfig;
 import com.vsct.vboard.controllers.*;
+import com.vsct.vboard.exceptions.NotFoundException;
 import com.vsct.vboard.models.Like;
 import com.vsct.vboard.models.Pin;
 import com.vsct.vboard.models.User;
@@ -32,7 +33,9 @@ import com.vsct.vboard.services.UploadsManager;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -45,7 +48,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 import static com.vsct.vboard.TestUtil.createTestDB;
@@ -84,9 +86,9 @@ public class LikesControllerTest {
     @Mock
     private NotificationsController notifications;
     @Mock
-    HttpSession session;
-    @Mock
     private ProxyConfig proxyConfig;
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -109,14 +111,14 @@ public class LikesControllerTest {
         Like like2 = new Like("id2", "pin", "author");
         Like like3 = new Like("id3", "pin", "author2");
         ArrayList<Like> list = new ArrayList<>();
-        Assert.assertEquals(list.toString(), likesController.getLikesFromAuthor("author"));
+        Assert.assertEquals(list, likesController.getLikesFromAuthor("author"));
         this.likeDAO.save(like);
         list.add(like);
-        Assert.assertEquals(list.toString(), likesController.getLikesFromAuthor("author"));
+        Assert.assertEquals(list, likesController.getLikesFromAuthor("author"));
         this.likeDAO.save(like2);
         list.add(like2);
         this.likeDAO.save(like3);
-        Assert.assertEquals(list.toString(), likesController.getLikesFromAuthor("author"));
+        Assert.assertEquals(list, likesController.getLikesFromAuthor("author"));
     }
 
     @Test
@@ -126,16 +128,16 @@ public class LikesControllerTest {
         Like like2 = new Like("id3", "pin2", "author");
         Like like3 = new Like("id4", "pin", "author2");
         ArrayList<Like> list = new ArrayList<>();
-        Assert.assertEquals(list.toString(), likesController.getLikesFromPin("pin"));
+        Assert.assertEquals(list, likesController.getLikesFromPin("pin"));
         this.likeDAO.save(like);
         list.add(like);
-        Assert.assertEquals(list.toString(), likesController.getLikesFromPin("pin"));
+        Assert.assertEquals(list, likesController.getLikesFromPin("pin"));
         this.likeDAO.save(like1);
         list.add(like1);
         this.likeDAO.save(like2);
         this.likeDAO.save(like3);
         list.add(like3);
-        Assert.assertEquals(list.toString(), likesController.getLikesFromPin("pin"));
+        Assert.assertEquals(list, likesController.getLikesFromPin("pin"));
     }
 
     @Test
@@ -170,8 +172,8 @@ public class LikesControllerTest {
         Assert.assertEquals(0, this.likeDAO.findByPin("vboard-id").size());
         Assert.assertEquals(0, this.likeDAO.findByAuthor("email").size());
         Assert.assertEquals(0, this.pinDAO.findByPinId("vboard-id").getLikes());
+        exceptionRule.expect(NotFoundException.class);
         this.likesController.removeLike("vboard-id", "email");
-        Assert.assertEquals(0, this.pinDAO.findByPinId("vboard-id").getLikes());
 
     }
 
