@@ -128,7 +128,7 @@ public class AuthenticationController {
     }
 
     @NotNull
-    private User getSessionUser() {
+    public User getSessionUser() {
         User user = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
         if (user != null) {
             logger.info("getSessionUser: niceName={} isAdmin={}", user.getNiceName(), user.isAdmin());
