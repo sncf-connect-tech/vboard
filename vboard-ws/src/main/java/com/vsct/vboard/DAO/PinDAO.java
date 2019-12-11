@@ -33,5 +33,5 @@ public interface PinDAO extends CrudRepository<Pin, String> {
 
     Integer removeByPinId(String pin_id); // Spring will generate an implementation based on the method name: removeBy+attributeName
 
-    Pin findByHrefUrl(String url);
+    List<Pin> findByHrefUrl(String url);
 }

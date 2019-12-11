@@ -52,9 +52,11 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 @RestController
@@ -99,17 +101,19 @@ public class PinsController {
 
     private void disableCertificateValidation() {
         TrustManager[] trustAllCerts = new TrustManager[]{
-            new X509TrustManager() {
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
+                new X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkClientTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+
+                    public void checkServerTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
                 }
-                public void checkClientTrusted(
-                        java.security.cert.X509Certificate[] certs, String authType) {
-                }
-                public void checkServerTrusted(
-                        java.security.cert.X509Certificate[] certs, String authType) {
-                }
-            }
         };
         try {
             SSLContext sc = SSLContext.getInstance("SSL");
@@ -208,12 +212,13 @@ public class PinsController {
         String url = params.getUrl();
         String imgType = params.getImgType();
 
-        if (!uploadsManager.isMultiplePinsPerUrlAllowed()) {
-            Pin existingPin = this.pinDAO.findByHrefUrl(url);
-            if (existingPin != null) {
-                throw new DuplicateContentException("An existing pin already exists for this URL,"
-                        + " created on " + existingPin.getPostDateUTC()
-                        + " and with ID: " + existingPin.getPinId());
+        if (isNotBlank(url) && !uploadsManager.isMultiplePinsPerUrlAllowed()) {
+            List<Pin> existingPins = this.pinDAO.findByHrefUrl(url);
+            if (!existingPins.isEmpty()) {
+                throw new DuplicateContentException("Existing pin already exist for this URL: "
+                        + existingPins.stream()
+                        .map(pin -> "[ID=" + pin.getPinId() + " creationDate=" + pin.getPostDateUTC() + "]")
+                        .collect(Collectors.joining()));
             }
         }
 
@@ -250,7 +255,7 @@ public class PinsController {
         // Send a notification
         this.notifications.addNotificationsFromPin(newPin.getPinId(), "a ajouté une épingle avec un label que vous suivez");
         // Add the new labels in the list of labels
-        if (!isBlank(strLabels)) {
+        if (isNotBlank(strLabels)) {
             List<String> pinLabels = Arrays.asList(strLabels.split(","));
             pinLabels.forEach(l -> this.labelDAO.save(new Label(l)));
         }
@@ -274,7 +279,7 @@ public class PinsController {
         if (!this.isMediaInternetImage(imgType)) {
             imgType = null;
         }
-        if (!isBlank(labels)) {
+        if (isNotBlank(labels)) {
             labels = "#" + labels;
         }
         User user = this.userDAO.findByEmail(author);
@@ -302,7 +307,7 @@ public class PinsController {
             throw new VBoardException(e.getMessage(), e.getMostSpecificCause());
         }
         // Add the new labels in the list of labels
-        if (!isBlank(labels)) {
+        if (isNotBlank(labels)) {
             List<String> pinLabels = Arrays.asList(labels.split(","));
             pinLabels.forEach(l -> this.labelDAO.save(new Label(l)));
         }
@@ -355,7 +360,7 @@ public class PinsController {
             throw new VBoardException(e.getMessage(), e.getMostSpecificCause());
         }
         // Add the new labels in the list of labels
-        if (!isBlank(strLabels)) {
+        if (isNotBlank(strLabels)) {
             List<String> pinLabels = Arrays.asList(strLabels.split(","));
             pinLabels.forEach(l -> this.labelDAO.save(new Label(l)));
         }
