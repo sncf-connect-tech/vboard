@@ -85,6 +85,11 @@ public class AuthenticationController {
         User user = this.userDAO.findByEmail(userEmail);
         if (user == null) {
             user = createUserFromAuth(auth);
+        } else if (logger.isWarnEnabled()) {  // Lazy: do not generate log argument if not needed
+            User sessionUser = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
+            if (sessionUser != null && !user.equals(sessionUser)) {
+                this.logger.warn("Differing users between DB & session: {}", user.diff(sessionUser));
+            }
         }
         // We always update this in case the config value has changed:
         user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
