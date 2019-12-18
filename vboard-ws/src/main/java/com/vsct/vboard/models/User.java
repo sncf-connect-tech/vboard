@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vsct.vboard.utils.SerializationError;
 import com.vsct.vboard.utils.StaticContextAccessor;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.commons.lang3.builder.*;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -39,7 +40,7 @@ import static org.apache.commons.lang3.StringUtils.countMatches;
 @Entity
 @Table(name = "users")
 @SuppressFBWarnings("STT_STRING_PARSING_A_FIELD")
-public class User implements Profil, Serializable {
+public class User implements Diffable<User>, Profil, Serializable {
 
     @Id
     @NotNull
@@ -257,50 +258,74 @@ public class User implements Profil, Serializable {
     }
 
     @Override
+    // WARNING: remember to update .hashCode() & .diff(user) accordingly
     public boolean equals(Object o) {
         if (this == o) return true;
+
         if (o == null || getClass() != o.getClass()) return false;
 
         User user = (User) o;
 
-        if (hasCustomAvatar != user.hasCustomAvatar) return false;
-        if (receiveNlEmails != user.receiveNlEmails) return false;
-        if (receivePopularPinsEmails != user.receivePopularPinsEmails) return false;
-        if (receiveLeaderboardEmails != user.receiveLeaderboardEmails) return false;
-        if (receiveRecapEmails != user.receiveRecapEmails) return false;
-        if (isAdmin != user.isAdmin) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (team != null ? !team.equals(user.team) : user.team != null) return false;
-        if (info != null ? !info.equals(user.info) : user.info != null) return false;
-        if (favoriteLabels != null ? !favoriteLabels.equals(user.favoriteLabels) : user.favoriteLabels != null)
-            return false;
-        if (lastConnection != null ? !lastConnection.equals(user.lastConnection) : user.lastConnection != null)
-            return false;
-        if (roles != null ? !roles.equals(user.roles) : user.roles != null) return false;
-        return newsletterLabel != null ? newsletterLabel.equals(user.newsletterLabel) : user.newsletterLabel == null;
+        return new EqualsBuilder()
+                .append(hasCustomAvatar, user.hasCustomAvatar)
+                .append(receiveNlEmails, user.receiveNlEmails)
+                .append(receivePopularPinsEmails, user.receivePopularPinsEmails)
+                .append(receiveLeaderboardEmails, user.receiveLeaderboardEmails)
+                .append(receiveRecapEmails, user.receiveRecapEmails)
+                .append(isAdmin, user.isAdmin)
+                .append(email, user.email)
+                .append(firstName, user.firstName)
+                .append(lastName, user.lastName)
+                .append(team, user.team)
+                .append(info, user.info)
+                .append(favoriteLabels, user.favoriteLabels)
+                .append(lastConnection, user.lastConnection)
+                .append(roles, user.roles)
+                .append(newsletterLabel, user.newsletterLabel)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        int result = email != null ? email.hashCode() : 0;
-        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
-        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
-        result = 31 * result + (hasCustomAvatar ? 1 : 0);
-        result = 31 * result + (team != null ? team.hashCode() : 0);
-        result = 31 * result + (info != null ? info.hashCode() : 0);
-        result = 31 * result + (favoriteLabels != null ? favoriteLabels.hashCode() : 0);
-        result = 31 * result + (lastConnection != null ? lastConnection.hashCode() : 0);
-        result = 31 * result + (receiveNlEmails ? 1 : 0);
-        result = 31 * result + (receivePopularPinsEmails ? 1 : 0);
-        result = 31 * result + (receiveLeaderboardEmails ? 1 : 0);
-        result = 31 * result + (receiveRecapEmails ? 1 : 0);
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
-        result = 31 * result + (newsletterLabel != null ? newsletterLabel.hashCode() : 0);
-        result = 31 * result + (isAdmin ? 1 : 0);
-        return result;
+        return new HashCodeBuilder(17, 37)
+                .append(email)
+                .append(firstName)
+                .append(lastName)
+                .append(hasCustomAvatar)
+                .append(team)
+                .append(info)
+                .append(favoriteLabels)
+                .append(lastConnection)
+                .append(receiveNlEmails)
+                .append(receivePopularPinsEmails)
+                .append(receiveLeaderboardEmails)
+                .append(receiveRecapEmails)
+                .append(roles)
+                .append(newsletterLabel)
+                .append(isAdmin)
+                .toHashCode();
     }
+
+    public DiffResult diff(User user) {
+     // No need for null check, as NullPointerException correct if obj is null
+     return new DiffBuilder(this, user, ToStringStyle.SHORT_PREFIX_STYLE)
+             .append("hasCustomAvatar", hasCustomAvatar, user.hasCustomAvatar)
+             .append("receiveNlEmails", receiveNlEmails, user.receiveNlEmails)
+             .append("receivePopularPinsEmails", receivePopularPinsEmails, user.receivePopularPinsEmails)
+             .append("receiveLeaderboardEmails", receiveLeaderboardEmails, user.receiveLeaderboardEmails)
+             .append("receiveRecapEmails", receiveRecapEmails, user.receiveRecapEmails)
+             .append("isAdmin", isAdmin, user.isAdmin)
+             .append("email", email, user.email)
+             .append("firstName", firstName, user.firstName)
+             .append("lastName", lastName, user.lastName)
+             .append("team", team, user.team)
+             .append("info", info, user.info)
+             .append("favoriteLabels", favoriteLabels, user.favoriteLabels)
+             .append("lastConnection", lastConnection, user.lastConnection)
+             .append("roles", roles, user.roles)
+             .append("newsletterLabel", newsletterLabel, user.newsletterLabel)
+       .build();
+   }
 
     @Override
     public String toString() {

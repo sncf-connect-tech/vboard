@@ -173,12 +173,12 @@ public class UserControllerTest {
         this.userDAO.save(new User("email", "fname", "lname", false, "team1", "info"));
         this.userDAO.save(new User("email2", "fname", "lname", false, "team1", "info"));
         User user = this.userDAO.findByEmail("email");
-        Mockito.doReturn(user).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(user).when(permission).getSessionUser();
         User user2 = this.userDAO.findByEmail("email2");
         Assert.assertEquals("", user.getFavoriteLabels());
         Assert.assertEquals("", user2.getFavoriteLabels());
         this.userController.updateFavoriteLabels("{\"labels\": \"#label\"}");
-        Mockito.doReturn(user2).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(user2).when(permission).getSessionUser();
         this.userController.updateFavoriteLabels("{\"labels\": \"#label1,#label2\"}");
         user = this.userDAO.findByEmail("email");
         user2 = this.userDAO.findByEmail("email2");

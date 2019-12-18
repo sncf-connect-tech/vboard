@@ -193,7 +193,7 @@ public class UsersController {
     @ResponseBody
     @Valid
     public User updateFavoriteLabels(@Valid @RequestBody String labels) {
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         labels = JavaUtils.extractJSONObject(labels, "labels");
         user.setFavoriteLabels(labels);
         try {
@@ -211,7 +211,7 @@ public class UsersController {
     @Valid
     // Parsing the params in the JSON body requires using a dedicated @RequestBody annotated class instead of simple @RequestParam arguments
     public User setLastConnection() {
-        final User user = permission.getSessionUserWithSyncFromDB();
+        final User user = permission.getSessionUser();
         user.setLastConnection(new DateTime(DateTimeZone.UTC).toString());
         this.userDAO.save(user);
         return user;
@@ -283,7 +283,7 @@ public class UsersController {
         if (!label.startsWith("#")) {
             label = "#" + label;
         }
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         user.setNewsletterLabel(label);
         this.userDAO.save(user);
     }

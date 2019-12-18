@@ -165,7 +165,7 @@ public class PinsController {
         List<SavedPin> savedPins = this.savedPinDAO.findByPinId(pinId);
         this.savedPinDAO.delete(savedPins);
         // Update the stats
-        this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+        this.gamification.updateStats(permission.getSessionUser());
         return result;
     }
 
@@ -248,7 +248,7 @@ public class PinsController {
                 uploadsManager.savePinImage(params.getImgType(), retval.getPinId());
             }
             // Update the stats
-            this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+            this.gamification.updateStats(permission.getSessionUser());
         } catch (UnexpectedRollbackException e) {
             throw new VBoardException(e.getMessage(), e.getMostSpecificCause());
         }

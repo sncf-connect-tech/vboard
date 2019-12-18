@@ -319,7 +319,7 @@ public class MessagesController {
     // Create and Send the newsletter email to all user allowing it
     public void sendNLEmailsToAll(EmailParams emailParams, boolean test) {
         this.setTemplate(); // retrieve email templates
-        User userNL = permission.getSessionUserWithSyncFromDB();
+        User userNL = permission.getSessionUser();
         if (userNL.getNewsletterLabel() != null && userNL.getNewsletterLabel().length() > 1) {
             this.tagNL = userNL.getNewsletterLabel();
             this.tagNLHTML = "%23" + userNL.getNewsletterLabel().substring(1);

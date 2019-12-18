@@ -174,7 +174,7 @@ public class PinsControllerTest {
     @Test
     public void addNewPinWithUtf8JsonContentType() {
         //@formatter:off
-        Mockito.doReturn(null).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(null).when(permission).getSessionUser();
         Map<String , Object> params = new HashMap<String , Object>() {{
             put("title", "title");
             put("url", "http://twitter.com/dummy/status/0");

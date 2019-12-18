@@ -136,26 +136,9 @@ public class AuthenticationController {
             return user;
         }
         if (logger.isWarnEnabled()) {  // Lazy: do not generate method argument if not needed
-            logger.warn("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName());
+            logger.warn("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName()); // TODO: remove this debug log
         }
         return initializeUser();
-    }
-
-    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
-    public @NotNull User getSessionUserWithSyncFromDB() {
-        final User sessionUser = this.getSessionUser();
-        if (ANONYMOUS_USER.equals(sessionUser)) {
-            return ANONYMOUS_USER;
-        }
-        final User dbUser = this.userDAO.findByEmail(sessionUser.getEmail());
-        if (dbUser == null) {
-            throw new VBoardException("No user found in DB for email=" + sessionUser.getEmail());
-        }
-        if (!dbUser.equals(sessionUser)) {
-            this.logger.info("Updating user in session cache niceName={} isAdmin={}. Called from method: {}", dbUser.getNiceName(), dbUser.isAdmin(), Thread.currentThread().getStackTrace()[2].getMethodName());
-            this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, dbUser);
-        }
-        return dbUser;
     }
 
     void ensureCurrentUserIsAdmin() {
@@ -165,7 +148,7 @@ public class AuthenticationController {
     }
 
     void ensureUserHasNewsletterRole() {
-        if (webSecurityConfig.isAuthEnabled() && !this.getSessionUserWithSyncFromDB().hasRole(Role.Newsletter)) {
+        if (webSecurityConfig.isAuthEnabled() && !this.getSessionUser().hasRole(Role.Newsletter)) {
             throw new VBoardException("Unauthorized Access - Current user does not have the 'Newsletter' role");
         }
     }
@@ -189,7 +172,7 @@ public class AuthenticationController {
     void ensureUserHasRightsToAlterPin(String pinAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
-        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(pinAuthor) || sessionUser.isAdmin() || hasModeratorRole())) {
+        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(pinAuthor) || sessionUser.isAdmin() || sessionUser.hasRole(Role.Moderateur))) {
             throw new VBoardException("Unauthorized Access - User cannot update nor delete pins: " + userString
                                       + " isAdmin=" + sessionUser.isAdmin());
         }
@@ -199,13 +182,9 @@ public class AuthenticationController {
     void ensureUserHasRightsToAlterComment(String commentAuthor) {
         final User sessionUser = this.getSessionUser();
         final String userString = sessionUser.getUserString();
-        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(commentAuthor) || sessionUser.isAdmin() || this.getSessionUser().getEmail().equals(commentAuthor) || hasModeratorRole())) {
+        if (webSecurityConfig.isAuthEnabled() && !(userString.equals(commentAuthor) || sessionUser.isAdmin() || sessionUser.getEmail().equals(commentAuthor) || sessionUser.hasRole(Role.Moderateur))) {
             throw new VBoardException("Unauthorized Access - The user does not have the authorization to do that action(" + userString + ")");
         }
-    }
-
-    private boolean hasModeratorRole() {
-        return this.getSessionUserWithSyncFromDB().hasRole(Role.Moderateur);
     }
 
 }

@@ -98,7 +98,7 @@ public class GamificationController {
     @ResponseBody
     @Valid
     public Stats getUserStats() {
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         return this.getStats(user);
     }
 
@@ -121,7 +121,7 @@ public class GamificationController {
     @ResponseBody
     @Valid
     public Stats getUserStatsPercentage() {
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         return this.getStatsPercentage(user);
     }
 
@@ -171,7 +171,7 @@ public class GamificationController {
     @ResponseBody
     @Valid
     public Badges getUserBadges() {
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         return this.getBadges(user);
     }
 
@@ -223,7 +223,7 @@ public class GamificationController {
     @ResponseBody
     @Valid
     public int trackConnection() {
-        final User user = permission.getSessionUserWithSyncFromDB();
+        final User user = permission.getSessionUser();
         Stats stats = this.statsDAO.findByEmail(user.getEmail());
         // If the user has no stats yet, a new one is created
         if (stats == null) {
@@ -623,7 +623,7 @@ public class GamificationController {
     @ResponseBody
     @Valid
     public void setSecret() {
-        User user = permission.getSessionUserWithSyncFromDB();
+        User user = permission.getSessionUser();
         Badges badges = this.badgesDAO.findByEmail(user.getEmail());
         Stats stats = this.statsDAO.findByEmail(user.getEmail());
         stats.setSecret(stats.getSecret() + 1);

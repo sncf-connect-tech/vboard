@@ -105,7 +105,7 @@ public class LikesController {
             // If the like was not there before, it is effectively added in the MySQL and ElasticSearch DB
             this.addLikeToPin(pinId);
             // Update the user's stats
-            this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+            this.gamification.updateStats(permission.getSessionUser());
         }
         return like;
     }
@@ -126,7 +126,7 @@ public class LikesController {
             }
             if (User.getEmailFromString(pin.getAuthor()).isPresent()) {
                 User userAuthor = this.userDAO.findByEmail(User.getEmailFromString(pin.getAuthor()).get());
-                if (userAuthor != null && userAuthor != permission.getSessionUserWithSyncFromDB()) {
+                if (userAuthor != null && userAuthor != permission.getSessionUser()) {
                     // If the author of the pin is known its stats are updated
                     this.gamification.updateStats(userAuthor);
                 }
@@ -154,10 +154,11 @@ public class LikesController {
         // Remove the like in elasticsearch
         this.elsClient.removeLike(pinId);
         // Update the stats for the current user
-        this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+        final User sessionUser = permission.getSessionUser();
+        this.gamification.updateStats(sessionUser);
         if (User.getEmailFromString(pin.getAuthor()).isPresent()) {
             User userAuthor = this.userDAO.findByEmail(User.getEmailFromString(pin.getAuthor()).get());
-            if (userAuthor != null && userAuthor != permission.getSessionUserWithSyncFromDB()) {
+            if (userAuthor != null && userAuthor.getEmail().equals(sessionUser.getEmail())) {
                 // Update the stats for the author of the pin
                 this.gamification.updateStats(userAuthor);
             }

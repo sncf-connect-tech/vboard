@@ -105,10 +105,11 @@ public class CommentsController {
             // Increase the number of comments for the given pin in elasticsearch
             this.elsClient.addComment(comment.getPinId());
             // Update the stats (for the user, and for the author of the pin where the comment has been added)
-            this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+            final User sessionUser = permission.getSessionUser();
+            this.gamification.updateStats(sessionUser);
             if (pin != null && User.getEmailFromString(pin.getAuthor()).isPresent()) {
                 User userAuthor = this.userDAO.findByEmail(User.getEmailFromString(pin.getAuthor()).get());
-                if (userAuthor != null && userAuthor != permission.getSessionUserWithSyncFromDB()) {
+                if (userAuthor != null && userAuthor != sessionUser) {
                     this.gamification.updateStats(userAuthor);
                 }
             }
@@ -147,7 +148,7 @@ public class CommentsController {
                 this.pinDAO.save(pin);
                 if (User.getEmailFromString(pin.getAuthor()).isPresent()) {
                     User userAuthor = this.userDAO.findByEmail(User.getEmailFromString(pin.getAuthor()).get());
-                    if (userAuthor != null && userAuthor != permission.getSessionUserWithSyncFromDB()) {
+                    if (userAuthor != null && userAuthor != permission.getSessionUser()) {
                         // Update the pin's author stats
                         this.gamification.updateStats(userAuthor);
                     }
@@ -211,7 +212,7 @@ public class CommentsController {
 
                 this.logger.debug("deleteComment: id={}", id);
                 // Update the stats
-                this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+                this.gamification.updateStats(permission.getSessionUser());
             } else {
                 throw new VBoardException("Comment does not exist or already deleted");
             }

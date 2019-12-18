@@ -248,7 +248,7 @@ public class NotificationsControllerTest {
 
     private void checkCleanNotifications(User u) {
         Mockito.doReturn(u).when(permission).getSessionUser();
-        Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(u).when(permission).getSessionUser();
         Assert.assertEquals(Collections.emptyList(), this.notificationsController.getAllNotifications());
         Assert.assertEquals(0, this.notificationDAO.findByEmail(u.getEmail()).size());
     }
@@ -286,7 +286,7 @@ public class NotificationsControllerTest {
 
         Mockito.doReturn(u).when(permission).getSessionUser();
         Mockito.doNothing().when(permission).ensureNewEntityAuthorMatchesSessionUser(anyString());
-        Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(u).when(permission).getSessionUser();
         User.getEmailFromString("firstname,lastname,emailNotif");
         User.getEmailFromString("firstname,lastname,emailNotifFrom");
 
@@ -327,7 +327,7 @@ public class NotificationsControllerTest {
         this.cleanAll();
 
         Mockito.doNothing().when(permission).ensureNewEntityAuthorMatchesSessionUser(anyString());
-        Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(u).when(permission).getSessionUser();
         User.getEmailFromString("firstname,lastname,emailNotif");
         User.getEmailFromString("firstname,lastname,emailNotifFrom");
         User.getEmailFromString("firstname,lastname,emailOther");
@@ -354,7 +354,7 @@ public class NotificationsControllerTest {
 
         Mockito.doReturn(u).when(permission).getSessionUser();
         Mockito.doNothing().when(permission).ensureNewEntityAuthorMatchesSessionUser(anyString());
-        Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(u).when(permission).getSessionUser();
         User.getEmailFromString("firstname,lastname,emailNotif");
         User.getEmailFromString("firstname,lastname,emailNotifFrom");
         User.getEmailFromString("firstname,lastname,emailOther");
@@ -385,7 +385,7 @@ public class NotificationsControllerTest {
         stats.setLastConnexion(new DateTime().minusDays(2).toString());
         this.statsDAO.save(stats);
         Mockito.doReturn(u).when(permission).getSessionUser();
-        Mockito.doReturn(u).when(permission).getSessionUserWithSyncFromDB();
+        Mockito.doReturn(u).when(permission).getSessionUser();
         this.gamificationController.trackConnection();
         Assert.assertEquals(1, this.notificationDAO.findByEmail("emailNotif").size());
         Notification notif = this.notificationDAO.findByEmail("emailNotif").get(0);

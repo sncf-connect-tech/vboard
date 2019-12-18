@@ -66,7 +66,7 @@ public class SavedPinController {
         SavedPin savedPin = new SavedPin(pinId, permission.getSessionUser().getEmail());
         this.savedPinDAO.save(savedPin);
         this.logger.debug("savedPin {} created by {}", pinId, permission.getSessionUser().getUserString());
-        this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+        this.gamification.updateStats(permission.getSessionUser());
         return savedPin;
     }
 
@@ -77,7 +77,7 @@ public class SavedPinController {
     public void deleteSavedPin(@PathVariable("pin_id") String pinId) {
         SavedPin savedPin = this.savedPinDAO.findById(pinId+permission.getSessionUser().getEmail());
         this.savedPinDAO.delete(savedPin);
-        this.gamification.updateStats(permission.getSessionUserWithSyncFromDB());
+        this.gamification.updateStats(permission.getSessionUser());
         this.logger.debug("savedPin {} deleted by: {}", pinId, permission.getSessionUser().getUserString());
     }
 
