@@ -34,6 +34,8 @@ import io.searchbox.core.Update;
 import io.searchbox.core.search.sort.Sort;
 import io.searchbox.params.Parameters;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -47,6 +49,7 @@ import static java.lang.Boolean.TRUE;
 public class ElasticSearchClient {
     private final ElasticSearchClientConfig elsConfig;
     private JestHttpClient elasticSearchClient = null;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     ElasticSearchClient(ElasticSearchClientConfig elsConfig) {
@@ -158,6 +161,7 @@ public class ElasticSearchClient {
 
     private void changeLikeCount(String pinId, String diff) {
         final String script = "{ \"script\" : \"ctx._source.likes += " + diff + "\" }";
+        logger.debug("Change like count: {}", script);
         try {
             final JestResult result = this.lazyGetElsClient().execute(new Update.Builder(script).index(this.elsConfig.getPinsIndex()).type("jdbc").id(pinId).build());
             if (!result.isSucceeded()) {
@@ -178,6 +182,7 @@ public class ElasticSearchClient {
 
     private void changeCommentCount(String pinId, String diff) {
         final String script = "{ \"script\" : \"ctx._source.comments_number += " + diff + "\" }";
+        logger.debug("Change comment count: {}", script);
         try {
             final JestResult result = this.lazyGetElsClient().execute(new Update.Builder(script).index(this.elsConfig.getPinsIndex()).type("jdbc").id(pinId).build());
             if (!result.isSucceeded()) {
@@ -198,6 +203,7 @@ public class ElasticSearchClient {
 
     public void updatePin(Pin pin) {
         final String script = "{ \"script\" : \"ctx._source = pinUpdate\", \"params\": { \"pinUpdate\": " + pin + " }}";
+        logger.debug("Update pin: {}", script);
         try {
             final JestResult result = this.lazyGetElsClient().execute(new Update.Builder(script).index(this.elsConfig.getPinsIndex()).type("jdbc").id(pin.getPinId()).build());
             if (!result.isSucceeded()) {

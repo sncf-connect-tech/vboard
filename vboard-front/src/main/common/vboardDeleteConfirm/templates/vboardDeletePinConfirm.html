@@ -29,6 +29,6 @@
         <span>Supprimer</span>
     </button>
     <div class="alert alert-danger" data-ng-show="error">
-        <pre>{{error.status}} {{error.data.message || error.data}}</pre>
+        <pre>{{error.status}} {{error.data && error.data.message || error.data}}</pre>
     </div>
 </div>

@@ -9,6 +9,7 @@ logging:
     org.springframework.web: ${SPRING_LOG_LEVEL:INFO}
     com.vsct.vboard:
       config.cognito.*: ${AWS_COGNITO_AUTH_LOG_LEVEL:INFO}
+      services.ElasticSearchClient: ${ELS_LOG_LEVEL:INFO}
 
 aws-cognito:
   enabled: ${AWS_COGNITO_ENABLED:false}
