@@ -128,6 +128,7 @@ public class AuthenticationController {
     }
 
     @NotNull
+    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     public User getSessionUser() {
         User user = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
         if (user != null) {
@@ -140,6 +141,7 @@ public class AuthenticationController {
         return initializeUser();
     }
 
+    @SuppressFBWarnings("CLI_CONSTANT_LIST_INDEX")
     public @NotNull User getSessionUserWithSyncFromDB() {
         final User sessionUser = this.getSessionUser();
         if (ANONYMOUS_USER.equals(sessionUser)) {
@@ -150,7 +152,7 @@ public class AuthenticationController {
             throw new VBoardException("No user found in DB for email=" + sessionUser.getEmail());
         }
         if (!dbUser.equals(sessionUser)) {
-            this.logger.info("Updating user in session cache niceName={} isAdmin={}", dbUser.getNiceName(), dbUser.isAdmin());
+            this.logger.info("Updating user in session cache niceName={} isAdmin={}. Called from method: {}", dbUser.getNiceName(), dbUser.isAdmin(), Thread.currentThread().getStackTrace()[2].getMethodName());
             this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, dbUser);
         }
         return dbUser;
