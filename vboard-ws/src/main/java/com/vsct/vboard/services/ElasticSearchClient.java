@@ -202,11 +202,10 @@ public class ElasticSearchClient {
     }
 
     public void updatePin(Pin pin) {
-        final String script = "{ \"script\": \"ctx._source = pinUpdate\"}";
+        final String script = "{ \"script\": { \"source\": \"ctx._source = params.pinUpdate\", \"params\": { \"pinUpdate\": " + pin + " } } }";
         logger.debug("Update pin: {}", script);
         try {
             final Update updateOperation = new Update.Builder(script)
-                    .setParameter("pinUpdate", pin)
                     .index(this.elsConfig.getPinsIndex())
                     .type("jdbc")
                     .id(pin.getPinId())
