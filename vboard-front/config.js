@@ -17,7 +17,7 @@
  */
 
 const apiEndpoint = '$VBOARD_API_ENDPOINT',
-    blogUrl = '$VBOARD_WP_PUBLIC_HOST',
+    blogUrl = '$VBOARD_BLOG_URL',
     localisations = '$VBOARD_LOCALISATIONS',
     displayPinsFromLastMonthsCount = '$VBOARD_PINS_MONTHS_COUNT';
 

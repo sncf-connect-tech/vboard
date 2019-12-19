@@ -7,12 +7,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [?] - 20YY-MM-DD
 ### Fixed
+- `Variable [pinUpdate] is not defined` HTTP 500 error in `ElasticSearchClient.updatePin`
 - When visiting the profile URL of a non-existing user, UI loaded forever (#44)
 - per-author pin search (#9)
 - issue with Cognito auth & getSessionUser, that use to rely on the `JSESSIONID` cookie
 (it does not anymore)
 
 ### Changed
+- renamed `$VBOARD_WP_PUBLIC_HOST` configuration environment variable into `$VBOARD_BLOG_URL`
 - requiring $KCK_ENABLED to be defined when using this auth mode
 (when the property was left undefined, the SpringBoot connector was misbehaving)
 - properly handling "user not found" situations with a 404

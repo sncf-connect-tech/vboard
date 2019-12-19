@@ -37,7 +37,7 @@ services:
       - VBOARD_API_ENDPOINT=/api/v1
       - VBOARD_HOSTNAME=localhost
       - VBOARD_WS_HOST=http://ws:8080
-      - VBOARD_WP_PUBLIC_HOST=
+      - VBOARD_BLOG_URL=
     ports:
       - 80:80
     networks:
