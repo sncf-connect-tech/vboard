@@ -167,10 +167,10 @@ public class AuthenticationController {
     }
 
     // Check whether the user (Format string) is the same as the session user String
-    public void ensureNewEntityAuthorMatchesSessionUser(String author) {
+    public void ensureNewEntityAuthorMatchesSessionUser(String pinAuthor) {
         final String userString = this.getSessionUser().getUserString();
-        if (!userString.equals(author)) {
-            throw new VBoardException("Unauthorized Access - The user provided by the frontend does not match the current session: Front-end user=" + author + ", backend-user=" + userString);
+        if (!userString.equals(pinAuthor)) {
+            throw new VBoardException("Unauthorized Access - The pin author (" + pinAuthor + ") does not match the authenticated user (" + userString + ")");
         }
     }
 
