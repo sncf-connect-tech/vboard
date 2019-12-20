@@ -141,8 +141,8 @@ public class AuthenticationController {
             logger.info("getSessionUser: niceName={} isAdmin={}", user.getNiceName(), user.isAdmin());
             return user;
         }
-        if (logger.isWarnEnabled()) {  // Lazy: do not generate method argument if not needed
-            logger.warn("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName()); // TODO: remove this debug log
+        if (logger.isDebugEnabled()) {  // Lazy: do not generate method argument if not needed
+            logger.debug("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName());
         }
         return initializeUser();
     }

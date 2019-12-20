@@ -31,7 +31,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
     let isUseLookingAtFavoritePins = false;
 
     /* Get Elasticsearch Pins */
-    const fetchPins = function (text, from, offset) {
+    const fetchPins = function ({ text, from, offset, label }) {
         isUseLookingAtFavoritePins = false;
         const search = getByPopularity ? '/popular' : '';
         // API call
@@ -39,7 +39,8 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             params: {
                 text,
                 from,
-                offset
+                offset,
+                labels: label
             }
         }).then(function (response) {
             if (response.status !== 200) {
@@ -109,7 +110,6 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
         };
     };
 
-
     /** Entry point : pins & labels update according to some criteria */
     this.update = function () {
         const self = this;
@@ -128,25 +128,23 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
                 self.replacePinsAndLabels();
                 $rootScope.$broadcast('vboardPinsCollectionUpdated');
             });
-        } else {
-            if (ctrlParams.text !== self.lastSearch.text || ctrlParams.from !== self.lastSearch.from) {
-                // update last search
-                self.lastSearch = ctrlParams;
-                // Elasticsearch Call
-                fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
-                    if (scrollFrom === 0) {
-                        self.allPins = fetchedPins;
-                        self.replacePinsAndLabels();
-                        $rootScope.$broadcast('vboardPinsCollectionUpdated');
-                    }
-                });
-            } else if (ctrlParams.label !== self.lastSearch.label) {
-                // update last search
-                self.lastSearch = ctrlParams;
-                // Filter all pins by label
-                self.filterPinsByLabel();
-                $rootScope.$broadcast('vboardPinsCollectionUpdated');
-            }
+        } else if (ctrlParams.text !== self.lastSearch.text || ctrlParams.from !== self.lastSearch.from) {
+            // update last search
+            self.lastSearch = ctrlParams;
+            // Elasticsearch Call
+            fetchPins(ctrlParams).then(function (fetchedPins) {
+                if (scrollFrom === 0) {
+                    self.allPins = fetchedPins;
+                    self.replacePinsAndLabels();
+                    $rootScope.$broadcast('vboardPinsCollectionUpdated');
+                }
+            });
+        } else if (ctrlParams.label !== self.lastSearch.label) {
+            // update last search
+            self.lastSearch = ctrlParams;
+            // Filter all pins by label
+            self.filterPinsByLabel();
+            $rootScope.$broadcast('vboardPinsCollectionUpdated');
         }
     };
 
@@ -163,7 +161,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             });
         } else {
             if (scrollFrom === 0 && !isUseLookingAtFavoritePins && !ctrlParams.id) {
-                fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
+                fetchPins(ctrlParams).then(function (fetchedPins) {
                     self.allPins = fetchedPins;
                     self.replacePinsAndLabels();
                     $rootScope.$broadcast('vboardPinsCollectionUpdated');
@@ -261,7 +259,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             // update last search
             self.lastSearch = ctrlParams;
             // ELS call
-            fetchPins(ctrlParams.text, ctrlParams.from, ctrlParams.offset).then(function (fetchedPins) {
+            fetchPins(ctrlParams).then(function (fetchedPins) {
                 if (fetchedPins.length !== 0) {
                     self.allPins = self.allPins.concat(fetchedPins);
                     self.replacePinsAndLabels();

@@ -24,8 +24,6 @@ import com.vsct.vboard.models.VBoardException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +42,6 @@ import java.util.Base64;
 @Service
 public class UploadsManager {
     private final UploadsConfig uploadsConfig;
-    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final ProxyConfig proxyConfig;
 
     @Autowired
@@ -56,39 +53,31 @@ public class UploadsManager {
     // img should be the base64 encoded image (exception: "default")
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION") // handled by try() syntax
     public void saveAvatar(String img, String name) {
-        if (!"default".equals(img)) { // which means the user wanted to delete it's avatar, thus the default one is set
-            byte[] data = Base64.getDecoder().decode(img);
-            try (OutputStream stream = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
-                stream.write(data);
-            } catch (Exception e) {
-                this.logger.error(e.getMessage());
-            }
-        } else {
+        if ("default".equals(img)) { // which means the user wanted to delete it's avatar, thus the default one is set
             try (InputStream is = this.getClass().getClassLoader().getResource("avatar.png").openStream()) { // Save the avatar the this.openAMConfig.getHostName() + /images folder (NAS)
                 try (OutputStream os = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
                     IOUtils.copy(is, os);
-                    this.logger.debug("Avatar de base enregistré dans le NAS pour: {}", name);
-                } catch (Exception e) {
-                    this.logger.error(e.getMessage());
                 }
-            } catch (Exception e) {
-                this.logger.error(e.getMessage());
+            } catch (IOException e) {
+                throw new VBoardException("Could not write default avatar image to filesystem", e);
+            }
+        } else {
+            byte[] data = Base64.getDecoder().decode(img);
+            try (OutputStream stream = new FileOutputStream(getAvatarImagesDirectory().resolve(name + ".png").toFile())) {
+                stream.write(data);
+            } catch (IOException e) {
+                throw new VBoardException("Could not write avatar image to filesystem", e);
             }
         }
-
     }
 
     // img should be the base64 encoded image (exception: url)
     @SuppressFBWarnings("OBL_UNSATISFIED_OBLIGATION")
     public void savePinImage(String img, String name) {
-        if (!img.startsWith("http")) { // If the image is an url, the image is downloaded and uploaded on the pinImg folder (NAS)
-            byte[] data = Base64.getDecoder().decode(img);
-            try (OutputStream stream = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile())) {
-                stream.write(data);
-            } catch (Exception e) {
-                this.logger.error(e.getMessage());
+        if (img.startsWith("http")) { // If the image is an url, the image is downloaded and uploaded on the pinImg folder (NAS)
+            if (img.endsWith("svg") || img.endsWith("gif")) {
+                throw new VBoardException("Neither .gif nor .svg are currently supported"); // cf. https://github.com/voyages-sncf-technologies/vboard/issues/82
             }
-        } else if (!img.endsWith("svg") && !img.endsWith("gif")) {
             URL url;
             try {
                 if (proxyConfig.getProxy() != Proxy.NO_PROXY) {
@@ -109,6 +98,13 @@ public class UploadsManager {
                 }
             } catch (IOException e) {
                 throw new VBoardException("Could not write pin image to filesystem", e);
+            }
+        } else { // Case of a base 64 image:
+            byte[] data = Base64.getDecoder().decode(img);
+            try (OutputStream stream = new FileOutputStream(getPinsImagesDirectory().resolve(name + ".png").toFile())) {
+                stream.write(data);
+            } catch (IOException e) {
+                throw new VBoardException("Could not decode base64 image", e);
             }
         }
     }

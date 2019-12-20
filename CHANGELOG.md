@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [?] - 20YY-MM-DD
 ### Fixed
+- search by label is now correctly done by the backend - closed #37
 - `Variable [pinUpdate] is not defined` HTTP 500 error in `ElasticSearchClient.updatePin`
 - When visiting the profile URL of a non-existing user, UI loaded forever (#44)
 - per-author pin search (#9)

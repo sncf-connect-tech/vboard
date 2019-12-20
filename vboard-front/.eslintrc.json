@@ -35,6 +35,7 @@
         "no-empty-function": 0,
         "no-extra-bind": 0,
         "no-multi-spaces": 0,
+        "no-mixed-operators": 0,
         "no-new": 0,
         "no-process-env": 0,
         "no-warning-comments": 0,

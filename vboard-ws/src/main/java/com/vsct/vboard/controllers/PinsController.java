@@ -224,7 +224,9 @@ public class PinsController {
 
         String description = params.getDescription();
         String[] labels = params.getLabels();
-        String strLabels = labels == null || labels.length == 0 ? "" : String.join(",", labels);
+        String strLabels = labels == null || labels.length == 0 ? "" : Arrays.stream(params.getLabels())
+                .map(label -> label.startsWith("#") ? label : "#" + label)
+                .collect(Collectors.joining(","));
         String author = params.getAuthor();
         permission.ensureNewEntityAuthorMatchesSessionUser(author); // Check if the author given is effectively the one that posted the pin
         DateTime postDateUTC = new DateTime(DateTimeZone.UTC);
@@ -239,7 +241,7 @@ public class PinsController {
             newPin.setImgType(imgType);
         }
         try {
-            this.logger.debug("addNewPin: title={} - url={} - likes=0 - imgType={} - description={} - labels={} - author={}",
+            this.logger.debug("addNewPin: title={} - url={} - imgType={} - description={} - labels={} - author={}",
                     title, url, newPin.getImgType(), description, strLabels, author);
             retval = this.pinDAO.save(newPin);
             this.elsClient.addPin(newPin);
