@@ -29,10 +29,7 @@ import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
@@ -48,6 +45,14 @@ public class UploadsManager {
     public UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) {
         this.uploadsConfig = uploadsConfig;
         this.proxyConfig = proxyConfig;
+        File pinsImagesDir = getPinsImagesDirectory().toFile();
+        if (!pinsImagesDir.exists()) {
+            pinsImagesDir.mkdir();
+        }
+        File avatarImagesDir = getAvatarImagesDirectory().toFile();
+        if (!avatarImagesDir.exists()) {
+            avatarImagesDir.mkdir();
+        }
     }
 
     // img should be the base64 encoded image (exception: "default")

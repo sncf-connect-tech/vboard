@@ -36,7 +36,9 @@ import org.apache.http.HttpStatus;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -64,12 +66,15 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT, classes = MainController.class)
 @ActiveProfiles(profiles = "test")
 public class PinsControllerTest {
+    private static final String MINIMAL_BASE64_IMG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==";
 
     @Value("${local.server.port}")
     public int webServerPort;
 
     private ProxyConfig proxyConfig = new ProxyConfig();
-    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(), proxyConfig);
+    @ClassRule
+    public final static TemporaryFolder tempFolder = new TemporaryFolder();
+    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(tempFolder.getRoot()), proxyConfig);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -215,14 +220,14 @@ public class PinsControllerTest {
         pins.add(this.pinDAO.findByPinId("0"));
         Mockito.doReturn(pins).when(elsClient).searchPinsById("0");
         try {
-            this.pinsController.updatePin(new AddNewPinParams("titleupdate", "url", "imgtype", "contentupdate", labels, "auth"), "notfound");
+            this.pinsController.updatePin(new AddNewPinParams("titleupdate", "url", MINIMAL_BASE64_IMG, "contentupdate", labels, "auth"), "notfound");
             Assert.fail("Epingle non trouvee, sans erreur");
         } catch (VBoardException e) {
         }
 
         Assert.assertEquals(this.pinDAO.findByPinId("0").getPinTitle(), "title");
 
-        this.pinsController.updatePin(new AddNewPinParams("titleupdate", "url", "imgtype", "contentupdate", labels, "author"), "0");
+        this.pinsController.updatePin(new AddNewPinParams("titleupdate", "url", MINIMAL_BASE64_IMG, "contentupdate", labels, "author"), "0");
         Pin pin = this.pinDAO.findByPinId("0");
         Assert.assertEquals("titleupdate", pin.getPinTitle());
         Assert.assertEquals("url", pin.getHrefUrl());

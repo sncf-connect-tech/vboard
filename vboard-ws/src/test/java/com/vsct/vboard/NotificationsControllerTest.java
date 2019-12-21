@@ -33,7 +33,9 @@ import com.vsct.vboard.services.UploadsManager;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -67,7 +69,9 @@ public class NotificationsControllerTest {
     public int webServerPort;
 
     private ProxyConfig proxyConfig = new ProxyConfig();
-    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(), proxyConfig);
+    @ClassRule
+    public final static TemporaryFolder tempFolder = new TemporaryFolder();
+    private UploadsManager uploadsManager = new UploadsManager(new UploadsConfig(tempFolder.getRoot()), proxyConfig);
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -259,7 +263,7 @@ public class NotificationsControllerTest {
         NotificationsController notificationsControllerSpy = spy(this.notificationsController);
         PinsController pinsControllerSpy = new PinsController(jdbcTemplate, pinDAO, userDAO, commentDAO, likeDAO, labelDAO, savedPinDAO, elsClient, uploadsManager, permission, gamificationController, notificationsControllerSpy, proxyConfig);
         this.pinsController.deleteAllPins();
-        pinsControllerSpy.addNewPin(new AddNewPinParams("title","url","im","description", labels, "emailNotifFrom,firstname,lastname"));
+        pinsControllerSpy.addNewPin(new AddNewPinParams("title","url",null,"description", labels, "emailNotifFrom,firstname,lastname"));
         verify(notificationsControllerSpy).addNotificationsFromPin(eq(this.pinDAO.findAll().iterator().next().getPinId()), eq("a ajouté une épingle avec un label que vous suivez"));
     }
 

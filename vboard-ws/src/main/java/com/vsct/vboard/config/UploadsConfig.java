@@ -22,6 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +36,12 @@ public class UploadsConfig {
     private boolean multiplePinsPerUrlAllowed = false;
 
     public UploadsConfig() {
+    }
+
+    // For testing:
+    public UploadsConfig(File tmpDir) {
+        this.imagesStorageDirectory = tmpDir.toPath();
+        this.blogImagesDirectory = tmpDir.toPath();
     }
 
     public void setImagesStorageDirectory(Path imagesStorageDirectory) throws IOException {
