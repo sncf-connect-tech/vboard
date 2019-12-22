@@ -45,13 +45,13 @@ public class UploadsManager {
     public UploadsManager(UploadsConfig uploadsConfig, ProxyConfig proxyConfig) {
         this.uploadsConfig = uploadsConfig;
         this.proxyConfig = proxyConfig;
-        File pinsImagesDir = getPinsImagesDirectory().toFile();
-        if (!pinsImagesDir.exists()) {
-            pinsImagesDir.mkdir();
-        }
-        File avatarImagesDir = getAvatarImagesDirectory().toFile();
-        if (!avatarImagesDir.exists()) {
-            avatarImagesDir.mkdir();
+        createDir(getPinsImagesDirectory().toFile());
+        createDir(getAvatarImagesDirectory().toFile());
+    }
+
+    private void createDir(File dir) {
+        if (!dir.exists() && !dir.mkdir()) {
+            throw new VBoardException("Could not create directory: " + dir.getAbsolutePath());
         }
     }
 
