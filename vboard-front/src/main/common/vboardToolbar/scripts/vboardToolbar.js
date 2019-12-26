@@ -260,7 +260,7 @@ angular.module('vboard').controller('VboardToolbarController', function VboardTo
     $scope.notification = function (title, message) {
         if (Notification.permission === "granted") {
             const notification = new Notification(title, {
-                icon: 'images/logo_vsc.jpg', // App logo
+                icon: 'images/logo-icon.png', // App logo
                 body: message // message to display
             });
             // Action to do when the user click on the browser notification (here the window get focus)
