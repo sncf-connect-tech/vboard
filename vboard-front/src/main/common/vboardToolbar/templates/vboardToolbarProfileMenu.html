@@ -20,10 +20,11 @@
     <ul>
         <li><a href="#/" title="Retour au Dashboard" data-ng-click="forceUpdate()" class="t-color-darkgray--text">Dashboard</a></li>
         <li data-ng-if="userAuthenticated"><a href="#profil" title="Page de profil" class="t-color-darkgray--text">Profil</a></li>
-        <li data-ng-if="blogUrl"><a title="Accéder au blog pour y créer un article dont l'épingle sera visible ici" href="{{blogUrl}}" target="_blank"  class="t-color-darkgray--text">Accéder au blog</a></li>
+        <li data-ng-if="config.blogUrl"><a title="Accéder au blog pour y créer un article dont l'épingle sera visible ici" href="{{config.blogUrl}}" target="_blank" class="t-color-darkgray--text">Accéder au blog</a></li>
+        <li data-ng-if="config.supportUrl"><a title="Lien vers le support aux utilisateurs" href="{{config.supportUrl}}" target="_blank" class="t-color-darkgray--text">Support</a></li>
         <li><a title="Voir le classement des utilisateurs et équipes les plus actifs dans certaines catégories" href="#leaderboard" class="t-color-darkgray--text">LeaderBoard</a></li>
         <li><a title="Trouver le profil d'une équipe ou d'un utilisateur" href="#search" class="t-color-darkgray--text">Rechercher un profil</a></li>
-        <li><a href="{{ apiEndpoint }}/swagger-ui.html" class="t-color-darkgray--text">Swagger</a></li>
+        <li><a href="{{ config.apiEndpoint }}/swagger-ui.html" class="t-color-darkgray--text">Swagger</a></li>
         <li data-ng-if="userAuthenticated"><a title="Se déconnecter de l'application" href="#/" data-ng-click="logout()" class="t-color-darkgray--text">Déconnexion</a></li>
     </ul>
 </div>

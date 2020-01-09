@@ -27,7 +27,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - support for HTTPs to PinsController web crawler (#42)
 - link to Swagger in web UI menu
 - config option `uploads.multiplePinsPerUrlAllowed`, with corresponding environment variable `$VBOARD_ALLOW_MULTIPLE_PINS_PER_URL`
-- `$ENABLE_WHITELABEL_ERRORS` environment variable
+- `$ENABLE_WHITELABEL_ERRORS` optional configuration environment variable for the backend
+- `$VBOARD_SUPPORT_URL` optional configuration environment variable for the frontend
 
 ### Removed
 - roles `Administrateur` (redundant with `User.isAdmin`)  & `Utilisateur` (useless, correspond to any authentified user)
