@@ -59,6 +59,13 @@ angular.module('vboard').controller('VboardPinboardController', function VboardP
         });
     };
 
+    /** Prevent bad display on late display */
+    $timeout(function () {
+        $scope.render($scope.pinsCollection.pins);
+        $scope.packer.reloadItems();
+        $scope.packer.layout();
+    }, 2000);
+
     $rootScope.disableFavoriteLabels = true;
 
     /** Show the search toolbar */
