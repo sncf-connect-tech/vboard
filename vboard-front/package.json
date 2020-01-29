@@ -46,6 +46,6 @@
   "scripts": {
     "build": "pleeease-compile && node bundler.js",
     "lint": "eslint --fix src/main/ config.js",
-    "start": "node bundler.js --watch-and-serve"
+    "start": "pleeease-compile && node bundler.js --watch-and-serve"
   }
 }

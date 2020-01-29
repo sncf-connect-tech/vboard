@@ -23,8 +23,9 @@ services:
     volumes:
       - images:/usr/local/tomcat/data
     depends_on:
-      - front
       - wsdb
+      - elasticsearch
+      - batchs
 
   front:
     build: ./vboard-front

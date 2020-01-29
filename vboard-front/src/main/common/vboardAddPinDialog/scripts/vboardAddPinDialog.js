@@ -157,7 +157,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
     }
 
     // Replace break lines in preview
-    $scope.$watch('pinDescription', function () {
+    $scope.$watch('editablePin.description', function () {
         $scope.editablePin.descriptionShow = $scope.editablePin.description ? $scope.editablePin.description.replace(/\n/g, "<br />"): '';
     });
 
