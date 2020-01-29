@@ -13,6 +13,5 @@ services:
     volumes:
       - ./statics:/var/vboard/statics
       # Mouting the following directory "overrides" the one in the built container.
-      # We do this to benefit from "grunt watch" regenerating the statics
-      #!! Does not work atm because grunt delete/recreate this directory
-      - ./vboard-front/grunt-target:/var/www/vboard
+      # We do this to benefit from "node bundler.js --watch-and-serve" regenerating the statics
+      - ./vboard-front/build:/var/www/vboard

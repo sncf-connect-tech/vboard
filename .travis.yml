@@ -13,7 +13,6 @@ jobs:
         - docker
       script:
         - cd vboard-front
-        # The front image includes a call to "grunt validate":
         - docker build .
     - stage: build
       name: Docker backend image build

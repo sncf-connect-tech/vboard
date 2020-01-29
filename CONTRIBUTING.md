@@ -122,7 +122,7 @@ You can also run those hooks manually:
 
 ## Style guide
 
-Currently, on the frontend side, a [grunt task](https://github.com/voyages-sncf-technologies/vboard/blob/master/vboard-front/grunt/aliases.json#L68) executes `csslint` & `eslint` linters.
+Currently, on the frontend side, `eslint` validates the JS code.
 
 There is no tool configured on the backend side to enforce any code style, but please follow the existing code format & practices.
 
