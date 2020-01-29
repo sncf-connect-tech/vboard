@@ -23,7 +23,6 @@ services:
     volumes:
       - images:/usr/local/tomcat/data
     depends_on:
-      - front
       - wsdb
 
   front:
