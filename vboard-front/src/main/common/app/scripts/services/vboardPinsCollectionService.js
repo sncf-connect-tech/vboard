@@ -345,7 +345,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
 
     /** Retrieve all labels on displayed pins */
     this.getLabels = function (pins) {
-        const labelsImploded = _.pluck(pins, 'labels');
+        const labelsImploded = _.map(pins, 'labels');
         // Get all labels on pins, separate them (on pins mutliple labels are represented in a single string with ",")
         // Add get the ones with #
         const labelsExploded = _.chain(labelsImploded)
