@@ -318,12 +318,8 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
         this.filterPinsByLabel();
         // Replace labels
         const labelsImploded = _.map(this.pins, 'labels');
-        const labelsExploded = _.chain(labelsImploded)
-            .map(function (labels) {
-                return labels.split(',');
-            }).flatten().filter(function (label) {
-                return label.indexOf('#') === 0;
-            }).value();
+        const labelsExploded = _(labelsImploded).flatMap((labels) => labels.split(','))
+            .filter((label) => label.startsWith('#')).value();
 
         // To adapt in different screen size and prevent the label line to be displayed on two lines
         let labelNumber = 12;
@@ -337,7 +333,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             labelNumber = 2;
         }
         // removed duplicate, and sort by most common used. Then limit the number as define above
-        this.labels = _.chain(labelsExploded).countBy(_.identity).toPairs().sortBy(1).reverse()
+        this.labels = _.countBy(labelsExploded).toPairs().sortBy(1).reverse()
             .map(0)
             .take(labelNumber)
             .value();
@@ -348,15 +344,11 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
         const labelsImploded = _.map(pins, 'labels');
         // Get all labels on pins, separate them (on pins mutliple labels are represented in a single string with ",")
         // Add get the ones with #
-        const labelsExploded = _.chain(labelsImploded)
-            .map(function (labels) {
-                return labels.split(',');
-            }).flatten().filter(function (label) {
-                return label.indexOf('#') === 0;
-            }).value();
+        const labelsExploded = _(labelsImploded).flatMap((labels) => labels.split(','))
+            .filter((label) => label.startsWith('#')).value();
         // removed duplicate, and sort by most common used.
-        return _.chain(labelsExploded).countBy(_.identity).pairs().sortBy(1).reverse()
-            .pluck(0)
+        return _.countBy(labelsExploded).pairs().sortBy(1).reverse()
+            .map(0)
             .value();
     };
 
@@ -385,7 +377,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             labels.shift();
             this.pins = _.filter(this.allPins, function (pin) {
                 for (let labelIndex = 0; labelIndex < labels.length; labelIndex++) {
-                    if (pin.labels.indexOf(labels[labelIndex]) >= 0) {
+                    if (pin.labels.includes(labels[labelIndex])) {
                         return true;
                     }
                 }

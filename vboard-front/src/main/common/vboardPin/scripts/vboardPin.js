@@ -50,7 +50,7 @@ angular.module('vboard').controller('VboardPinController', function VboardPinCon
     $scope.pinAvatar = "images/avatar.png";
 
     $scope.readableAuthor = $scope.pin.author;
-    if ($scope.pin.author && $scope.pin.author.indexOf(',') > -1 && $scope.pin.author.indexOf('@') > -1) {
+    if ($scope.pin.author && $scope.pin.author.includes(',') && $scope.pin.author.includes('@')) {
         $scope.authorLink = `#profil/${  $scope.pin.author.split(',')[2] }`;
     }
 
@@ -59,7 +59,7 @@ angular.module('vboard').controller('VboardPinController', function VboardPinCon
     $scope.setPerm = function () {
         $scope.setModificationPerm();
         $scope.connected = $rootScope.userAuthenticated;
-        $scope.hasNewsletterRole = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.indexOf('Newsletter') >= 0 : false;
+        $scope.hasNewsletterRole = $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.includes('Newsletter') : false;
     };
 
     $scope.setModificationPerm = function () {
@@ -82,7 +82,7 @@ angular.module('vboard').controller('VboardPinController', function VboardPinCon
 
     // If the link contains <iframe, the app put it as a vidéo (set videoLink)
     $scope.videoLink = "";
-    if ($scope.pin.imgType && $scope.pin.imgType.indexOf('<iframe') === 0) {
+    if ($scope.pin.imgType && $scope.pin.imgType.startsWith('<iframe')) {
         const scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
         $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); // trust the url, the iframe is recreating in html to avoid injection
     }
@@ -174,7 +174,7 @@ angular.module('vboard').controller('VboardPinController', function VboardPinCon
     // Content to display on the tooltip of likes
     $scope.setLikesAuthors = function (email) {
         vboardAuth.getUserByEmail(email).then(function (success2) {
-            if ($scope.likesAuthors.indexOf(`${ success2.first_name  } ${ success2.last_name }`) === -1) {
+            if (!$scope.likesAuthors.includes(`${ success2.first_name  } ${ success2.last_name }`)) {
                 if ($scope.likesAuthors) {
                     $scope.likesAuthors = `${ $scope.likesAuthors  }\n`
                 }
@@ -261,7 +261,7 @@ angular.module('vboard').controller('VboardPinController', function VboardPinCon
     /** Init */
     $scope.setPerm();
     // Check whether the user format is valid (version compatibility)
-    const fullAuthor = $scope.pin.author && $scope.pin.author.indexOf(',', $scope.pin.author.indexOf(',') + 1) > -1;
+    const fullAuthor = $scope.pin.author && $scope.pin.author.split(',').length === 3;
     if (fullAuthor) {
         const [authorFirstName, authorLastName, authorEmail] = $scope.pin.author.split(',');
         $scope.pinAvatar = `/avatar/${  authorEmail  }.png`;

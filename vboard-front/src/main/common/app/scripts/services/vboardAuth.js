@@ -53,7 +53,7 @@ angular.module('vboard').factory('vboardAuth', function vboardAuth($rootScope, $
         },
 
         isModerator() {
-            return $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.indexOf('Moderateur') >= 0: false;
+            return $rootScope.userAuthenticated ? $rootScope.userAuthenticated.roles.includes('Moderateur'): false;
         },
 
         /** Get User */

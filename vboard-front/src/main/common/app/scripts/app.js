@@ -35,7 +35,7 @@ angular.module('vboard').run(function ($rootScope, $http, $timeout, $window, $in
     // Auto refresh every 2 minutes to retrieve new pins (posted by other)
     $interval(function () {
         // Prevent refreshing pins if the user is not on the default page (vboardpinboard)
-        if ($location.url().indexOf("profil") < 0 && $location.url().indexOf("leaderboard") < 0 && $location.url().indexOf("search") < 0 && $location.url().indexOf("konami") < 0) {
+        if (!$location.url().includes("profil") && !$location.url().includes("leaderboard") && !$location.url().includes("search") && !$location.url().includes("konami")) {
             vboardPinsCollection.forceUpdate();
         }
         vboardMessageInterceptor.getGeneralMessage();
@@ -123,8 +123,8 @@ angular.module('vboard').config(function ($httpProvider) {
 /* eslint-disable no-undef */
 angular.element(document).ready(function () {
     /* eslint-disable angular/window-service */
-    if (typeof window.Keycloak === 'undefined' || window.Keycloak === 'DISABLED') {
-        const isKeycloakVoluntarilyDisabled = typeof window.Keycloak !== 'undefined';
+    if (_.isUndefined(window.Keycloak) || window.Keycloak === 'DISABLED') {
+        const isKeycloakVoluntarilyDisabled = !_.isUndefined(window.Keycloak);
         // If keycloak is unavailable, so is the client adapter
         // Therefore, we mock the adapter so the ui can load, and show an error message
         angular.module('vboard').factory('vboardKeycloakAuth', function vboardKeycloakAuth() {

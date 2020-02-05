@@ -206,7 +206,7 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
                 // Put the user's favorite label in one table and the other in another one
                 for (let labelIndex = 0; labelIndex < $scope.favoriteLabels.length; labelIndex++) {
                     // So elements already in user's favorite labels are removed
-                    if (allLabels.indexOf($scope.favoriteLabels[labelIndex]) > -1) {
+                    if (allLabels.includes($scope.favoriteLabels[labelIndex])) {
                         allLabels.splice(allLabels.indexOf($scope.favoriteLabels[labelIndex]), 1);
                     }
                 }
@@ -217,7 +217,7 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
 
     /** Labels */
     $scope.addLabel = function (label) {
-        if ($scope.allLabels.indexOf(label) > -1) {
+        if ($scope.allLabels.includes(label)) {
             $scope.allLabels.splice($scope.allLabels.indexOf(label), 1);
         }
         if (!$scope.favoriteLabels) {
@@ -229,7 +229,7 @@ angular.module('vboard').controller('VboardProfilController', function VboardPro
     };
 
     $scope.removeLabel = function (label) {
-        if ($scope.favoriteLabels.indexOf(label) > -1) {
+        if ($scope.favoriteLabels.includes(label)) {
             $scope.favoriteLabels.splice($scope.favoriteLabels.indexOf(label), 1);
         }
         $scope.allLabels.push(label);

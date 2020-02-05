@@ -48,7 +48,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
     $scope.addLabel = function () {
         let label = $scope.editablePin.newLabel;
         // If the label does not start with #, one is added
-        label = (label.indexOf('#')===0 ? '' : '#') + label;
+        label = (label.startsWith('#') ? '' : '#') + label;
         $scope.editablePin.labels.push(label);
         $scope.displayLabels = $scope.editablePin.labels ? $scope.editablePin.labels.join(' ')  : '';
         $scope.editablePin.newLabel = '';
@@ -87,7 +87,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
     // validate the form submission (for adding a pin)
     $scope.submit = function () {
         // If the image is visible and start with http, it is send as it is
-        if ($scope.image.show && $scope.image.croppedImage.indexOf("http")===0) {
+        if ($scope.image.show && $scope.image.croppedImage.startsWith("http")) {
             $scope.image.type = $scope.image.croppedImage;
             if ($scope.image.type.length >= 255) {
                 vboardMessageInterceptor.showErrorMessage("L'url de l'image est trop longue (255 caractères maximum)");
@@ -139,7 +139,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
         if ($scope.pin.imgType) {
             $scope.image.show = true;
             // If the link contains <iframe, the app put it as a vidéo (set videoLink)
-            if ($scope.pin.imgType.indexOf('<iframe') === 0) {
+            if ($scope.pin.imgType.startsWith('<iframe')) {
                 const scr = $scope.pin.imgType.substring($scope.pin.imgType.indexOf('src') + 5);
                 // 5: to remove the src=" and only keep what is inside the src (what is after here, and only what is inside the src in the next line
                 $scope.videoLink = $sce.trustAsResourceUrl(scr.substring(0, scr.indexOf('"'))); // trust the url, the iframe is recreating in html to avoid injection
@@ -176,10 +176,10 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
     };
 
     $scope.addImageURL = function () {
-        if ($scope.image.croppedImage && $scope.image.croppedImage.indexOf('http') === 0) {
+        if ($scope.image.croppedImage && $scope.image.croppedImage.startsWith('http')) {
             $scope.image.show = true;
         }
-        if ($scope.image.croppedImage && $scope.image.croppedImage.indexOf('<iframe') === 0) {
+        if ($scope.image.croppedImage && $scope.image.croppedImage.startsWith('<iframe')) {
             $scope.image.show = true;
             /* eslint-disable camelcase */
             const scrUrl = $scope.image.croppedImage.substring($scope.image.croppedImage.indexOf('src') + 5);
@@ -215,7 +215,7 @@ angular.module('vboard').controller('VboardAddPinDialogController', function Vbo
 
     /** Scrapping */
     $scope.getInfoFromURL = function (url) {
-        if (url && url.indexOf("http") === 0) {
+        if (url && url.startsWith("http")) {
             $http.post(`${ CONFIG.apiEndpoint  }/pins/url/`, {
                 urlinfo: url
             }).then(function (response) {

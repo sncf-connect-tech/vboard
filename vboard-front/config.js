@@ -22,7 +22,7 @@ const apiEndpoint = '$VBOARD_API_ENDPOINT',
     localisations = '$VBOARD_LOCALISATIONS',
     displayPinsFromLastMonthsCount = '$VBOARD_PINS_MONTHS_COUNT';
 
-const isDefined = (str) => str && str.indexOf('$') !== 0
+const isDefined = (str) => str && !str.startsWith('$')
 const localisationParser = (loc) => {
     const [id, name] = loc.split(':');
     return { id, name };

@@ -37,7 +37,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
 
     // Check if the current user is on the team, and so if he can update the team info (based on user behavior as anyone can add themselves to a team)
     $scope.initPermission = function (team) {
-        $scope.perm = team.members.indexOf(`${ $rootScope.userAuthenticated.first_name  };${  $rootScope.userAuthenticated.last_name  };${  $rootScope.userAuthenticated.email }`) !== -1;
+        $scope.perm = team.members.includes(`${ $rootScope.userAuthenticated.first_name  };${  $rootScope.userAuthenticated.last_name  };${  $rootScope.userAuthenticated.email }`);
         if ($scope.perm) {
             $scope.getUsers();
         }
@@ -108,7 +108,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
     // Allow modifications to be saved even if the user is still focused on an input and leave the page (classic saving is done when the user gets out of a focusing element
     $window.onbeforeunload = function () {
         // handle the exit event
-        if ($location.url().indexOf("/profil/team") >= 0 && $scope.focus) {
+        if ($location.url().includes("/profil/team") && $scope.focus) {
             $scope.submitTeamUpdate($scope.team);
         }
     };
@@ -194,7 +194,7 @@ angular.module('vboard').controller('VboardTeamProfilController', function Vboar
     };
 
     $scope.setMembers = function (val) {
-        if (val.indexOf("Nouveau;Membre;@") !== -1 ) {
+        if (val.includes("Nouveau;Membre;@")) {
             val.splice(val.indexOf("Nouveau;Membre;@"), 1);
         }
         vboardAuth.setMembers($scope.name, val);

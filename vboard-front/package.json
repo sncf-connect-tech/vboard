@@ -28,6 +28,7 @@
     "eslint": "latest",
     "eslint-config-strict": "^14.0.1",
     "eslint-plugin-angular": "^4.0.1",
+    "eslint-plugin-lodash": "^6.0.0",
     "glob": "^7.1.6",
     "jasmine-core": "2.2.0",
     "karma": "0.12.31",
