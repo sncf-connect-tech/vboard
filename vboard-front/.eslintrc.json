@@ -1,6 +1,6 @@
 {
     "plugins": ["angular"],
-    "extends": ["strict", "plugin:angular/johnpapa"],
+    "extends": ["strict", "plugin:angular/johnpapa", "plugin:lodash/canonical"],
     "parserOptions": {
         "ecmaVersion": 8
     },
@@ -86,7 +86,13 @@
         // Legacy
         "max-depth": [2, 5],
         "max-len": 0,
-        "max-params": 0
+        "max-params": 0,
+
+        // Lodash
+        "lodash/chaining": 0,
+        "lodash/prefer-immutable-method": 0,
+        "lodash/prefer-lodash-method": 0,
+        "lodash/prefer-noop": 0
     },
     "globals": {
         "_": false,

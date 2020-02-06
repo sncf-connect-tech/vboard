@@ -38,7 +38,7 @@ angular.module('vboard').controller('VboardProfilNewsletterController', function
     $scope.label = $rootScope.userAuthenticated.newsletter_label;
 
     $scope.setLabel = function (label) {
-        $scope.label = label.indexOf('#') === 0 ? label : `#${  label }`;
+        $scope.label = label.startsWith('#') ? label : `#${  label }`;
         $http.post(`${ CONFIG.apiEndpoint  }/users/nlLabel`, {
             label
         });

@@ -129,7 +129,7 @@ angular.module('vboard').controller('VboardToolbarController', function VboardTo
 
     // Add or remove some label on filter
     $scope.addOrDeleteLabel = function (label, trigger) {
-        if ($scope.search.label && $scope.search.label.split('#').indexOf(label.substring(1)) > -1) {
+        if ($scope.search.label && $scope.search.label.split('#').includes(label.substring(1))) {
             // Update the search using an array. The symbol '#' is removed to check if the label is included in that array
             const index = $scope.search.label.split('#').indexOf(label.substring(1));
             const labels = $scope.search.label.split('#');
@@ -147,7 +147,7 @@ angular.module('vboard').controller('VboardToolbarController', function VboardTo
     $scope.isActive = function (label) {
         let active = false;
         if ($scope.search.label) {
-            active = $scope.search.label.split('#').indexOf(label.substring(1)) > -1;
+            active = $scope.search.label.split('#').includes(label.substring(1));
         }
         return active;
     };

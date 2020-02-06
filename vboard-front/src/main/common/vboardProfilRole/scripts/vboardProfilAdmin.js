@@ -49,7 +49,7 @@ angular.module('vboard').controller('VboardProfilAdminController', function Vboa
                 }
                 for (const subIndex in response2.data) {
                     const user = `${ response2.data[subIndex].first_name  },${  response2.data[subIndex].last_name  },${  response2.data[subIndex].email }`;
-                    if ($scope.newsletterMembers.indexOf(user) === -1) {
+                    if (!$scope.newsletterMembers.includes(user)) {
                         $scope.userSuggest.push(user);
                     }
                 }
@@ -74,7 +74,7 @@ angular.module('vboard').controller('VboardProfilAdminController', function Vboa
                 }
                 for (const subIndex in response2.data) {
                     const user = `${ response2.data[subIndex].first_name  },${  response2.data[subIndex].last_name  },${  response2.data[subIndex].email }`;
-                    if ($scope.moderatorMembers.indexOf(user) === -1) {
+                    if (!$scope.moderatorMembers.includes(user)) {
                         $scope.userSuggest2.push(user);
                     }
                 }

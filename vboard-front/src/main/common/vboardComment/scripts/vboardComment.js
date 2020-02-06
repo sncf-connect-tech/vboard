@@ -37,7 +37,7 @@ angular.module('vboard').controller('VboardCommentController', function VboardCo
 
     /** Get comment's author nice name */
     // Check if the author string has the right format (firstName,LastName,email)
-    if ($scope.comment.author && $scope.comment.author.indexOf(',', $scope.comment.author.indexOf(',') + 1) > -1) {
+    if ($scope.comment.author && $scope.comment.author.split(',').length === 3) {
         const [firstName, lastName, email] = $scope.comment.author.split(',');
         $scope.name = `${ firstName } ${ lastName }`;
         $scope.email = email;
