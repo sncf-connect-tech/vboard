@@ -42,14 +42,9 @@ with comments and a search bar
 
 
 # Usage
-The following command starts V.Board locally from the published images:
+The following command starts V.Board locally :
 
     export TAG=latest
-    docker-compose pull
-    docker-compose up -d --no-build
-
-You can also rebuild the images locally:
-
     docker-compose build
     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-build
 
