@@ -11,7 +11,7 @@ RUN ./install-build.sh
 
 FROM httpd:2.4
 # Install envsubst command:
-RUN apt update -y && apt install -y gettext
+RUN apt-get update -y && apt-get install -y gettext
 
 COPY --from=0 /usr/src/app/build  /var/www/vboard
 RUN chown -R www-data:www-data    /var/www/vboard

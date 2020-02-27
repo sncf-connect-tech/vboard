@@ -333,7 +333,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
             labelNumber = 2;
         }
         // removed duplicate, and sort by most common used. Then limit the number as define above
-        this.labels = _.countBy(labelsExploded).toPairs().sortBy(1).reverse()
+        this.labels = _(labelsExploded).countBy().toPairs().sortBy(1).reverse()
             .map(0)
             .take(labelNumber)
             .value();
@@ -347,7 +347,7 @@ angular.module('vboard').service('vboardPinsCollection', function vboardPinsColl
         const labelsExploded = _(labelsImploded).flatMap((labels) => labels.split(','))
             .filter((label) => label.startsWith('#')).value();
         // removed duplicate, and sort by most common used.
-        return _.countBy(labelsExploded).pairs().sortBy(1).reverse()
+        return _(labelsExploded).countBy().toPairs().sortBy(1).reverse()
             .map(0)
             .value();
     };
