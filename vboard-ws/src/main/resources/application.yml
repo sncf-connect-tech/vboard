@@ -46,8 +46,8 @@ spring:
     testOnBorrow: true
     validationQuery: SELECT 1
 elasticsearch:
-  serverUri: ${VBOARD_ELASTICSEARCH}
-  pinsIndex: jdbc_pins_index
+  serverUri: ${VBOARD_ELASTICSEARCH_HOST}
+  pinsIndex: ${VBOARD_ELASTICSEARCH_INDEX}
   querySize: 50
 
 com:
