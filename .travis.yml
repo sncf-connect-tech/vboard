@@ -44,6 +44,7 @@ jobs:
       name: Frontend linters
       script:
         - cd vboard-front
+        - nvm use stable
         - npm --version
         - npm install
         - npm run lint
