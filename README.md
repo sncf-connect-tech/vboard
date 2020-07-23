@@ -23,7 +23,6 @@ The public, open-source version of this project was publish in January 2018. It'
 - [Contributing](#contributing)
 - [Architecture](#architecture)
   * [Authentication](#authentication)
-  * [Docker services](#docker-services)
 
 <!-- tocstop -->
 
