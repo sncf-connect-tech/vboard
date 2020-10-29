@@ -50,7 +50,7 @@ public class AuthenticationController {
 
     private static final String SESSION_USER_ATTRIBUTE_NAME = "User";
     private static final User ANONYMOUS_USER = new User("@nonymous", "Anonymous", "User");
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
     private final UserDAO userDAO;
     private final AdministratorsConfig administratorsConfig;
     private final WebSecurityConfig webSecurityConfig;
@@ -77,7 +77,7 @@ public class AuthenticationController {
             try {
                 this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, ANONYMOUS_USER);
             } catch (IllegalStateException e) {
-                this.logger.error("Could not set attribute User in current session", e);
+                LOGGER.error("Could not set attribute User in current session", e);
             }
             return ANONYMOUS_USER;
         }
@@ -89,10 +89,10 @@ public class AuthenticationController {
         // We always update this in case the config value has changed:
         user.setIsAdmin(this.administratorsConfig.getEmails().contains(userEmail));
         this.userDAO.save(user);
-        if (logger.isWarnEnabled()) {  // Lazy: do not execute code to build log message if not needed
+        if (LOGGER.isWarnEnabled()) {  // Lazy: do not execute code to build log message if not needed
             User sessionUser = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
             if (sessionUser != null && !user.equals(sessionUser)) {
-                this.logger.warn("Differing users between DB & session: {}", user.diff(sessionUser));
+                LOGGER.warn("Differing users between DB & session: {}", user.diff(sessionUser));
             }
         }
         this.session.setAttribute(SESSION_USER_ATTRIBUTE_NAME, user);
@@ -125,6 +125,7 @@ public class AuthenticationController {
         }
         final KeycloakPrincipal userDetails = (KeycloakPrincipal) auth.getPrincipal();
         final IDToken idToken = userDetails.getKeycloakSecurityContext().getToken();
+        LOGGER.info("createUserFromAuth: idToken.email={} idToken.givenName={} idToken.familyName={}", idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
         return new User(idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
     }
 
@@ -138,11 +139,11 @@ public class AuthenticationController {
     public User getSessionUser() {
         User user = (User) session.getAttribute(SESSION_USER_ATTRIBUTE_NAME);
         if (user != null) {
-            logger.info("getSessionUser: niceName={} isAdmin={}", user.getNiceName(), user.isAdmin());
+            LOGGER.info("getSessionUser: niceName={} isAdmin={}", user.getNiceName(), user.isAdmin());
             return user;
         }
-        if (logger.isDebugEnabled()) {  // Lazy: do not generate method argument if not needed
-            logger.debug("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName());
+        if (LOGGER.isDebugEnabled()) {  // Lazy: do not generate method argument if not needed
+            LOGGER.debug("No user found in session, re-initializing one. Called from method: {}", Thread.currentThread().getStackTrace()[2].getMethodName());
         }
         return initializeUser();
     }
