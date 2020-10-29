@@ -103,7 +103,7 @@ Please check the `README.md` of each component for more information:
 
 In order to execute a number of checks before each commit, this project uses `git` [pre-commit](http://pre-commit.com) hooks.
 They are listed in the [.pre-commit-config.yaml](.pre-commit-config.yaml) configuration file
-and are executed by [Travis CI](https://travis-ci.org/voyages-sncf-technologies/vboard).
+and are executed by [Travis CI](https://travis-ci.com/voyages-sncf-technologies/vboard).
 No PR will be merged unless they the hooks pass.
 
 As much as possible, please try to install them on your development machine.
@@ -128,7 +128,7 @@ There is no tool configured on the backend side to enforce any code style, but p
 
 ## Continuous integration
 
-[Travis CI](https://travis-ci.org/voyages-sncf-technologies/vboard) is configured on this project to build both the backend & frontend components,
+[Travis CI](https://travis-ci.com/voyages-sncf-technologies/vboard) is configured on this project to build both the backend & frontend components,
 on each each commit or pull request, and warn on build / code style / test failures.
 
 ## Code reviews
