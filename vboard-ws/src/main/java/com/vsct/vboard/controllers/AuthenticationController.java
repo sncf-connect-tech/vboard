@@ -82,6 +82,9 @@ public class AuthenticationController {
             return ANONYMOUS_USER;
         }
         String userEmail = getUserEmailFromAuth(auth);
+        if (userEmail.isEmpty()) {
+            throw new VBoardException("An non-empty email is required to perform authentication");
+        }
         User user = this.userDAO.findByEmail(userEmail);
         if (user == null) {
             user = createUserFromAuth(auth);
@@ -121,11 +124,14 @@ public class AuthenticationController {
                 throw new IllegalArgumentException("The username in the JWT token provided does not contain a '_'");
             }
             String[] parts = StringUtils.split(username, "_");
-            return new User(jwtAuth.getEmail(), StringUtils.capitalize(parts[0]), StringUtils.capitalize(parts[1]));
+            String firstName = StringUtils.capitalize(parts[0]);
+            String lastName = StringUtils.capitalize(parts[1]);
+            LOGGER.info("createUserFromAuth/JWT: email={} firstName={} lastName={}", jwtAuth.getEmail(), firstName, lastName);
+            return new User(jwtAuth.getEmail(), firstName, lastName);
         }
         final KeycloakPrincipal userDetails = (KeycloakPrincipal) auth.getPrincipal();
         final IDToken idToken = userDetails.getKeycloakSecurityContext().getToken();
-        LOGGER.info("createUserFromAuth: idToken.email={} idToken.givenName={} idToken.familyName={}", idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
+        LOGGER.info("createUserFromAuth/Keycloak: email={} firstName={} lastName={}", idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
         return new User(idToken.getEmail(), idToken.getGivenName(), idToken.getFamilyName());
     }
 
