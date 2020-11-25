@@ -5,7 +5,7 @@ repos:
     -   id: check-merge-conflict
     -   id: trailing-whitespace
     -   id: check-json
-        exclude: vboard-front/.eslintrc.json
+        exclude: vboard-front/.+lintrc
     -   id: check-yaml
 -   repo: https://github.com/Lucas-C/pre-commit-hooks
     rev: v1.1.7

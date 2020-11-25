@@ -9,7 +9,8 @@ services:
       - SERVICE_8080_VERSION=${TAG}
     environment:
       - VBOARD_DB_HOST=wsdb
-      - VBOARD_ELASTICSEARCH=http://elasticsearch:9200
+      - VBOARD_ELASTICSEARCH_HOST=http://elasticsearch:9200
+      - VBOARD_ELASTICSEARCH_INDEX=jdbc_pins_index
       - VBOARD_HOSTNAME=localhost
       - VBOARD_IMAGES_DIRECTORY=/usr/local/tomcat/data/
       - VBOARD_WORDPRESS_IMAGES_DIRECTORY=/usr/local/tomcat/data/blog/
@@ -52,7 +53,8 @@ services:
     image: vboard/vboard-batchs:${TAG}
     environment:
       - VBOARD_DB_HOST=wsdb:3306
-      - VBOARD_ELASTICSEARCH=http://elasticsearch:9200
+      - VBOARD_ELASTICSEARCH_HOST=http://elasticsearch:9200
+      - VBOARD_ELASTICSEARCH_INDEX=jdbc_pins_index
       - MYSQL_USER=root
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=vboard_pins

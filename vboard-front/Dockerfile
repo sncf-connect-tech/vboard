@@ -1,4 +1,4 @@
-FROM node:8-alpine
+FROM node:8-alpine AS build-image
 WORKDIR /usr/src/app
 COPY .pleeeaserc .
 COPY bundled.json .
@@ -9,19 +9,28 @@ COPY src src
 RUN ./install-build.sh
 
 
-FROM httpd:2.4
-# Install envsubst command:
-RUN apt-get update -y && apt-get install -y gettext
+FROM httpd:2.4-alpine
 
-COPY --from=0 /usr/src/app/build  /var/www/vboard
-RUN chown -R www-data:www-data    /var/www/vboard
-RUN chmod a+x                     /var/www/vboard/images
+RUN apk add --no-cache bash=5.0.17-r0 gettext=0.20.2-r0 libcap=2.27-r0 && rm -rf /var/cache/apk/*
 
-COPY ./config.js                  /var/www/vboard/
-COPY ./keycloak.json.tmpl         /var/www/vboard/keycloak.json
-COPY ./httpd.conf                 /usr/local/apache2/conf
+COPY --from=build-image /usr/src/app/build  /var/www/vboard
+RUN chmod a+x                               /var/www/vboard/images
 
-COPY ./run_http_server.sh         /run_http_server.sh
-RUN chmod u+x                     /run_http_server.sh
+COPY ./config.js                            /var/www/vboard/
+COPY ./keycloak.json.tmpl                   /var/www/vboard/keycloak.json
+COPY ./httpd.conf                           /usr/local/apache2/conf
+
+COPY ./run_http_server.sh                   /run_http_server.sh
+RUN chmod u+x                               /run_http_server.sh
+
+# Change access righs to conf, logs, bin from root to www-data
+RUN chown -hR www-data:www-data /usr/local/apache2/ /var/www/vboard/ /run_http_server.sh
+
+# setcap to bind to privileged ports as non-root
+RUN setcap 'cap_net_bind_service=+ep' /usr/local/apache2/bin/httpd
+RUN getcap /usr/local/apache2/bin/httpd
+
+# Using a non-root user to launch httpd:
+USER www-data
 
 CMD ["/run_http_server.sh"]
