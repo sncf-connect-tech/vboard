@@ -13,7 +13,7 @@ RUN mkdir                                                    /usr/local/tomcat/p
 COPY logback.xml                                             /usr/local/tomcat/properties
 COPY catalina.properties                                     /usr/local/tomcat/conf
 
-RUN apk add --no-cache curl=7.64.0-r4 && rm -rf /var/cache/apk/*
+RUN apk add --no-cache curl=~7 && rm -rf /var/cache/apk/*
 HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD curl --fail http://localhost:8080/vboard/version || exit 1
 
 # Running as non-root:
