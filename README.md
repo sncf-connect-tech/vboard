@@ -84,3 +84,8 @@ _cf_. [KeycloakEnabledInEnv.java](https://github.com/voyages-sncf-technologies/v
 - through [AWS Cognito](https://aws.amazon.com/fr/cognito/), with a `X-AMZN-OIDC-DATA` HTTP header containing a JWT token,
 if the environment variable `$AWS_COGNITO_ENABLED` is defined
 - anonymous mode
+
+## Alternative software
+
+- https://tildes.net
+- https://postmill.xyz
