@@ -117,13 +117,14 @@ public class AuthenticationController {
         if (auth instanceof JsonWebTokenAuthentication) {
             JsonWebTokenAuthentication jwtAuth = ((JsonWebTokenAuthentication)auth);
             String username = jwtAuth.getName();
-            if (username.contains("\\")) {
-                username = StringUtils.split(username, "\\")[1];
+            String[] parts = StringUtils.split(username, "\\");
+            if (parts != null) {
+                username = parts[1];
             }
-            if (!username.contains("_")) {
+            parts = StringUtils.split(username, "_");
+            if (parts == null) {
                 throw new IllegalArgumentException("The username in the JWT token provided does not contain a '_'");
             }
-            String[] parts = StringUtils.split(username, "_");
             String firstName = StringUtils.capitalize(parts[0]);
             String lastName = StringUtils.capitalize(parts[1]);
             LOGGER.info("createUserFromAuth/JWT: email={} firstName={} lastName={}", jwtAuth.getEmail(), firstName, lastName);

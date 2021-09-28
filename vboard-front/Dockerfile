@@ -11,7 +11,7 @@ RUN ./install-build.sh
 
 FROM httpd:2.4-alpine
 
-RUN apk add --no-cache bash=~5 gettext=~0.20 libcap=~2 && rm -rf /var/cache/apk/*
+RUN apk add --no-cache bash=~5 gettext=~0.21 libcap=~2 && rm -rf /var/cache/apk/*
 
 COPY --from=build-image /usr/src/app/build  /var/www/vboard
 RUN chmod a+x                               /var/www/vboard/images
