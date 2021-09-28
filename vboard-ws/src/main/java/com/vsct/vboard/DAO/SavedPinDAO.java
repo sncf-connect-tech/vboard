@@ -23,11 +23,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface SavedPinDAO extends CrudRepository<SavedPin, String> {
     // No implementation needed
-    SavedPin findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
+    Optional<SavedPin> findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
 
     List<SavedPin> findByUserEmail(String user_email); // Spring will generate an implementation based on the method name: findBy+attributeName
 

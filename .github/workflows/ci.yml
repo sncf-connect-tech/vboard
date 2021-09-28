@@ -1,0 +1,116 @@
+name: Build, test and publish
+
+on: # cf. https://github.community/t/how-to-trigger-an-action-on-push-or-pull-request-but-not-both/16662
+  push:
+    branches:
+      - master
+    tags:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hadolint/hadolint-action@v1.6.0
+        with:
+          recursive: true
+
+  pre-commit-hooks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - run: pip install pre-commit && pre-commit run --all-files
+
+  mvn-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - name: Maven cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ hashFiles('vboard-ws/pom.xml') }}
+      - working-directory: vboard-ws
+        run: mvn install -B
+
+  npm-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: 'npm'
+          cache-dependency-path: vboard-front/package-lock.json
+      - working-directory: vboard-front
+        run: npm install && npm run lint
+
+  docker-build-push-ws:
+    runs-on: ubuntu-latest
+    needs: [ hadolint, pre-commit-hooks, mvn-install ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/metadata-action@v3
+        id: meta
+        with:
+          images: vboard/vboard-ws
+      - uses: docker/login-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v2
+        with:
+          context: vboard-ws
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  docker-build-push-front:
+    runs-on: ubuntu-latest
+    needs: [ hadolint, pre-commit-hooks, npm-lint ]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/metadata-action@v3
+        id: meta
+        with:
+          images: vboard/vboard-front
+      - uses: docker/login-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v2
+        with:
+          context: vboard-front
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  docker-build-push-batchs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/metadata-action@v3
+        id: meta
+        with:
+          images: vboard/vboard-batchs
+      - uses: docker/login-action@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v2
+        with:
+          context: vboard-batchs
+          push: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

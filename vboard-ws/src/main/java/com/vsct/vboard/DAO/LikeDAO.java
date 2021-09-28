@@ -23,6 +23,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface LikeDAO extends CrudRepository<Like, String> {
@@ -31,5 +32,5 @@ public interface LikeDAO extends CrudRepository<Like, String> {
 
     List<Like> findByAuthor(String author); // Spring will generate an implementation based on the method name: findBy+attributeName
 
-    Like findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
+    Optional<Like> findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
 }

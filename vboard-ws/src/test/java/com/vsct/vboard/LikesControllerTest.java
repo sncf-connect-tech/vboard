@@ -145,11 +145,11 @@ public class LikesControllerTest {
         User.getEmailFromString(Mockito.anyString());
         this.pinDAO.save(new Pin("vboard-id", "", "", 0, "", "", "content", "", new DateTime()));
         Assert.assertEquals(0, this.pinDAO.findByPinId("vboard-id").getLikes());
-        Assert.assertNull(this.likeDAO.findById("vboard-idemail"));
+        Assert.assertNull(this.likeDAO.findById("vboard-idemail").orElse(null));
         Assert.assertEquals(0, this.likeDAO.findByPin("vboard-id").size());
         Assert.assertEquals(0, this.likeDAO.findByAuthor("email").size());
         this.likesController.addNewLikeInLikesDB(new LikeParams("email", "vboard-id"));
-        Assert.assertNotNull(this.likeDAO.findById("vboard-idemail"));
+        Assert.assertNotNull(this.likeDAO.findById("vboard-idemail").orElse(null));
         Assert.assertEquals(1, this.likeDAO.findByPin("vboard-id").size());
         Assert.assertEquals(1, this.likeDAO.findByAuthor("email").size());
         Assert.assertEquals(1, this.pinDAO.findByPinId("vboard-id").getLikes());

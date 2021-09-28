@@ -29,7 +29,6 @@ import com.vsct.vboard.models.User;
 import com.vsct.vboard.parameterFormat.CommentParams;
 import com.vsct.vboard.services.ElasticSearchClient;
 import com.vsct.vboard.services.UploadsManager;
-import org.apache.catalina.connector.Request;
 import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Before;
@@ -135,13 +134,13 @@ public class CommentControllerTest {
         User.getEmailFromString(Mockito.anyString());
         this.pinDAO.save(new Pin("vblog-0", "title", "", 0, "", "", "content", "auth", new DateTime()));
         Assert.assertEquals(0, this.commentDAO.findByPin("vblog-0").size());
-        commentsController.addCommentFromVblog("text", "0", "author", "ID", new Request());
+        commentsController.addCommentFromVblog("text", "0", "author", "ID", null);
         Assert.assertEquals(1, this.commentDAO.findByPin("vblog-0").size());
-        commentsController.addCommentFromVblog("text", "0", "author", "ID", new Request());
-        commentsController.addCommentFromVblog("text", "4", "author", "ID", new Request()); // other pinID
-        commentsController.addCommentFromVblog("text", "0", "author", "ID2", new Request());
-        commentsController.addCommentFromVblog("text", "0", "author", "ID3", new Request());
-        commentsController.addCommentFromVblog("text", "0", "author", "ID", new Request());  // update
+        commentsController.addCommentFromVblog("text", "0", "author", "ID", null);
+        commentsController.addCommentFromVblog("text", "4", "author", "ID", null); // other pinID
+        commentsController.addCommentFromVblog("text", "0", "author", "ID2", null);
+        commentsController.addCommentFromVblog("text", "0", "author", "ID3", null);
+        commentsController.addCommentFromVblog("text", "0", "author", "ID", null);  // update
         Assert.assertEquals(3, this.commentDAO.findByPin("vblog-0").size());
         Assert.assertEquals(3, this.pinDAO.findByPinId("vblog-0").getCommentsNumber());
     }
@@ -152,7 +151,7 @@ public class CommentControllerTest {
         Comment comment = new Comment("id", "0", "auth", "comment", new DateTime().toString());
         this.commentDAO.save(comment);
         this.commentsController.updateComment("{\"text\": \"comment update\"}", "id");
-        Comment updateComment = this.commentDAO.findById("id");
+        Comment updateComment = this.commentDAO.findById("id").orElse(null);
         Assert.assertNotEquals(comment, updateComment);
         Assert.assertEquals(comment.getAuthor(), updateComment.getAuthor());
         Assert.assertEquals(comment.getPostDateUTC(), updateComment.getPostDateUTC());
@@ -172,7 +171,7 @@ public class CommentControllerTest {
         Assert.assertFalse(this.commentDAO.findAll().iterator().hasNext());
         Assert.assertEquals(0, this.pinDAO.findByPinId("0").getCommentsNumber());
 
-        this.pinDAO.delete("0");
+        this.pinDAO.deleteById("0");
         comment = new Comment("id", "0", "auth", "comment", new DateTime().toString());
         Assert.assertFalse(this.commentDAO.findAll().iterator().hasNext());
         this.commentDAO.save(comment);

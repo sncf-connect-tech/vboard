@@ -23,11 +23,12 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface NotificationDAO extends CrudRepository<Notification, String> {
     // No implementation needed
     List<Notification> findByEmail(String email); // Spring will generate an implementation based on the method name: findBy+attributeName
 
-    Notification findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
+    Optional<Notification> findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
 }

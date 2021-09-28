@@ -67,6 +67,8 @@ public class AwsCognitoECDSAKeyProvider implements ECDSAKeyProvider {
                     LOGGER.debug("New cache entry set for kid={} from https://public-keys.auth.elb.{}.amazonaws.com", kid, region);
                     return publicKey;
                 }
+            } finally {
+                request.reset();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
