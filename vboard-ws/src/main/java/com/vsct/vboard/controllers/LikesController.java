@@ -94,7 +94,7 @@ public class LikesController {
         // Check user identity
         permission.ensureEmailMatchesSessionUser(authorEmail);
         try {
-            previousLike = this.likeDAO.findById(pinId + authorEmail);
+            previousLike = this.likeDAO.findById(pinId + authorEmail).orElse(null);
             this.logger.debug("addNewLike: author={} - pin={}", authorEmail, pinId);
             // Save in DB (if the like already exist, it will just be updated by the exact same values (same id))
             this.likeDAO.save(like);
@@ -144,7 +144,7 @@ public class LikesController {
         if (pin == null) {
             throw new NotFoundException("No pin found for ID: " + pinId);
         }
-        Like like = this.likeDAO.findById(pinId + email);
+        Like like = this.likeDAO.findById(pinId + email).orElse(null);
         if (like == null) {
             throw new NotFoundException("No like found for user: " + email);
         }

@@ -2,7 +2,7 @@
 [![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
 -> come look at our [good first issues](https://github.com/voyages-sncf-technologies/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-[![TravisCI build](https://travis-ci.com/voyages-sncf-technologies/vboard.svg?branch=master)](https://travis-ci.com/voyages-sncf-technologies/vboard) [![RSS from AllMyChanges](https://img.shields.io/badge/rss-allmychanges-yellow.svg)](https://allmychanges.com/rss/2b583bf388b767a02deb52966222e624/)
+[![Build, test and publish](https://github.com/voyages-sncf-technologies/vboard/workflows/Build,%20test%20and%20publish/badge.svg)](https://github.com/voyages-sncf-technologies/vboard/actions?query=branch%3Amaster)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Dependency analysis: [![Known npm Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-front%2Fpackage.json) (npm) <!--[![Known Maven Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-ws%2Fpom.xml)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-ws%2Fpom.xml) (Maven)-->
@@ -12,7 +12,7 @@ V.Board is an information sharing app. It allows users to share "pins", that is 
 V.Board is designed to be used for communication among an organization teams: project advancement, technology watch, etc.
 
 This software has been used at oui.sncf since July 2016.
-The public, open-source version of this project was publish in January 2018. It's current status is: **INCUBATING**
+The public, open-source version of this project was published in January 2018. It's current status is: **INCUBATING**
 
 ![Animated demo showing how to add a pin](vboard_addpin_demo.gif)
 

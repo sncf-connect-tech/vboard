@@ -130,7 +130,7 @@ public class CommentsController {
                                        @RequestParam("author") String author,
                                        @RequestParam("ID") final String ID, HttpServletRequest request) {
 
-        Comment comment = this.commentDAO.findById("vblog-" + ID);
+        Comment comment = this.commentDAO.findById("vblog-" + ID).orElse(null);
         // Should restrict the host name from wordpress (vblog)
         /*if (!request.getRemoteHost().equals(hostName.getHostName())) {
             throw new VBoardException("Unknown web site - The hostname that is using this method is not authorized: hostname: " + request.getRemoteHost());
@@ -180,7 +180,7 @@ public class CommentsController {
     @Valid
     public Comment updateComment(@Valid @RequestBody String text, @PathVariable("id") String id) {
         text = JavaUtils.extractJSONObject(text, "text");
-        Comment comment = this.commentDAO.findById(id);
+        Comment comment = this.commentDAO.findById(id).orElse(null);
         // Check if the user can update this comment (or throw an exception)
         permission.ensureUserHasRightsToAlterComment(comment.getAuthor());
         comment.setText(text);
@@ -196,7 +196,7 @@ public class CommentsController {
     public Comment removeComment(@RequestParam(value = "id") String id)  {
         Comment comment;
         try {
-            comment = this.commentDAO.findById(id);
+            comment = this.commentDAO.findById(id).orElse(null);
             if (comment != null) {
                 // Check if the user can update this comment (or throw an exception)
                 permission.ensureUserHasRightsToAlterPin(comment.getAuthor());

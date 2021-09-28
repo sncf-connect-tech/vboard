@@ -24,6 +24,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 public interface CommentDAO extends CrudRepository<Comment, String> {
@@ -32,5 +33,5 @@ public interface CommentDAO extends CrudRepository<Comment, String> {
 
     List<Comment> findByAuthor(String author); // Spring will generate an implementation based on the method name: findBy+attributeName
 
-    Comment findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
+    Optional<Comment> findById(String id); // Spring will generate an implementation based on the method name: findBy+attributeName
 }

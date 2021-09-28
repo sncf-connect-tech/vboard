@@ -101,7 +101,7 @@ public class NotificationsController {
     @ResponseBody
     @Valid
     public void setSeenNotification(@PathVariable("id") String id) {
-        Notification notif = this.notificationDAO.findById(id);
+        Notification notif = this.notificationDAO.findById(id).orElse(null);
         permission.ensureEmailMatchesSessionUser(notif.getEmail());
         notif.setSeen(true);
         this.notificationDAO.save(notif);
@@ -112,7 +112,7 @@ public class NotificationsController {
     @ResponseBody
     @Valid
     public void setClickedNotification(@PathVariable("id") String id) {
-        Notification notif = this.notificationDAO.findById(id);
+        Notification notif = this.notificationDAO.findById(id).orElse(null);
         permission.ensureEmailMatchesSessionUser(notif.getEmail());
         notif.setClicked(true);
         this.notificationDAO.save(notif);

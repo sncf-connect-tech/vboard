@@ -155,15 +155,15 @@ public class PinsController {
 
         // Delete all likes on that pin
         List<Like> likes = this.likeDAO.findByPin(pinId);
-        this.likeDAO.delete(likes);
+        this.likeDAO.deleteAll(likes);
 
         // Delete all comment on that pin
         List<Comment> comments = this.commentDAO.findByPin(pinId);
-        this.commentDAO.delete(comments);
+        this.commentDAO.deleteAll(comments);
 
         // Delete all savedPin which points on this pins
         List<SavedPin> savedPins = this.savedPinDAO.findByPinId(pinId);
-        this.savedPinDAO.delete(savedPins);
+        this.savedPinDAO.deleteAll(savedPins);
         // Update the stats
         this.gamification.updateStats(permission.getSessionUser());
         return result;

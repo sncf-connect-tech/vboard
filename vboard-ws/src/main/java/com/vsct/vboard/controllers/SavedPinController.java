@@ -75,7 +75,7 @@ public class SavedPinController {
     @ResponseBody
     @Valid
     public void deleteSavedPin(@PathVariable("pin_id") String pinId) {
-        SavedPin savedPin = this.savedPinDAO.findById(pinId+permission.getSessionUser().getEmail());
+        SavedPin savedPin = this.savedPinDAO.findById(pinId+permission.getSessionUser().getEmail()).orElse(null);
         this.savedPinDAO.delete(savedPin);
         this.gamification.updateStats(permission.getSessionUser());
         this.logger.debug("savedPin {} deleted by: {}", pinId, permission.getSessionUser().getUserString());

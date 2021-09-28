@@ -205,10 +205,10 @@ public class NotificationsControllerTest {
         Mockito.doReturn(u).when(permission).getSessionUser();
         Notification notif1 = new Notification("email3", "link", "message", "type", "from", false, false);
         this.notificationDAO.save(notif1);
-        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()));
+        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()).orElse(null));
         this.notificationsController.setSeenNotification(notif1.getId());
         notif1.setSeen(true);
-        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()));
+        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()).orElse(null));
     }
 
     @Test
@@ -217,10 +217,10 @@ public class NotificationsControllerTest {
         Mockito.doReturn(u).when(permission).getSessionUser();
         Notification notif1 = new Notification("email4", "link", "message", "type", "from", false, false);
         this.notificationDAO.save(notif1);
-        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()));
+        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()).orElse(null));
         this.notificationsController.setClickedNotification(notif1.getId());
         notif1.setClicked(true);
-        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()));
+        Assert.assertEquals(notif1, this.notificationDAO.findById(notif1.getId()).orElse(null));
     }
 
     @Test

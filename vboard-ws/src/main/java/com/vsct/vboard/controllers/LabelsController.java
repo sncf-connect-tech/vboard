@@ -80,7 +80,7 @@ public class LabelsController {
         }
         List<Label> labels = strLabels.stream().map(Label::new)
                 .collect(Collectors.toList());
-        this.labelDAO.save(labels);
+        this.labelDAO.saveAll(labels);
         return labels;
     }
 
