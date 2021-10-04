@@ -8,3 +8,8 @@ RUN curl https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.48/mysql-
 
 COPY properties/logstash.conf        /usr/share/logstash/pipeline/
 COPY properties/logstash.yml         /usr/share/logstash/config/
+
+COPY index_mapping.json              /usr/share/logstash/
+COPY entrypoint.sh                   /usr/share/logstash/
+
+ENTRYPOINT ["/usr/share/logstash/entrypoint.sh"]

@@ -1,0 +1,194 @@
+{
+  "properties" : {
+    "@timestamp" : {
+      "type" : "date"
+    },
+    "@version" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "author" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "comments_number" : {
+      "type" : "long"
+    },
+    "href_url" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "img_type" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "indexable_text_content" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "labels" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "likes" : {
+      "type" : "long"
+    },
+    "pin_id" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "pin_title" : {
+      "type" : "text",
+      "fields" : {
+        "keyword" : {
+          "type" : "keyword",
+          "ignore_above" : 256
+        }
+      }
+    },
+    "post_date" : {
+      "properties" : {
+        "after_now" : {
+          "type" : "boolean"
+        },
+        "before_now" : {
+          "type" : "boolean"
+        },
+        "century_of_era" : {
+          "type" : "long"
+        },
+        "chronology" : {
+          "properties" : {
+            "zone" : {
+              "properties" : {
+                "fixed" : {
+                  "type" : "boolean"
+                },
+                "id" : {
+                  "type" : "text",
+                  "fields" : {
+                    "keyword" : {
+                      "type" : "keyword",
+                      "ignore_above" : 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "day_of_month" : {
+          "type" : "long"
+        },
+        "day_of_week" : {
+          "type" : "long"
+        },
+        "day_of_year" : {
+          "type" : "long"
+        },
+        "equal_now" : {
+          "type" : "boolean"
+        },
+        "era" : {
+          "type" : "long"
+        },
+        "hour_of_day" : {
+          "type" : "long"
+        },
+        "millis" : {
+          "type" : "long"
+        },
+        "millis_of_day" : {
+          "type" : "long"
+        },
+        "millis_of_second" : {
+          "type" : "long"
+        },
+        "minute_of_day" : {
+          "type" : "long"
+        },
+        "minute_of_hour" : {
+          "type" : "long"
+        },
+        "month_of_year" : {
+          "type" : "long"
+        },
+        "second_of_day" : {
+          "type" : "long"
+        },
+        "second_of_minute" : {
+          "type" : "long"
+        },
+        "week_of_weekyear" : {
+          "type" : "long"
+        },
+        "weekyear" : {
+          "type" : "long"
+        },
+        "year" : {
+          "type" : "long"
+        },
+        "year_of_century" : {
+          "type" : "long"
+        },
+        "year_of_era" : {
+          "type" : "long"
+        },
+        "zone" : {
+          "properties" : {
+            "fixed" : {
+              "type" : "boolean"
+            },
+            "id" : {
+              "type" : "text",
+              "fields" : {
+                "keyword" : {
+                  "type" : "keyword",
+                  "ignore_above" : 256
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "post_date_utc" : {
+      "type" : "date"
+    }
+  }
+}

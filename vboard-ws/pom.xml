@@ -6,7 +6,7 @@
 
     <groupId>com.vsct.vboard</groupId>
     <artifactId>vboard-ws</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.5</version>
 
     <name>V.Board WebService</name>
     <packaging>war</packaging>

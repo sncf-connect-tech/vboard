@@ -26,6 +26,10 @@ server:
 endpoints: # by default disable and protect all actuator endpoints
   enabled: false
   sensitive: true
+management:
+  endpoint:
+    health:
+      show-details: always
 
 spring:
   jackson:
@@ -55,7 +59,7 @@ elasticsearch:
 com:
   vsct:
     vboard:
-      hostname: ${VBOARD_HOSTNAME}
+      hostname: ${VBOARD_HOSTNAME:localhost}
 uploads:
   imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY:/tmp}
   blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY:/tmp}

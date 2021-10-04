@@ -1,0 +1,20 @@
+# For Heroku, we need to retrieve a "sh" shell from the "-debug" distroless version:
+FROM gcr.io/distroless/java:8-debug AS debug
+FROM vboard/vboard-front AS front
+FROM vboard/vboard-ws
+
+COPY --from=debug /busybox/sh      /bin
+# sed is required by setup_statics.sh:
+COPY --from=debug /busybox/sed     /bin
+COPY --from=debug /busybox/ls      /bin
+
+# Spring Boot apps will automagically serve content from this directory:
+COPY --from=front /var/www/vboard  /app/static
+# This copy could be avoided on next release of vboard-front, when it will contain setup_statics.sh:
+COPY vboard-front/setup_statics.sh /app/static
+
+COPY bin/heroku_start.sh           /app
+COPY bin/heroku_db_cleanup.sh      /app
+
+# Removing custom entrypoint:
+ENTRYPOINT []

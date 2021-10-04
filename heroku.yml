@@ -1,0 +1,27 @@
+# Reference: https://devcenter.heroku.com/articles/build-docker-images-heroku-yml
+build:
+  docker:
+    web: Dockerfile.heroku
+    batchs: vboard-batchs/Dockerfile.heroku
+run:
+  web: /app/heroku_start.sh
+  batchs: /usr/share/logstash/entrypoint.sh
+
+# Addons & configuration required:
+#   heroku addons:create bonsai:sandbox-6
+#   heroku config:set VBOARD_ELASTICSEARCH_HOST=https://...bonsaisearch.net:443
+#   heroku config:set VBOARD_ELASTICSEARCH_INDEX=jdbc_pins_index
+#   heroku addons:create cleardb:ignite
+# The following values can be extracted from $CLEARDB_DATABASE_URL once the addon has been added:
+#   heroku config
+#   heroku config:set VBOARD_DB_HOST=...
+#   heroku config:set MYSQL_USER=...
+#   heroku config:set MYSQL_ROOT_PASSWORD=...
+#   heroku config:set MYSQL_DATABASE=...
+# Final extra steps required:
+#   heroku config:set VBOARD_API_ENDPOINT=https://vboard-demo.herokuapp.com
+#   heroku ps:scale batchs=1
+# To configure a daily DB cleanup:
+#   heroku addons:create scheduler:standard
+# To ensure code is pushed to the correct branch:
+#   git push -f $local_branch heroku:master
