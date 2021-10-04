@@ -4,10 +4,11 @@ on: # cf. https://github.community/t/how-to-trigger-an-action-on-push-or-pull-re
   push:
     branches:
       - master
-    tags:
   pull_request:
     branches:
       - master
+  create:
+    tags:
 
 jobs:
 
