@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [?] - 20YY-MM-DD
+## [1.2.1] - 2021-10-04
 ### Fixed
 - search by label is now correctly done by the backend - closed #37
 - `Variable [pinUpdate] is not defined` HTTP 500 error in `ElasticSearchClient.updatePin`

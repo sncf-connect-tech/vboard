@@ -3,6 +3,7 @@
 -> come look at our [good first issues](https://github.com/voyages-sncf-technologies/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 [![Build, test and publish](https://github.com/voyages-sncf-technologies/vboard/workflows/Build,%20test%20and%20publish/badge.svg)](https://github.com/voyages-sncf-technologies/vboard/actions?query=branch%3Amaster)
+[![](https://img.shields.io/docker/pulls/vboard/vboard-batchs.svg)](https://hub.docker.com/r/vboard)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
 Dependency analysis: [![Known npm Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-front%2Fpackage.json) (npm) <!--[![Known Maven Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-ws%2Fpom.xml)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-ws%2Fpom.xml) (Maven)-->
