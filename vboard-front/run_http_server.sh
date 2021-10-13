@@ -3,7 +3,7 @@
 set -o pipefail -o errexit -o nounset -o xtrace
 
 : ${VBOARD_WS_HOST?'Required env variable'}
-[ -z "${VBOARD_API_ENDPOINT:-}" ] && export VBOARD_HOSTNAME=/api/v1
+[ -z "${VBOARD_API_ENDPOINT:-}" ] && export VBOARD_API_ENDPOINT=/api/v1
 [ -z "${VBOARD_BLOG_URL:-}" ] && export VBOARD_BLOG_URL=
 [ -z "${VBOARD_HOSTNAME:-}" ] && export VBOARD_HOSTNAME=localhost
 [ -z "${PORT:-}" ] && export PORT=80

@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [1.2.4] - 2021-10-13
+### Fixed
+- frontend `ProxyPass` configuration
+
 ## [1.2.3] - 2021-10-13
 ### Added
 - `$DRIVER_CLASS_NAME` can now be set to define `spring.datasource.driverClassName`, which now has a default value of `com.mysql.jdbc.Driver`
