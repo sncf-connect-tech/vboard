@@ -41,6 +41,7 @@ spring:
       # - create: creates the DB schema, destroying previous data
       # - create-drop: drop the schema when the SessionFactory is closed explicitly, typically when the application is stopped
   datasource:
+    driverClassName: ${DRIVER_CLASS_NAME:com.mysql.jdbc.Driver}
     url: jdbc:mysql://${VBOARD_DB_HOST}/${MYSQL_DATABASE}
     username: ${MYSQL_USER}
     password: ${MYSQL_ROOT_PASSWORD}

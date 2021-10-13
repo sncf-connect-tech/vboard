@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [1.2.3] - 2021-10-13
+### Added
+- `$DRIVER_CLASS_NAME` can now be set to define `spring.datasource.driverClassName`, which now has a default value of `com.mysql.jdbc.Driver`
+
+## [1.2.2] - 2021-10-13
+### Added
+- CI: now validating that the backend image built can start without any error, using `$EXIT_AFTER_INIT`
+- `$PORT` can now be defined to set the listening port
+### Changed
+- backend Docker image is now based on `gcr.io/distroless/java:8` instead of `tomcat`
+
 ## [1.2.1] - 2021-10-04
 ### Fixed
 - search by label is now correctly done by the backend - closed #37
