@@ -2,7 +2,7 @@ FROM maven:3.5.4-jdk-8-alpine AS build-image
 WORKDIR /usr/src/app
 COPY src src
 COPY pom.xml .
-RUN mvn clean install -Dmaven.test.skip=true -Dfindbugs.skip=true -Dpmd.skip=true
+RUN mvn clean install -B -Dmaven.test.skip=true -Dfindbugs.skip=true -Dpmd.skip=true
 
 
 FROM tomcat:7-jre8-alpine
