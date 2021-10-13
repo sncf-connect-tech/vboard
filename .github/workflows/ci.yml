@@ -75,7 +75,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Validating the image built can start without any error
-        run: docker run --rm -e SPRING_PROFILES_ACTIVE=test -e EXIT_AFTER_INIT=true ${{ steps.meta.outputs.tags }}
+        run: docker run -e SPRING_PROFILES_ACTIVE=test -e EXIT_AFTER_INIT=true ${{ steps.meta.outputs.tags }}
 
   docker-build-push-front:
     runs-on: ubuntu-latest
