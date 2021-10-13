@@ -18,10 +18,13 @@
 
 package com.vsct.vboard;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -31,12 +34,14 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.Arrays;
 
 @SpringBootApplication(exclude = ErrorMvcAutoConfiguration.class, scanBasePackages = "com.vsct.vboard")
 @Configuration
 @EnableSwagger2
 @Controller
 public class MainController extends SpringBootServletInitializer {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MainController.class);
 
     @Bean
     public Docket swaggerApi() {
@@ -58,6 +63,11 @@ public class MainController extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(MainController.class, args);
+        LOGGER.info("Program arguments: {}", Arrays.toString(args));
+        ConfigurableApplicationContext ctx = SpringApplication.run(MainController.class, args);
+        if (System.getenv("EXIT_AFTER_INIT") != null) {
+            LOGGER.info("Immediately stopping the app");
+            System.exit(SpringApplication.exit(ctx, () -> 0));
+        }
     }
 }

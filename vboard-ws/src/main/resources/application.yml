@@ -19,6 +19,7 @@ aws-cognito:
   roles-field-name: ${AWS_COGNITO_ROLES_FIELDNAME:custom:roles}
 
 server:
+  port: ${PORT:8080}
   error:
     whitelabel:
       enabled: ${ENABLE_WHITELABEL_ERRORS:false}
@@ -55,8 +56,8 @@ com:
     vboard:
       hostname: ${VBOARD_HOSTNAME}
 uploads:
-  imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY}
-  blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY}
+  imagesStorageDirectory: ${VBOARD_IMAGES_DIRECTORY:/tmp}
+  blogImagesDirectory: ${VBOARD_WORDPRESS_IMAGES_DIRECTORY:/tmp}
   multiplePinsPerUrlAllowed: ${VBOARD_ALLOW_MULTIPLE_PINS_PER_URL:false}
 emails:
   hostname: ${MAIL_HOST}

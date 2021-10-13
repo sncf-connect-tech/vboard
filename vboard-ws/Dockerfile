@@ -1,23 +1,24 @@
-FROM maven:3.5.4-jdk-8-alpine AS build-image
+FROM maven:3.5.4-jdk-8-alpine AS builder
 WORKDIR /usr/src/app
 COPY src src
 COPY pom.xml .
-RUN mvn clean install -Dmaven.test.skip=true -Dfindbugs.skip=true -Dpmd.skip=true
+RUN mvn clean install -B -Dmaven.test.skip=true -Dfindbugs.skip=true -Dpmd.skip=true
 
 
-FROM tomcat:7-jre8-alpine
+FROM gcr.io/distroless/java:8
 
-RUN rm -rf /usr/local/tomcat/webapps/docs /usr/local/tomcat/webapps/examples /usr/local/tomcat/webapps/manager /usr/local/tomcat/webapps/host-manager
-COPY --from=build-image /usr/src/app/target/vboard-ws-*.war  /usr/local/tomcat/webapps/vboard.war
-RUN mkdir                                                    /usr/local/tomcat/properties
-COPY logback.xml                                             /usr/local/tomcat/properties
-COPY catalina.properties                                     /usr/local/tomcat/conf
+# Création d'un répertoire pour l'application
+WORKDIR /app
 
-RUN apk add --no-cache curl=~7 && rm -rf /var/cache/apk/*
-HEALTHCHECK --interval=30s --timeout=30s --retries=3 CMD curl --fail http://localhost:8080/vboard/version || exit 1
+# On importe le JAR de l'image intermédiaire
+COPY --from=builder /usr/src/app/target/vboard-ws-*.war /app/vboard-ws.jar
+COPY logback.xml                                        /app/
 
-# Running as non-root:
-RUN chown -R nobody                                          /usr/local/tomcat
-USER nobody
+# On définit un user dédié à lancer l'appli:
+USER 1001
+# Note: en l'absence de commande "useradd" dans une image "distroless", on ajoute directement le fichier /etc/passwd
+COPY passwd /etc/passwd
 
-CMD ["catalina.sh", "run"]
+CMD ["-XX:+ExitOnOutOfMemoryError", "-XX:-OmitStackTraceInFastThrow", "-Xms256m", "-Xmx1g", "-jar", "vboard-ws.jar"]
+# -XX:+ExitOnOutOfMemoryError : an OutOfMemoryError will often leave the JVM in an inconsistent state, so we terminate it if that happens
+# -XX:-OmitStackTraceInFastThrow : avoid missing stacktraces - cf. https://plumbr.io/blog/java/on-a-quest-for-missing-stacktraces
