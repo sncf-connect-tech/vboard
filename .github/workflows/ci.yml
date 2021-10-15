@@ -75,8 +75,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Validating the image built can start without any error
-        run: docker run -e SPRING_PROFILES_ACTIVE=test -e EXIT_AFTER_INIT=true ${{ steps.meta.outputs.tags }}
-        # The above command fails when new tags are created, due to this: https://github.com/docker/metadata-action/issues/140
+        run: docker run -e SPRING_PROFILES_ACTIVE=test -e EXIT_AFTER_INIT=true ${{ steps.meta.outputs.version }}
 
   docker-build-push-front:
     runs-on: ubuntu-latest
