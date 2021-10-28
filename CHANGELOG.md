@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [1.2.5] - 2021-10-28
+### Added
+- files to deploy the app on Heroku
+
 ## [1.2.4] - 2021-10-13
 ### Fixed
 - frontend `ProxyPass` configuration
