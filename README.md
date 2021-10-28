@@ -15,6 +15,8 @@ V.Board is designed to be used for communication among an organization teams: pr
 This software has been used at oui.sncf since July 2016.
 The public, open-source version of this project was published in January 2018. It's current status is: **INCUBATING**
 
+Online demo instance: <https://vboard-demo.herokuapp.com>
+
 ![Animated demo showing how to add a pin](vboard_addpin_demo.gif)
 
 <!-- toc -->
@@ -49,7 +51,7 @@ The following command starts V.Board locally :
     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --no-build
 
 You can then access the website through http://localhost
-and the swagger at http://localhost/api/v1/swagger-ui.html
+and the swagger at http://localhost/api/v1/swagger-ui/
 
 
 # Contributing

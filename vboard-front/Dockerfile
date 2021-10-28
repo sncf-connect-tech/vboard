@@ -20,6 +20,7 @@ COPY ./config.js                            /var/www/vboard/
 COPY ./keycloak.json.tmpl                   /var/www/vboard/keycloak.json
 COPY ./httpd.conf                           /usr/local/apache2/conf
 
+COPY ./setup_statics.sh                     /var/www/vboard/
 COPY ./run_http_server.sh                   /run_http_server.sh
 RUN chmod u+x                               /run_http_server.sh
 

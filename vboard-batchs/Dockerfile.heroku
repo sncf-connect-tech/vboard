@@ -1,0 +1,9 @@
+# Custom Dockerfile for Heroku to use the latest image published on Docker Hub.
+# Recipe from: https://stackoverflow.com/a/58204409/636849
+FROM vboard/vboard-batchs
+
+# The following could be avoided on next release, when it will already be set in vboard/vboard-batchs:
+COPY index_mapping.json  /usr/share/logstash/
+COPY entrypoint.sh       /usr/share/logstash/
+
+ENTRYPOINT ["/usr/share/logstash/entrypoint.sh"]

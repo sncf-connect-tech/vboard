@@ -1,12 +1,5 @@
 application:
-  name: vboard-ws
   version: DEV
-  buildDate: 2019-10-29
-
-aws-cognito:
-  enabled: false
-  jwt-http-header-name: X-AMZN-OIDC-DATA
-  region: eu-west-1
 
 logging:
   level:
@@ -32,15 +25,9 @@ management:
   security:
     enabled: false
 
-com:
-  vsct:
-    vboard:
-      hostname: localhost
 uploads:
   imagesStorageDirectory: imagesStorageDir
   blogImagesDirectory: blogImagesDir
   multiplePinsPerUrlAllowed: false
-proxy:
-  hostname:
 emails:
   hostname: dummy
