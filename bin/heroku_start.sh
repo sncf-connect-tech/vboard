@@ -5,5 +5,6 @@ cd /app/static
 source /app/static/setup_statics.sh
 
 cd /app
-# To avoid Heroku R14 warnings, RAM could be further restrained by setting: -Xmx512m
-/usr/bin/java -jar -XX:+ExitOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -Xms256m -Xmx1g -jar vboard-ws.war
+# !! A .jar must be provided, not a .war, or we will get 404s errors !!
+# Also, to avoid Heroku R14 warnings, RAM could be further restrained by setting: -Xmx512m
+/usr/bin/java -XX:+ExitOnOutOfMemoryError -XX:-OmitStackTraceInFastThrow -Xms256m -Xmx1g -jar vboard-ws.jar

@@ -1,6 +1,7 @@
 # For Heroku, we need to retrieve a "sh" shell from the "-debug" distroless version:
 FROM gcr.io/distroless/java:8-debug AS debug
 FROM vboard/vboard-front AS front
+FROM vboard/vboard-ws AS ws
 FROM vboard/vboard-ws
 
 COPY --from=debug /busybox/sh      /bin
@@ -10,6 +11,10 @@ COPY --from=debug /busybox/ls      /bin
 
 # Spring Boot apps will automagically serve content from this directory:
 COPY --from=front /var/www/vboard  /app/static
+
+# We need to rename the .war into a .jar, or we get 404 errors:
+# (this won't be needed anymore after 1.2.6 is released)
+COPY --from=ws /app/vboard-ws.war  /app/vboard-ws.jar
 
 COPY bin/heroku_start.sh           /app
 COPY bin/heroku_db_cleanup.sh      /app

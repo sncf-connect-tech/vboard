@@ -12,3 +12,13 @@ com:
   vsct:
     vboard:
       hostname: localhost
+server:
+  error:
+    whitelabel:
+      enabled: true
+endpoints:
+  enabled: true
+  sensitive: false
+management:
+  security:
+    enabled: false
