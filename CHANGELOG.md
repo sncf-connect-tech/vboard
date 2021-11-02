@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - files to deploy the app on Heroku
 
+![](vboard-on-heroku.png)
+
 ## [1.2.4] - 2021-10-13
 ### Fixed
 - frontend `ProxyPass` configuration
