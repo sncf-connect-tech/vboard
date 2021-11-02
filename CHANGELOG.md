@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.2.5] - 2021-10-28
 ### Added
-- files to deploy the app on Heroku
+- configuration files to deploy the app on Heroku
 
 ![](vboard-on-heroku.png)
 
