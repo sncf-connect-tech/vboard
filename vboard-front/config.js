@@ -19,6 +19,7 @@
 const apiEndpoint = '$VBOARD_API_ENDPOINT',
     blogUrl = '$VBOARD_BLOG_URL',
     supportUrl = '$VBOARD_SUPPORT_URL',
+    menuItems = '$VBOARD_MENU_ITEMS',
     localisations = '$VBOARD_LOCALISATIONS',
     displayPinsFromLastMonthsCount = '$VBOARD_PINS_MONTHS_COUNT';
 
@@ -27,11 +28,20 @@ const localisationParser = (loc) => {
     const [id, name] = loc.split(':');
     return { id, name };
 }
+const safeJsonParseArray = (string) => {
+    try {
+        return JSON.parse(string);
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
 
 angular.module('vboard').constant('CONFIG', {
     apiEndpoint: isDefined(apiEndpoint)                                       ? apiEndpoint                                      : 'http://localhost:8080',
     blogUrl: isDefined(blogUrl)                                               ? blogUrl                                          : null,
     supportUrl: isDefined(supportUrl)                                         ? supportUrl                                       : null,
+    menuItems: isDefined(menuItems)                                           ? safeJsonParseArray(menuItems)                    : [],
     // By default, display only pins from the last 3 years:
     localisations: isDefined(localisations)                                   ? localisations.split(';').map(localisationParser) : [],
     displayPinsFromLastMonthsCount: isDefined(displayPinsFromLastMonthsCount) ? displayPinsFromLastMonthsCount                   : 36,

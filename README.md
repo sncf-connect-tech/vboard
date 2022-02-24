@@ -90,5 +90,6 @@ if the environment variable `$AWS_COGNITO_ENABLED` is defined
 
 ## Alternative software
 
+- [laarc](https://www.laarc.io/welcome.html)
 - https://tildes.net
 - https://postmill.xyz
