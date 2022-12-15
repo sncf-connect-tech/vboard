@@ -90,6 +90,7 @@ if the environment variable `$AWS_COGNITO_ENABLED` is defined
 
 ## Alternative software
 
-- [laarc](https://www.laarc.io/welcome.html)
-- https://tildes.net
-- https://postmill.xyz
+- [linkding](https://github.com/sissbruecker/linkding): self-hosted bookmark service based on Python & SQLite
+- [laarc](https://github.com/laarc/laarc): self-hosted HackerNews-clone based on Racket (LISP)
+- https://tildes.net: self-hosted Reddit-clone in Python
+- https://postmill.xyz: self-hosted social link aggregator with voting and threaded comments, built on PHP Symfony
