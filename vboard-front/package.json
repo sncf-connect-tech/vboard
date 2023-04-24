@@ -31,7 +31,7 @@
     "eslint-plugin-lodash": "^6.0.0",
     "glob": "^7.1.6",
     "jasmine-core": "2.2.0",
-    "karma": "0.12.31",
+    "karma": "6.4.1",
     "karma-chrome-launcher": "^0.1.7",
     "karma-jasmine": "0.3.5",
     "karma-phantomjs-launcher": "0.1.4",
