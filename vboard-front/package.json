@@ -42,7 +42,7 @@
   "engineStrict": true,
   "repository": {
     "type": "git",
-    "url": "git@github.com:voyages-sncf-technologies/vboard.git"
+    "url": "git@github.com:sncf-connect-tech/vboard.git"
   },
   "scripts": {
     "build": "pleeease-compile && node bundler.js",

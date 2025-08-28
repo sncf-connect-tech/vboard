@@ -30,14 +30,14 @@ There are many ways you can help us in this project:
 - tell us when you face **bugs** by creating a [bug report issue](#reporting-a-bug)
 - **contribute some code** to the project, by making a [pull request](#code)
 
-Overall, don't hesitate to get in touch with us throught this project [issues](https://github.com/voyages-sncf-technologies/vboard/issues) for any request,
+Overall, don't hesitate to get in touch with us throught this project [issues](https://github.com/sncf-connect-tech/vboard/issues) for any request,
 even for simple questions.
 
-We use [GitHub projects](https://github.com/voyages-sncf-technologies/vboard/projects/1) as a simple workflow to triage the issues.
+We use [GitHub projects](https://github.com/sncf-connect-tech/vboard/projects/1) as a simple workflow to triage the issues.
 
 # Suggesting new features
 
-First off, make sure it hasn't been suggested yet by making a quick [issues search](https://github.com/voyages-sncf-technologies/vboard/issues).
+First off, make sure it hasn't been suggested yet by making a quick [issues search](https://github.com/sncf-connect-tech/vboard/issues).
 
 If not, simply open an issue including the following information:
 - a short description of what you have in mind
@@ -52,7 +52,7 @@ If not, simply open an issue including the following information:
 
 # Reporting a bug
 
-First off, make sure it hasn't been reported before by making a quick [issues search](https://github.com/voyages-sncf-technologies/vboard/issues).
+First off, make sure it hasn't been reported before by making a quick [issues search](https://github.com/sncf-connect-tech/vboard/issues).
 
 If not, please open an issue including the following information:
 - the current version of V.Board you are using
@@ -63,7 +63,7 @@ If not, please open an issue including the following information:
 
 # Code
 
-For newcomers, we maintin a list of [good first issues](https://github.com/voyages-sncf-technologies/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22),
+For newcomers, we maintin a list of [good first issues](https://github.com/sncf-connect-tech/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22),
 including bug fixes and minor improvments,
 to get you started with the code.
 
@@ -96,14 +96,14 @@ Moreover, we use Docker to have a convenient way to deploy the full app or launc
 It may suffice if you don't want to install NodeJS for example, but will not be very handy to use to develop the Java backend iteratively.
 
 Please check the `README.md` of each component for more information:
-- [vboard-ws](https://github.com/voyages-sncf-technologies/vboard/tree/master/vboard-ws)
-- [vboard-front](https://github.com/voyages-sncf-technologies/vboard/tree/master/vboard-front)
+- [vboard-ws](https://github.com/sncf-connect-tech/vboard/tree/master/vboard-ws)
+- [vboard-front](https://github.com/sncf-connect-tech/vboard/tree/master/vboard-front)
 
 ## pre-commit hooks
 
 In order to execute a number of checks before each commit, this project uses `git` [pre-commit](http://pre-commit.com) hooks.
 They are listed in the [.pre-commit-config.yaml](.pre-commit-config.yaml) configuration file
-and are executed by [Travis CI](https://travis-ci.com/voyages-sncf-technologies/vboard).
+and are executed by [Travis CI](https://travis-ci.com/sncf-connect-tech/vboard).
 No PR will be merged unless they the hooks pass.
 
 As much as possible, please try to install them on your development machine.
@@ -128,7 +128,7 @@ There is no tool configured on the backend side to enforce any code style, but p
 
 ## Continuous integration
 
-[Travis CI](https://travis-ci.com/voyages-sncf-technologies/vboard) is configured on this project to build both the backend & frontend components,
+[Travis CI](https://travis-ci.com/sncf-connect-tech/vboard) is configured on this project to build both the backend & frontend components,
 on each each commit or pull request, and warn on build / code style / test failures.
 
 ## Code reviews
@@ -145,7 +145,7 @@ Code reviewers should follow those guidelines:
 
 1. Update version in `vboard-ws/pom.xml` & `vboard-front/package.json`
 2. Update `CHANGELOG.md`
-3. Create a new release & tag on [GitHub](https://github.com/voyages-sncf-technologies/vboard/releases)
+3. Create a new release & tag on [GitHub](https://github.com/sncf-connect-tech/vboard/releases)
 
 ## Release on Docker hub
 ```

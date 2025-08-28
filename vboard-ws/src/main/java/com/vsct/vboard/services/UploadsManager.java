@@ -1,6 +1,6 @@
 /*
  * This file is part of the vboard distribution.
- * (https://github.com/voyages-sncf-technologies/vboard)
+ * (https://github.com/sncf-connect-tech/vboard)
  * Copyright (c) 2017 VSCT.
  *
  * vboard is free software: you can redistribute it and/or modify
@@ -81,7 +81,7 @@ public class UploadsManager {
     public void savePinImage(String img, String name) {
         if (img.startsWith("http")) { // If the image is an url, the image is downloaded and uploaded on the pinImg folder (NAS)
             if (img.endsWith("svg") || img.endsWith("gif")) {
-                throw new VBoardException("Neither .gif nor .svg are currently supported"); // cf. https://github.com/voyages-sncf-technologies/vboard/issues/82
+                throw new VBoardException("Neither .gif nor .svg are currently supported"); // cf. https://github.com/sncf-connect-tech/vboard/issues/82
             }
             URL url;
             try {

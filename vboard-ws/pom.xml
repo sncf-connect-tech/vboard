@@ -12,9 +12,9 @@
     <packaging>war</packaging>
 
     <scm>
-        <connection>scm:https://github.com/voyages-sncf-technologies/vboard.git</connection>
-        <developerConnection>scm:git@github.com:voyages-sncf-technologies/vboard.git</developerConnection>
-        <url>https://github.com/voyages-sncf-technologies/vboard</url>
+        <connection>scm:https://github.com/sncf-connect-tech/vboard.git</connection>
+        <developerConnection>scm:git@github.com:sncf-connect-tech/vboard.git</developerConnection>
+        <url>https://github.com/sncf-connect-tech/vboard</url>
     </scm>
 
     <properties>

@@ -1,12 +1,12 @@
 [![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 [![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
--> come look at our [good first issues](https://github.com/voyages-sncf-technologies/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+-> come look at our [good first issues](https://github.com/sncf-connect-tech/vboard/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-[![Build, test and publish](https://github.com/voyages-sncf-technologies/vboard/workflows/Build,%20test%20and%20publish/badge.svg)](https://github.com/voyages-sncf-technologies/vboard/actions?query=branch%3Amaster)
+[![Build, test and publish](https://github.com/sncf-connect-tech/vboard/workflows/Build,%20test%20and%20publish/badge.svg)](https://github.com/sncf-connect-tech/vboard/actions?query=branch%3Amaster)
 [![](https://img.shields.io/docker/pulls/vboard/vboard-batchs.svg)](https://hub.docker.com/r/vboard)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
 
-Dependency analysis: [![Known npm Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-front%2Fpackage.json) (npm) <!--[![Known Maven Vulnerabilities](https://snyk.io/test/github/voyages-sncf-technologies/vboard/badge.svg?targetFile=vboard-ws%2Fpom.xml)](https://snyk.io/test/github/voyages-sncf-technologies/vboard?targetFile=vboard-ws%2Fpom.xml) (Maven)-->
+Dependency analysis: [![Known npm Vulnerabilities](https://snyk.io/test/github/sncf-connect-tech/vboard/badge.svg?targetFile=vboard-front%2Fpackage.json)](https://snyk.io/test/github/sncf-connect-tech/vboard?targetFile=vboard-front%2Fpackage.json) (npm) <!--[![Known Maven Vulnerabilities](https://snyk.io/test/github/sncf-connect-tech/vboard/badge.svg?targetFile=vboard-ws%2Fpom.xml)](https://snyk.io/test/github/sncf-connect-tech/vboard?targetFile=vboard-ws%2Fpom.xml) (Maven)-->
 
 
 V.Board is an information sharing app. It allows users to share "pins", that is byte-size pieces of information: an URL, a picture and a short description.
@@ -83,7 +83,7 @@ It is shared between the `ws` and `front` services: `ws` writes in it and `front
 There are 3 supported mode of authentication, that are activated in this order:
 
 - through a [Keycloak instance](https://www.keycloak.org), if the environment variables `$KCK_ENABLED`, `$KCK_PUBLIC_HOST` & `$KCK_REALM_KEY` are defined,
-_cf_. [KeycloakEnabledInEnv.java](https://github.com/voyages-sncf-technologies/vboard/blob/master/vboard-ws/src/main/java/com/vsct/vboard/config/KeycloakEnabledInEnv.java)
+_cf_. [KeycloakEnabledInEnv.java](https://github.com/sncf-connect-tech/vboard/blob/master/vboard-ws/src/main/java/com/vsct/vboard/config/KeycloakEnabledInEnv.java)
 - through [AWS Cognito](https://aws.amazon.com/fr/cognito/), with a `X-AMZN-OIDC-DATA` HTTP header containing a JWT token,
 if the environment variable `$AWS_COGNITO_ENABLED` is defined
 - anonymous mode
